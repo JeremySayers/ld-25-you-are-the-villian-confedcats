@@ -26,11 +26,6 @@ public class GamePanel extends JPanel {
 	private static final Graphics bg = buff.getGraphics();
 	Player player = new Player();
 	ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>();
-	
-	// First you need to create controller.
-	JInputJoystick joystick = new JInputJoystick(Controller.Type.GAMEPAD);
-	// Check if the controller was found.
-	
 
 
 	Map level1 = new Rainbow();
@@ -42,9 +37,6 @@ public class GamePanel extends JPanel {
 	private Hat hat;
 	public GamePanel() {
 		super();
-		if(!joystick.isControllerConnected()){
-			   System.out.println("No controller found!");
-		}
 		
 		// Force Repaint To Achieve 60fps
 		new java.util.Timer().scheduleAtFixedRate(new java.util.TimerTask(){
@@ -137,22 +129,21 @@ public class GamePanel extends JPanel {
         }
 	}
 	public void checkJoystick(){
-		if(joystick.isControllerConnected()){
-			joystick.pollController();
-		}
-		if (joystick.getXAxisPercentage() > 60){
-			player.setxVel(5);
-		} else if (joystick.getXAxisPercentage() < 40){
-			player.setxVel(-5);
-		} else {
-			player.setxVel(0);
-		}
-		
-		if (joystick.getButtonValue(1)){
-			jumpKey = true;
-		} else {
-			jumpKey =false;
-		}
+		if(Driver.joystick.isControllerConnected()){
+			Driver.joystick.pollController();
+			if (Driver.joystick.getXAxisPercentage() > 60){
+				player.setxVel(5);
+			} else if (Driver.joystick.getXAxisPercentage() < 40){
+				player.setxVel(-5);
+			} else {
+				player.setxVel(0);
+			}
+			if (Driver.joystick.getButtonValue(1)){
+				jumpKey = true;
+			} else {
+				jumpKey =false;
+			}
+		}	
 	}
 	
 	
