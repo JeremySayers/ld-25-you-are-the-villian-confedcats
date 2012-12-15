@@ -13,6 +13,7 @@ import com.confedcats.ld25.enemies.BaseEnemy;
 import com.confedcats.ld25.enemies.ConfederateSoldier;
 import com.confedcats.ld25.maps.Map;
 import com.confedcats.ld25.maps.Rainbow;
+import com.confedcats.ld25.tiles.ColorTile;
 
 public class GamePanel extends JPanel {
 	// Create Buffers
@@ -63,7 +64,7 @@ public class GamePanel extends JPanel {
 		bg.setColor(Color.BLACK);
 		bg.fillRect(0, 0, Driver.WIDTH, Driver.HEIGHT);
 		// Start Painting
-		//level1.paint(g);
+		level1.paint(g);
 		
 		//Paints the player
 		bg.setColor(Color.GREEN);
