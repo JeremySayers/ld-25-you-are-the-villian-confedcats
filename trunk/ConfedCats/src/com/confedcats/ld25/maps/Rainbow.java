@@ -72,7 +72,7 @@ public class Rainbow extends Map {
 		return new Enemy[]{};
 	}
 	public Tile[] getMapTiles() {
-		return new Tile[]{ColorTile.getTransparentTile(), new ImageTile(PREFIX+"left.png"), new ImageTile(PREFIX+"center.png"), new ImageTile(PREFIX+"right.png"), new ColorTile(Color.RED), ColorTile.getTransparentTile()};
+		return new Tile[]{new ColorTile(), new ImageTile(PREFIX+"left.png"), new ImageTile(PREFIX+"center.png"), new ImageTile(PREFIX+"right.png"), new ColorTile(Color.RED), new ColorTile()};
 	}
 	public TileType[] getMapTileTypes() {
 		return new TileType[]{TileType.EMPTY, TileType.PLATFORM, TileType.PLATFORM, TileType.PLATFORM, TileType.PIT, TileType.SPOUT};

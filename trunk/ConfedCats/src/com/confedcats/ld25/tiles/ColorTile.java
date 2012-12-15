@@ -5,10 +5,17 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class ColorTile extends Tile {
+	private boolean trans = false;
 	private Color col = new Color(Color.TRANSLUCENT);
+	public ColorTile() {
+		super(new BufferedImage(40, 40, TYPE_INT_ARGB));
+		this.col = new Color(Color.TRANSLUCENT);
+		trans = true;
+	}
 	public ColorTile(Color col) {
 		super(generateSolidColor(col));
 		this.col = col;
+		trans = false;
 	}
 	private static BufferedImage generateSolidColor(Color col) {
 		BufferedImage img = new BufferedImage(40, 40, TYPE_INT_ARGB);
@@ -21,16 +28,13 @@ public class ColorTile extends Tile {
 		return col;
 	}
 	public static ColorTile getTransparentTile() {
-		ColorTile c = new ColorTile(Color.BLACK);
-		for (int y=0; y<c.getHeight(); y++) {
-			for (int x=0; x<c.getWidth(); x++) {
-				c.setRGB(x, y, Color.TRANSLUCENT);
-			}
-		}
-		return c;
+		return new ColorTile();
+	}
+	private boolean isTransparent() {
+		return trans;
 	}
 	public Tile clone() {
-		if (getTileType()==TileType.EMPTY)
+		if (isTransparent())
 			return getTransparentTile();
 		return new ColorTile(getColor());
 	}
