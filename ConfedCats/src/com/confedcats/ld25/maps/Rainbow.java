@@ -9,6 +9,7 @@ import java.util.HashMap;
 import com.confedcats.ld25.Driver;
 import com.confedcats.ld25.enemies.Boss;
 import com.confedcats.ld25.enemies.Enemy;
+import com.confedcats.ld25.sounds.Sound;
 import com.confedcats.ld25.tiles.ColorTile;
 import com.confedcats.ld25.tiles.Tile;
 import com.confedcats.ld25.tiles.Tile.TileType;
@@ -38,6 +39,7 @@ public class Rainbow extends Map {
 		{2,2,2,2,3,0,0,0,1,2,3,0,0,0,1,2,2,2,2,2},
 		{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
 		{2,2,2,2,2,2,2,2,2,4,4,2,2,2,2,2,2,2,2,2}};
+	private static final Sound MUSIC = Sound.create("rainbow.mp3", true);
 	public int[][] generateMap() {
 		return MAP_MASK;
 	}
@@ -57,6 +59,10 @@ public class Rainbow extends Map {
 		return 0;
 	}
 
+	public Sound getMusic() {
+		return MUSIC;
+	}
+	
 	public String getName() {
 		return "Rainbow";
 	}
