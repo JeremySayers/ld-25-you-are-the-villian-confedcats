@@ -32,7 +32,6 @@ public abstract class Weapon extends BufferedImage {
 	public Rectangle getBounds() {
 		return new Rectangle(getX(), getY(), getWidth(), getHeight());
 	}
-	public abstract int getFullHealth();
 	public int getHealth() {
 		return health;
 	}

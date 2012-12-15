@@ -11,9 +11,11 @@ import javax.swing.JPanel;
 
 import com.confedcats.ld25.enemies.BaseEnemy;
 import com.confedcats.ld25.enemies.ConfederateSoldier;
+import com.confedcats.ld25.hats.Hat;
 import com.confedcats.ld25.maps.Map;
 import com.confedcats.ld25.maps.Rainbow;
 import com.confedcats.ld25.sounds.Sound;
+import com.confedcats.ld25.weapons.Pistol;
 
 public class GamePanel extends JPanel {
 	// Create Buffers
@@ -27,6 +29,7 @@ public class GamePanel extends JPanel {
 	public int currentFPS = 0;
     public int FPS = 0;
     public long start = 0;
+	private Hat hat;
 	public GamePanel() {
 		super();
 		
@@ -69,6 +72,7 @@ public class GamePanel extends JPanel {
 			}
 		});
 		level1.getMusic().play();
+		hat = new Hat(Pistol.class, 80, 80);
 	}
 	public void paintComponent(Graphics g) {
 		// Clear Screen
@@ -84,6 +88,8 @@ public class GamePanel extends JPanel {
 			bg.drawImage(Player.PLAYER1_LEFT, player.getX(), player.getY(), null);
 		else
 			bg.drawImage(player.getLastXVel()>0?Player.PLAYER1_RIGHT:Player.PLAYER1_LEFT, player.getX(), player.getY(), null);
+		
+		//hat.paint(bg);
 		
 		//Paints the enemies
 		bg.setColor(Color.RED);

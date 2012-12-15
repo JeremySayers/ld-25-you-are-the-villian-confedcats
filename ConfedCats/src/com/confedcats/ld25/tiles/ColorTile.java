@@ -38,4 +38,7 @@ public class ColorTile extends Tile {
 			return getTransparentTile();
 		return new ColorTile(getColor());
 	}
+	public void paintMe(Graphics g){
+		g.drawImage(this, getX(), getY(), null);
+	}
 }

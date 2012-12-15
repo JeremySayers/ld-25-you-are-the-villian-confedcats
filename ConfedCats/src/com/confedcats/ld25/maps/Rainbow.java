@@ -6,12 +6,10 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
-import javax.imageio.ImageIO;
-
-import com.confedcats.ld25.Driver;
 import com.confedcats.ld25.enemies.Boss;
 import com.confedcats.ld25.enemies.Enemy;
 import com.confedcats.ld25.sounds.Sound;
+import com.confedcats.ld25.tiles.AnimationTile;
 import com.confedcats.ld25.tiles.ColorTile;
 import com.confedcats.ld25.tiles.ImageTile;
 import com.confedcats.ld25.tiles.Tile;
@@ -84,7 +82,7 @@ public class Rainbow extends Map {
 		return new Tile[]{new ColorTile(), new ImageTile(PREFIX+"left.png"), new ImageTile(PREFIX+"center.png"), 
 				new ImageTile(PREFIX+"right.png"), new ImageTile(PREFIX+"tl.png"), new ImageTile(PREFIX+"tr.png"),
 				new ImageTile(PREFIX+"bl.png"), new ImageTile(PREFIX+"br.png"), new ImageTile(PREFIX+"vertical.png"),
-				new ColorTile(Color.RED), new ColorTile(), new ImageTile(PREFIX+"leftborder.png"), new ImageTile(PREFIX+"rightborder.png"),};
+				new AnimationTile(PREFIX+"cc_firepit1.png", PREFIX+"cc_firepit2.png"), new ColorTile(), new ImageTile(PREFIX+"leftborder.png"), new ImageTile(PREFIX+"rightborder.png"),};
 	}
 	public TileType[] getMapTileTypes() {
 		return new TileType[]{TileType.EMPTY, TileType.PLATFORM, TileType.PLATFORM, 
