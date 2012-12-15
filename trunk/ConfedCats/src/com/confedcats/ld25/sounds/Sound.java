@@ -24,7 +24,6 @@ public class Sound {
 	    try {
 			clip = AudioSystem.getClip();
 		} catch (LineUnavailableException e) {
-			e.printStackTrace();
 		}
 	    this.music = music;
 	    instances.add(this);
@@ -86,7 +85,6 @@ public class Sound {
 			if (!isMute())
 				clip.start();
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 	private void resume() {

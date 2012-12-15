@@ -9,8 +9,11 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import net.java.games.input.Controller;
+
 import com.confedcats.ld25.enemies.BaseEnemy;
 import com.confedcats.ld25.enemies.ConfederateSoldier;
+import com.confedcats.ld25.jInput.JInputJoystick;
 import com.confedcats.ld25.hats.Hat;
 import com.confedcats.ld25.maps.Map;
 import com.confedcats.ld25.maps.Rainbow;
@@ -23,6 +26,13 @@ public class GamePanel extends JPanel {
 	private static final Graphics bg = buff.getGraphics();
 	Player player = new Player();
 	ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>();
+	
+	// First you need to create controller.
+	JInputJoystick joystick = new JInputJoystick(Controller.Type.GAMEPAD);
+	// Check if the controller was found.
+	
+
+
 	Map level1 = new Rainbow();
 	boolean jumpKey = false;
 	
@@ -32,6 +42,9 @@ public class GamePanel extends JPanel {
 	private Hat hat;
 	public GamePanel() {
 		super();
+		if(!joystick.isControllerConnected()){
+			   System.out.println("No controller found!");
+		}
 		
 		// Force Repaint To Achieve 60fps
 		new java.util.Timer().scheduleAtFixedRate(new java.util.TimerTask(){
@@ -113,6 +126,7 @@ public class GamePanel extends JPanel {
 			enemies.get(i).updateEnemyPos(level1);
 		}
 		player.jumpingStuff(jumpKey);
+		checkJoystick();
 	}
 	public void calcFPS(){
 		currentFPS++;
@@ -121,6 +135,24 @@ public class GamePanel extends JPanel {
             currentFPS = 0;
             start = System.currentTimeMillis();
         }
+	}
+	public void checkJoystick(){
+		if(joystick.isControllerConnected()){
+			joystick.pollController();
+		}
+		if (joystick.getXAxisPercentage() > 60){
+			player.setxVel(5);
+		} else if (joystick.getXAxisPercentage() < 40){
+			player.setxVel(-5);
+		} else {
+			player.setxVel(0);
+		}
+		
+		if (joystick.getButtonValue(1)){
+			jumpKey = true;
+		} else {
+			jumpKey =false;
+		}
 	}
 	
 	
