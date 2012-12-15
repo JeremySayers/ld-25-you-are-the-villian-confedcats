@@ -39,11 +39,18 @@ public class Player {
 		if (canMoveHorizontal(y,x)){
 			setX(getX()+getxVel());
 		}
+		if (canMoveVertical(y,x)){
 			if (isJumping){
-				y = y + jumpSpeed;
 				jumpSpeed += gravity;
+				y = y + jumpSpeed;
 			}
-		
+		} 
+		if ((y+gravity+height)/40 != 15){
+			if (mapStorage[((y+gravity+height)/40)][(x)/40].getTileType() == TileType.EMPTY && isJumping == false){
+				jumpSpeed = 0;
+				isJumping = true;
+			}
+		}
 	}
 	public boolean canMoveHorizontal(int y, int x){
 		if (xVel > 0){
@@ -60,17 +67,43 @@ public class Player {
 			}
 		}
 	}
+	public boolean canMoveVertical(int y, int x){
+		if (jumpSpeed < 0){
+			if (mapStorage[((y+jumpSpeed)/40)][(x)/40].getTileType() == TileType.EMPTY){
+				return true;
+			} else {
+				jumpSpeed = 0;
+				return false;
+			}
+		} else {
+			if (mapStorage[((y+gravity+height)/40)][(x)/40].getTileType() == TileType.EMPTY){
+				return true;
+			} else {
+				isJumping = false;
+				jumpSpeed = 0;
+				return false;
+			}
+		}
+	}
 	
+	public void playerReset(){
+		x = 385;
+		y = 525;
+	}
 	public static int roundToClosestGrid(double i){
 	    return (int) ((Math.floor(i/40) *40))/40;
 	}
 	public void jumpingStuff(boolean jumpKey){
 		if (jumpKey){
+			
 			if (!isJumping()){
 				setJumpSpeed(getStartJumpSpeed());
 				setJumping(true);
 			}
 		}
+	}
+	public void log(String string){
+		System.out.println(string);
 	}
 	
 	
