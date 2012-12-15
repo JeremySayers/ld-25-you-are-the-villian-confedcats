@@ -1,9 +1,13 @@
 package com.confedcats.ld25;
 
+import com.confedcats.ld25.maps.Map;
+import com.confedcats.ld25.tiles.Tile;
+import com.confedcats.ld25.tiles.Tile.TileType;
+
 public class Player {
 	private boolean isAlive;
 	private boolean isJumping = false;
-	private int jumpSpeed = -10;
+	private int jumpSpeed = 0;
 	private int startJumpSpeed = -20;
 	private int gravity = 1;
 	private int direction; //0 - Left, 1 - Right
@@ -11,20 +15,54 @@ public class Player {
 	private int yVel;
 	private int x;
 	private int y;
+	private int width = 30;
+	private int height = 30;
+	//Corners for collision detection
+	private int topRightX;
+	private int topRightY;
+	private int topLeftX;
+	private int topLeftY;
+	private int bottomRightX;
+	private int bottomRightY;
+	private int bottomLeftX;
+	private int bottomLeftY;
+	
+	private Tile[][] mapStorage;
 	
 	public Player(){
 		x = 385;
-		y = 570;
+		y = 525;
 	}
 	
-	public void updatePlayerPos(){
-		setX(getX()+getxVel());
-		if (isJumping){
+	public void updatePlayerPos(Map map){
+		mapStorage = map.getTiles();
+		if (canMoveHorizontal(y,x)){
+			setX(getX()+getxVel());
+		}
+			if (isJumping){
 				y = y + jumpSpeed;
 				jumpSpeed += gravity;
-			if (y >= 570)
-				isJumping = false;
+			}
+		
+	}
+	public boolean canMoveHorizontal(int y, int x){
+		if (xVel > 0){
+			if (mapStorage[(y/40)][(x+width+xVel)/40].getTileType() == TileType.EMPTY){
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			if (mapStorage[(y/40)][(x+xVel)/40].getTileType() == TileType.EMPTY){
+				return true;
+			} else {
+				return false;
+			}
 		}
+	}
+	
+	public static int roundToClosestGrid(double i){
+	    return (int) ((Math.floor(i/40) *40))/40;
 	}
 	public void jumpingStuff(boolean jumpKey){
 		if (jumpKey){

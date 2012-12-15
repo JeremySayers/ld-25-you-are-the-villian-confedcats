@@ -1,5 +1,7 @@
 package com.confedcats.ld25.enemies;
 
+import com.confedcats.ld25.maps.Map;
+
 public abstract class BaseEnemy {
 	private int health;
 	private int xVel = 0;
@@ -50,7 +52,7 @@ public abstract class BaseEnemy {
 		setX(x);
 		setY(y);
 	}
-	public void updateEnemyPos(){
+	public void updateEnemyPos(Map map){
 		if (y < 570)
 			y += gravity;
 	}

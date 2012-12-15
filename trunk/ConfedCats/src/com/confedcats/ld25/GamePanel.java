@@ -41,9 +41,9 @@ public class GamePanel extends JPanel {
 		addKeyListener(new KeyAdapter(){
 			public void keyPressed(KeyEvent event) {
 				if (event.getKeyCode()==KeyEvent.VK_LEFT) 
-					player.setxVel(-5);
+					player.setxVel(-8);
 				if (event.getKeyCode()==KeyEvent.VK_RIGHT) 
-					player.setxVel(5);
+					player.setxVel(8);
 				if (event.getKeyCode()==KeyEvent.VK_UP) {
 					jumpKey = true;
 				}
@@ -86,10 +86,10 @@ public class GamePanel extends JPanel {
 		repaint();
 		calcFPS();
 		synchronized(player){
-			player.updatePlayerPos();
+			player.updatePlayerPos(level1);
 		}
 		for (int i = 0; i < enemies.size(); i++){
-			enemies.get(i).updateEnemyPos();
+			enemies.get(i).updateEnemyPos(level1);
 		}
 		player.jumpingStuff(jumpKey);
 	}
