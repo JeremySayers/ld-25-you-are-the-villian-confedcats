@@ -9,12 +9,15 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 
+import com.confedcats.ld25.sounds.Sound;
+
 public class Driver extends Applet {
 	public static final GraphicsDevice DEVICE = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 	public static final int HEIGHT = 600;
 	public static final int WIDTH = 800;
 	public static final GamePanel PANEL = new GamePanel();
 	public static final JFrame POPOUT = new JFrame("Confederate Cats");
+	private boolean muted = true;
 	public void init() {
 		// Initialize Applet
 		setSize(WIDTH, HEIGHT);
@@ -48,5 +51,12 @@ public class Driver extends Applet {
 			}
 		});
 		/* End Of Full Screen Pop Out Class */
+	}
+	public void start() {
+		Sound.setMute(muted);
+	}
+	public void stop() {
+		muted = Sound.isMute();
+		Sound.setMute(true);
 	}
 }

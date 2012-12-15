@@ -9,6 +9,7 @@ import java.util.HashMap;
 import com.confedcats.ld25.Driver;
 import com.confedcats.ld25.enemies.Boss;
 import com.confedcats.ld25.enemies.Enemy;
+import com.confedcats.ld25.sounds.Sound;
 import com.confedcats.ld25.tiles.ColorTile;
 import com.confedcats.ld25.tiles.Tile;
 import com.confedcats.ld25.tiles.Tile.TileType;
@@ -49,7 +50,6 @@ public abstract class Map {
 		Tile[][] tiles = getTiles();
 		for (int y=0; y<tiles.length; y++) {
 			for (int x=0; x<tiles[y].length; x++) {
-				System.out.println(String.format("(%s,%s)", x*40, y*40));
 				g.drawImage(tiles[y][x], x*40, y*40, 40, 40, null);
 			}
 		}
@@ -60,6 +60,7 @@ public abstract class Map {
 	public abstract int getDifficulty();
 	public abstract Tile[] getMapTiles();
 	public abstract TileType[] getMapTileTypes();
+	public abstract Sound getMusic();
 	public abstract String getName();
 	public Tile[][] getTiles() {
 		return tiles;

@@ -13,7 +13,7 @@ import com.confedcats.ld25.enemies.BaseEnemy;
 import com.confedcats.ld25.enemies.ConfederateSoldier;
 import com.confedcats.ld25.maps.Map;
 import com.confedcats.ld25.maps.Rainbow;
-import com.confedcats.ld25.tiles.ColorTile;
+import com.confedcats.ld25.sounds.Sound;
 
 public class GamePanel extends JPanel {
 	// Create Buffers
@@ -21,7 +21,6 @@ public class GamePanel extends JPanel {
 	private static final Graphics bg = buff.getGraphics();
 	Player player = new Player();
 	ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>();
-	
 	Map level1 = new Rainbow();
 	boolean jumpKey = false;
 	
@@ -58,6 +57,7 @@ public class GamePanel extends JPanel {
 					jumpKey = false;
 			}
 		});
+		level1.getMusic().play();
 	}
 	public void paintComponent(Graphics g) {
 		// Clear Screen
