@@ -39,28 +39,29 @@ public class Player {
 		if (canMoveHorizontal(y,x)){
 			setX(getX()+getxVel());
 		}
+		 
+		if ((y+gravity+height)/40 != 15){
+			if (mapStorage[(int) Math.floor((y+gravity+height)/40)][(int) (Math.floor(x)/40)].getTileType() == TileType.EMPTY && isJumping == false){
+				jumpSpeed = 0;
+				isJumping = true;
+			}
+		}
 		if (canMoveVertical(y,x)){
 			if (isJumping){
 				jumpSpeed += gravity;
 				y = y + jumpSpeed;
 			}
-		} 
-		if ((y+gravity+height)/40 != 15){
-			if (mapStorage[((y+gravity+height)/40)][(x)/40].getTileType() == TileType.EMPTY && isJumping == false){
-				jumpSpeed = 0;
-				isJumping = true;
-			}
 		}
 	}
 	public boolean canMoveHorizontal(int y, int x){
 		if (xVel > 0){
-			if (mapStorage[(y/40)][(x+width+xVel)/40].getTileType() == TileType.EMPTY){
+			if (mapStorage[(int) Math.ceil(y/40)][(int) (Math.ceil(x+width+xVel)/40)].getTileType() == TileType.EMPTY){
 				return true;
 			} else {
 				return false;
 			}
 		} else {
-			if (mapStorage[(y/40)][(x+xVel)/40].getTileType() == TileType.EMPTY){
+			if (mapStorage[(int) Math.floor(y/40)][(int) (Math.floor(x+xVel)/40)].getTileType() == TileType.EMPTY){
 				return true;
 			} else {
 				return false;
@@ -69,14 +70,14 @@ public class Player {
 	}
 	public boolean canMoveVertical(int y, int x){
 		if (jumpSpeed < 0){
-			if (mapStorage[((y+jumpSpeed)/40)][(x)/40].getTileType() == TileType.EMPTY){
+			if (mapStorage[(int) Math.floor((y+jumpSpeed)/40)][(int) (Math.floor(x)/40)].getTileType() == TileType.EMPTY && mapStorage[(int) Math.floor((y+jumpSpeed)/40)][(int) (Math.floor(x+width)/40)].getTileType() == TileType.EMPTY){
 				return true;
-			} else {
+			}else {
 				jumpSpeed = 0;
 				return false;
 			}
 		} else {
-			if (mapStorage[((y+gravity+height)/40)][(x)/40].getTileType() == TileType.EMPTY){
+			if (mapStorage[(int) Math.ceil((y+gravity+height)/40)][(int) Math.ceil((x)/40)].getTileType() == TileType.EMPTY && mapStorage[(int) Math.ceil((y+gravity+height)/40)][(int) Math.ceil((x+width)/40)].getTileType() == TileType.EMPTY){
 				return true;
 			} else {
 				isJumping = false;
