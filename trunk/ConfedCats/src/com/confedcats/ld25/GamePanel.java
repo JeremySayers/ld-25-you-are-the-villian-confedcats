@@ -13,6 +13,7 @@ import com.confedcats.ld25.enemies.BaseEnemy;
 import com.confedcats.ld25.enemies.ConfederateSoldier;
 import com.confedcats.ld25.maps.Map;
 import com.confedcats.ld25.maps.Rainbow;
+import com.confedcats.ld25.sounds.Sound;
 
 public class GamePanel extends JPanel {
 	// Create Buffers
@@ -48,14 +49,23 @@ public class GamePanel extends JPanel {
 				}
 			}
 			public void keyReleased(KeyEvent event) {
-				if (event.getKeyCode()==KeyEvent.VK_LEFT && player.getxVel() < 0) 
+				if (event.getKeyCode()==KeyEvent.VK_LEFT && player.getxVel() < 0){ 
 					player.setxVel(0);
-				if (event.getKeyCode()==KeyEvent.VK_RIGHT && player.getxVel() > 0) 
+					player.setLastXVel(-1);
+				}
+				if (event.getKeyCode()==KeyEvent.VK_RIGHT && player.getxVel() > 0){
 					player.setxVel(0);
+					player.setLastXVel(1);
+				}
+					
 				if (event.getKeyCode()==KeyEvent.VK_UP ) 
 					jumpKey = false;
 				if (event.getKeyCode()==KeyEvent.VK_R ) 
 					player.playerReset();
+				if (event.getKeyCode()==KeyEvent.VK_M ) {
+					Sound.setMute(!Sound.isMute());
+					System.out.println(Sound.isMute()+"");
+				}
 			}
 		});
 		level1.getMusic().play();
