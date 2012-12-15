@@ -14,6 +14,10 @@ public class GamePanel extends JPanel {
 	private static final Graphics bg = buff.getGraphics();
 	Player player = new Player();
 	boolean jumpKey = false;
+	
+	public int currentFPS = 0;
+    public int FPS = 0;
+    public long start = 0;
 	public GamePanel() {
 		super();
 		
@@ -50,25 +54,29 @@ public class GamePanel extends JPanel {
 		// Start Painting
 		bg.setColor(Color.GREEN);
 		bg.fillRect(player.getX(), player.getY(), 30, 30);
+		bg.setColor(Color.WHITE);
+		bg.drawString(FPS+" FPS", 20, 20);
 		// End Painting
 		// Paint Buffer To Graphics Handle Stretching The Image To Container Size
 		g.drawImage(buff, 0, 0, getWidth(), getHeight(), 0, 0, Driver.WIDTH, Driver.HEIGHT, null);
 	}
 	public void tick() {
 		repaint();
+		calcFPS();
 		synchronized(player){
 			player.updatePlayerPos();
 		}
-		jumpingStuff();
+		player.jumpingStuff(jumpKey);
+	}
+	public void calcFPS(){
+		currentFPS++;
+        if(System.currentTimeMillis() - start >= 1000) {
+            FPS = currentFPS;
+            currentFPS = 0;
+            start = System.currentTimeMillis();
+        }
 	}
 	
-	public void jumpingStuff(){
-		if (jumpKey){
-			if (!player.isJumping()){
-				player.setJumpSpeed(player.getStartJumpSpeed());
-				player.setJumping(true);
-			}
-		}
-	}
+	
 	
 }
