@@ -11,6 +11,7 @@ import com.confedcats.ld25.enemies.Boss;
 import com.confedcats.ld25.enemies.Enemy;
 import com.confedcats.ld25.tiles.ColorTile;
 import com.confedcats.ld25.tiles.Tile;
+import com.confedcats.ld25.tiles.Tile.TileType;
 
 public abstract class Map {
 	private BufferedImage buff = new BufferedImage(Driver.WIDTH, Driver.HEIGHT, BufferedImage.TYPE_INT_ARGB);
@@ -20,9 +21,9 @@ public abstract class Map {
 		generateBuffer();
 	}
 	public Tile[][] convertMap() {
-		System.out.println("convertMap");
 		int[][] intMap = generateMap();
 		Tile[] tiles = getMapTiles();
+		TileType[] types = getMapTileTypes();
 		Tile[][] map;
 		if (intMap.length>0) {
 			map = new Tile[intMap.length][intMap[1].length];
@@ -30,10 +31,10 @@ public abstract class Map {
 				for (int x=0; x<intMap[y].length; x++) {
 					try {
 						map[y][x] = tiles[intMap[y][x]].clone();
-						map[y][x].move(x, y);
+						map[y][x].register(types[intMap[y][x]], x, y);
 					} catch (Exception e) {
 						map[y][x] = new ColorTile(Color.WHITE);
-						map[y][x].move(x, y);
+						map[y][x].register(types[intMap[y][x]], x, y);
 					}
 				}
 			}
@@ -43,7 +44,6 @@ public abstract class Map {
 		return map;
 	}
 	public void generateBuffer() {
-		System.out.println("generateBuffer");
 		Graphics g = buff.getGraphics();
 		g.drawImage(getBackground(), 0, 0, null);
 		Tile[][] tiles = getTiles();
@@ -59,13 +59,13 @@ public abstract class Map {
 	public abstract HashMap<Integer, Boss> getBosses();
 	public abstract int getDifficulty();
 	public abstract Tile[] getMapTiles();
+	public abstract TileType[] getMapTileTypes();
 	public abstract String getName();
 	public Tile[][] getTiles() {
 		return tiles;
 	}
 	public abstract Enemy[] getValidEnemies();
 	public void paint(Graphics g) {
-		System.out.println("paint");
 		g.drawImage(buff, 0, 0, null);
 	}
 }

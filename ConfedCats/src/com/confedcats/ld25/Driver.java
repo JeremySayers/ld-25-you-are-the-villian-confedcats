@@ -35,11 +35,13 @@ public class Driver extends Applet {
 						add(PANEL, BorderLayout.CENTER);
 						PANEL.setSize(new Dimension(WIDTH,HEIGHT));
 						POPOUT.setVisible(false);
+						PANEL.requestFocus();
 						DEVICE.setFullScreenWindow(null); // Un-Associate popout with full screen.
 					} else {
 						POPOUT.add(PANEL, BorderLayout.CENTER);
 						PANEL.setPreferredSize(new Dimension(1,1));
 						POPOUT.setVisible(true);
+						PANEL.requestFocus();
 						DEVICE.setFullScreenWindow(POPOUT); // Re-Associate popout with full screen.
 					}
 				}
