@@ -6,11 +6,14 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
+
 import com.confedcats.ld25.Driver;
 import com.confedcats.ld25.enemies.Boss;
 import com.confedcats.ld25.enemies.Enemy;
 import com.confedcats.ld25.sounds.Sound;
 import com.confedcats.ld25.tiles.ColorTile;
+import com.confedcats.ld25.tiles.ImageTile;
 import com.confedcats.ld25.tiles.Tile;
 import com.confedcats.ld25.tiles.Tile.TileType;
 
@@ -40,15 +43,13 @@ public class Rainbow extends Map {
 		{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
 		{2,2,2,2,2,2,2,2,2,4,4,2,2,2,2,2,2,2,2,2}};
 	private static final Sound MUSIC = Sound.create("rainbow.mp3", true);
+	private static final String PREFIX = "rainbow/";
+	private static final BufferedImage BACKGROUND = loadImage(PREFIX+"background.png");
 	public int[][] generateMap() {
 		return MAP_MASK;
 	}
 	public Image getBackground() {
-		BufferedImage img = new BufferedImage(Driver.WIDTH, Driver.HEIGHT, BufferedImage.TYPE_INT_RGB);
-		Graphics g = img.getGraphics();
-		g.setColor(Color.PINK);
-		g.fillRect(0, 0, img.getWidth(), img.getHeight());
-		return img;
+		return BACKGROUND;
 	}
 
 	public HashMap<Integer, Boss> getBosses() {
@@ -71,7 +72,7 @@ public class Rainbow extends Map {
 		return new Enemy[]{};
 	}
 	public Tile[] getMapTiles() {
-		return new Tile[]{ColorTile.getTransparentTile(), new ColorTile(Color.LIGHT_GRAY), new ColorTile(Color.GRAY), new ColorTile(Color.DARK_GRAY), new ColorTile(Color.RED), new ColorTile(Color.GREEN)};
+		return new Tile[]{ColorTile.getTransparentTile(), new ImageTile(PREFIX+"left.png"), new ImageTile(PREFIX+"center.png"), new ImageTile(PREFIX+"right.png"), new ColorTile(Color.RED), ColorTile.getTransparentTile()};
 	}
 	public TileType[] getMapTileTypes() {
 		return new TileType[]{TileType.EMPTY, TileType.PLATFORM, TileType.PLATFORM, TileType.PLATFORM, TileType.PIT, TileType.SPOUT};

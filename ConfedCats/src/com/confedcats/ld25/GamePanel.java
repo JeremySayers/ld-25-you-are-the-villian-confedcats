@@ -13,7 +13,6 @@ import com.confedcats.ld25.enemies.BaseEnemy;
 import com.confedcats.ld25.enemies.ConfederateSoldier;
 import com.confedcats.ld25.maps.Map;
 import com.confedcats.ld25.maps.Rainbow;
-import com.confedcats.ld25.sounds.Sound;
 
 public class GamePanel extends JPanel {
 	// Create Buffers
@@ -74,9 +73,9 @@ public class GamePanel extends JPanel {
 		
 		//Paints the enemies
 		bg.setColor(Color.RED);
-		for (int i = 0; i < enemies.size(); i++){
+		/*for (int i = 0; i < enemies.size(); i++){
 			bg.fillRect(enemies.get(i).getX(), enemies.get(i).getY(), 30, 30);
-		}
+		}*/
 		//Paints the FPS counter
 		bg.setColor(Color.WHITE);
 		bg.drawString(FPS+" FPS", 20, 20);

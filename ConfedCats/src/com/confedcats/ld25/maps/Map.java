@@ -6,6 +6,8 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
+
 import com.confedcats.ld25.Driver;
 import com.confedcats.ld25.enemies.Boss;
 import com.confedcats.ld25.enemies.Enemy;
@@ -13,13 +15,22 @@ import com.confedcats.ld25.sounds.Sound;
 import com.confedcats.ld25.tiles.ColorTile;
 import com.confedcats.ld25.tiles.Tile;
 import com.confedcats.ld25.tiles.Tile.TileType;
+import com.confedcats.ld25.weapons.Weapon;
 
 public abstract class Map {
+	private static final String PREFIX = "/com/confedcats/ld25/maps/";
 	private BufferedImage buff = new BufferedImage(Driver.WIDTH, Driver.HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	private Tile[][] tiles;
 	public Map() {
 		this.tiles = convertMap();
 		generateBuffer();
+	}
+	protected static BufferedImage loadImage(String fname) {
+		try {
+			return ImageIO.read(Weapon.class.getResource(PREFIX+fname).openStream());
+		} catch (Exception e) {
+		}
+		return null;
 	}
 	public Tile[][] convertMap() {
 		int[][] intMap = generateMap();
@@ -50,7 +61,8 @@ public abstract class Map {
 		Tile[][] tiles = getTiles();
 		for (int y=0; y<tiles.length; y++) {
 			for (int x=0; x<tiles[y].length; x++) {
-				g.drawImage(tiles[y][x], x*40, y*40, 40, 40, null);
+				if (tiles[y][x].getTileType()!=TileType.EMPTY)
+					g.drawImage(tiles[y][x], x*40, y*40, 40, 40, null);
 			}
 		}
 	}
