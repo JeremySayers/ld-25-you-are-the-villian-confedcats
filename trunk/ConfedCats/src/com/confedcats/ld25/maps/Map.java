@@ -12,6 +12,7 @@ import com.confedcats.ld25.Driver;
 import com.confedcats.ld25.enemies.Boss;
 import com.confedcats.ld25.enemies.Enemy;
 import com.confedcats.ld25.sounds.Sound;
+import com.confedcats.ld25.tiles.AnimationTile;
 import com.confedcats.ld25.tiles.ColorTile;
 import com.confedcats.ld25.tiles.Tile;
 import com.confedcats.ld25.tiles.Tile.TileType;
@@ -43,10 +44,10 @@ public abstract class Map {
 				for (int x=0; x<intMap[y].length; x++) {
 					try {
 						map[y][x] = tiles[intMap[y][x]].clone();
-						map[y][x].register(types[intMap[y][x]], x, y);
+						map[y][x].register(types[intMap[y][x]], x*40, y*40);
 					} catch (Exception e) {
 						map[y][x] = new ColorTile(Color.WHITE);
-						map[y][x].register(types[intMap[y][x]], x, y);
+						map[y][x].register(types[intMap[y][x]], x*40, y*40);
 					}
 				}
 			}
@@ -62,7 +63,7 @@ public abstract class Map {
 		for (int y=0; y<tiles.length; y++) {
 			for (int x=0; x<tiles[y].length; x++) {
 				if (tiles[y][x].getTileType()!=TileType.EMPTY)
-					g.drawImage(tiles[y][x], x*40, y*40, 40, 40, null);
+					tiles[y][x].paintMe(g);
 			}
 		}
 	}
@@ -80,5 +81,11 @@ public abstract class Map {
 	public abstract Enemy[] getValidEnemies();
 	public void paint(Graphics g) {
 		g.drawImage(buff, 0, 0, null);
+		for (int y=0; y<tiles.length; y++) {
+			for (int x=0; x<tiles[y].length; x++) {
+				if (tiles[y][x] instanceof AnimationTile)
+					tiles[y][x].paintMe(g);
+			}
+		}
 	}
 }
