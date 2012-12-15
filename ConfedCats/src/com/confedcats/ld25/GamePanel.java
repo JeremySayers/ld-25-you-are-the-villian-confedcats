@@ -30,8 +30,6 @@ public class GamePanel extends JPanel {
 	public GamePanel() {
 		super();
 		
-		enemies.add(new ConfederateSoldier(100,300,0));
-		
 		// Force Repaint To Achieve 60fps
 		new java.util.Timer().scheduleAtFixedRate(new java.util.TimerTask(){
 			public void run() {
@@ -41,9 +39,9 @@ public class GamePanel extends JPanel {
 		addKeyListener(new KeyAdapter(){
 			public void keyPressed(KeyEvent event) {
 				if (event.getKeyCode()==KeyEvent.VK_LEFT) 
-					player.setxVel(-8);
+					player.setxVel(-5);
 				if (event.getKeyCode()==KeyEvent.VK_RIGHT) 
-					player.setxVel(8);
+					player.setxVel(5);
 				if (event.getKeyCode()==KeyEvent.VK_UP) {
 					jumpKey = true;
 				}
@@ -66,6 +64,8 @@ public class GamePanel extends JPanel {
 					Sound.setMute(!Sound.isMute());
 					System.out.println(Sound.isMute()+"");
 				}
+				if (event.getKeyCode()==KeyEvent.VK_E ) 
+					enemies.add(new ConfederateSoldier(100,385,20));
 			}
 		});
 		level1.getMusic().play();
@@ -87,9 +87,9 @@ public class GamePanel extends JPanel {
 		
 		//Paints the enemies
 		bg.setColor(Color.RED);
-		/*for (int i = 0; i < enemies.size(); i++){
+		for (int i = 0; i < enemies.size(); i++){
 			bg.fillRect(enemies.get(i).getX(), enemies.get(i).getY(), 30, 30);
-		}*/
+		}
 		//Paints the FPS counter
 		bg.setColor(Color.WHITE);
 		bg.drawString(FPS+" FPS", 20, 20);
