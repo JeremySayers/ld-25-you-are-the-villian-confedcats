@@ -55,6 +55,8 @@ public class GamePanel extends JPanel {
 					player.setxVel(0);
 				if (event.getKeyCode()==KeyEvent.VK_UP ) 
 					jumpKey = false;
+				if (event.getKeyCode()==KeyEvent.VK_R ) 
+					player.playerReset();
 			}
 		});
 		level1.getMusic().play();
