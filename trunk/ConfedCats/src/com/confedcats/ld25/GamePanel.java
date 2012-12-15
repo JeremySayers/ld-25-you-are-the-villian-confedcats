@@ -78,8 +78,12 @@ public class GamePanel extends JPanel {
 		level1.paint(bg);
 		
 		//Paints the player
-		bg.setColor(Color.GREEN);
-		bg.fillRect(player.getX(), player.getY(), 30, 30);
+		if (player.getxVel()>0)
+			bg.drawImage(Player.PLAYER1_RIGHT, player.getX(), player.getY(), null);
+		else if (player.getxVel()<0)
+			bg.drawImage(Player.PLAYER1_LEFT, player.getX(), player.getY(), null);
+		else
+			bg.drawImage(player.getLastXVel()>0?Player.PLAYER1_RIGHT:Player.PLAYER1_LEFT, player.getX(), player.getY(), null);
 		
 		//Paints the enemies
 		bg.setColor(Color.RED);
