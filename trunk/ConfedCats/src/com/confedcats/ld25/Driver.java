@@ -17,7 +17,7 @@ public class Driver extends Applet {
 	public static final int WIDTH = 800;
 	public static final GamePanel PANEL = new GamePanel();
 	public static final JFrame POPOUT = new JFrame("Confederate Cats");
-	private boolean muted = true;
+	private boolean muted = false;
 	public void init() {
 		// Initialize Applet
 		setSize(WIDTH, HEIGHT);
