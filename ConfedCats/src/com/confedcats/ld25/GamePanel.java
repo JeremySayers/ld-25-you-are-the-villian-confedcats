@@ -10,7 +10,8 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
 
-	Player player;
+	Player player = new Player();
+	boolean jumpKey = false;
 	public GamePanel() {
 		super();
 		
@@ -20,19 +21,23 @@ public class GamePanel extends JPanel {
 				tick();
 			}
 		}, 1, 1000/60);
-		startGame();
 		addKeyListener(new KeyAdapter(){
 			public void keyPressed(KeyEvent event) {
 				if (event.getKeyCode()==KeyEvent.VK_LEFT) 
 					player.setxVel(-3);
 				if (event.getKeyCode()==KeyEvent.VK_RIGHT) 
 					player.setxVel(3);
+				if (event.getKeyCode()==KeyEvent.VK_UP) {
+					jumpKey = true;
+				}
 			}
 			public void keyReleased(KeyEvent event) {
 				if (event.getKeyCode()==KeyEvent.VK_LEFT && player.getxVel() < 0) 
 					player.setxVel(0);
 				if (event.getKeyCode()==KeyEvent.VK_RIGHT && player.getxVel() > 0) 
 					player.setxVel(0);
+				if (event.getKeyCode()==KeyEvent.VK_UP ) 
+					jumpKey = false;
 			}
 		});
 	}
@@ -54,12 +59,16 @@ public class GamePanel extends JPanel {
 		synchronized(player){
 			player.updatePlayerPos();
 		}
+		jumpingStuff();
 	}
 	
-	public void startGame(){
-		createPlayer();
+	public void jumpingStuff(){
+		if (jumpKey){
+			if (!player.isJumping()){
+				player.setJumpSpeed(player.getStartJumpSpeed());
+				player.setJumping(true);
+			}
+		}
 	}
-	public void createPlayer(){
-		player = new Player();
-	}
+	
 }

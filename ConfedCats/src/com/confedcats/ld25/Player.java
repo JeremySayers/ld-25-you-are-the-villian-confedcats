@@ -2,6 +2,10 @@ package com.confedcats.ld25;
 
 public class Player {
 	private boolean isAlive;
+	private boolean isJumping = false;
+	private int jumpSpeed = -10;
+	private int startJumpSpeed = -20;
+	private int gravity = 1;
 	private int direction; //0 - Left, 1 - Right
 	private int xVel;
 	private int yVel;
@@ -9,13 +13,53 @@ public class Player {
 	private int y;
 	
 	public Player(){
-		
+		x = 385;
+		y = 570;
 	}
 	
 	public void updatePlayerPos(){
 		setX(getX()+getxVel());
+		if (isJumping){
+				y = y + jumpSpeed;
+				jumpSpeed += gravity;
+			if (y >= 570)
+				isJumping = false;
+		}
 	}
 	
+	
+	public boolean isJumping() {
+		return isJumping;
+	}
+
+	public void setJumping(boolean isJumping) {
+		this.isJumping = isJumping;
+	}
+
+	public int getJumpSpeed() {
+		return jumpSpeed;
+	}
+
+	public void setJumpSpeed(int jumpSpeed) {
+		this.jumpSpeed = jumpSpeed;
+	}
+
+	public int getStartJumpSpeed() {
+		return startJumpSpeed;
+	}
+
+	public void setStartJumpSpeed(int startJumpSpeed) {
+		this.startJumpSpeed = startJumpSpeed;
+	}
+
+	public int getGravity() {
+		return gravity;
+	}
+
+	public void setGravity(int gravity) {
+		this.gravity = gravity;
+	}
+
 	public int getDirection() {
 		return direction;
 	}
