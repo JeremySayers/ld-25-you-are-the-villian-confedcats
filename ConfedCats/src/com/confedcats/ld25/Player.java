@@ -26,6 +26,14 @@ public class Player {
 				isJumping = false;
 		}
 	}
+	public void jumpingStuff(boolean jumpKey){
+		if (jumpKey){
+			if (!isJumping()){
+				setJumpSpeed(getStartJumpSpeed());
+				setJumping(true);
+			}
+		}
+	}
 	
 	
 	public boolean isJumping() {
