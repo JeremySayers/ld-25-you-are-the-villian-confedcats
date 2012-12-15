@@ -11,6 +11,7 @@ import com.confedcats.ld25.enemies.Boss;
 import com.confedcats.ld25.enemies.Enemy;
 import com.confedcats.ld25.tiles.ColorTile;
 import com.confedcats.ld25.tiles.Tile;
+import com.confedcats.ld25.tiles.Tile.TileType;
 
 public class Rainbow extends Map {
 	/* 
@@ -65,6 +66,9 @@ public class Rainbow extends Map {
 	}
 	public Tile[] getMapTiles() {
 		return new Tile[]{ColorTile.getTransparentTile(), new ColorTile(Color.LIGHT_GRAY), new ColorTile(Color.GRAY), new ColorTile(Color.DARK_GRAY), new ColorTile(Color.RED), new ColorTile(Color.GREEN)};
+	}
+	public TileType[] getMapTileTypes() {
+		return new TileType[]{TileType.EMPTY, TileType.PLATFORM, TileType.PLATFORM, TileType.PLATFORM, TileType.PIT, TileType.SPOUT};
 	}
 
 }

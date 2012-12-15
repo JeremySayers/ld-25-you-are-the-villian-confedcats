@@ -4,7 +4,9 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-public class Tile extends BufferedImage {
+public abstract class Tile extends BufferedImage {
+	public static enum TileType {PLATFORM, SPOUT, PIT, EMPTY};
+	private TileType type;
 	private int x;
 	private int y;
 	public Tile(BufferedImage img) {
@@ -12,11 +14,12 @@ public class Tile extends BufferedImage {
 		Graphics g = getGraphics();
 		g.drawImage(img, 0, 0, null);
 	}
-	public Tile clone() {
-		return new Tile(this);
-	}
+	public abstract Tile clone();
 	public Rectangle getBounds() {
 		return new Rectangle(getX(), getY(), getWidth(), getHeight());
+	}
+	public TileType getTileType() {
+		return type;
 	}
 	public int getX() {
 		return x;
@@ -24,7 +27,8 @@ public class Tile extends BufferedImage {
 	public int getY() {
 		return y;
 	}
-	public void move(int x, int y) {
+	public void register(TileType type, int x, int y) {
+		this.type = type;
 		this.x = x;
 		this.y = y;
 	}
