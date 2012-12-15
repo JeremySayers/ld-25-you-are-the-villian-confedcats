@@ -32,7 +32,7 @@ public class Player {
 	
 	public Player(){
 		x = 385;
-		y = 525;
+		y = 445;
 	}
 	
 	protected static BufferedImage loadImage(String fname) {
