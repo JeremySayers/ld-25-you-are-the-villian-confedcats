@@ -64,7 +64,7 @@ public class GamePanel extends JPanel {
 		bg.setColor(Color.BLACK);
 		bg.fillRect(0, 0, Driver.WIDTH, Driver.HEIGHT);
 		// Start Painting
-		level1.paint(g);
+		level1.paint(bg);
 		
 		//Paints the player
 		bg.setColor(Color.GREEN);

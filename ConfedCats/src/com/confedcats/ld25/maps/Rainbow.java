@@ -64,7 +64,7 @@ public class Rainbow extends Map {
 		return new Enemy[]{};
 	}
 	public Tile[] getMapTiles() {
-		return new Tile[]{ColorTile.getTransparentTile(), new ColorTile(Color.BLUE), new ColorTile(Color.DARK_GRAY), new ColorTile(Color.PINK), new ColorTile(Color.RED), new ColorTile(Color.GREEN)};
+		return new Tile[]{ColorTile.getTransparentTile(), new ColorTile(Color.LIGHT_GRAY), new ColorTile(Color.GRAY), new ColorTile(Color.DARK_GRAY), new ColorTile(Color.RED), new ColorTile(Color.GREEN)};
 	}
 
 }

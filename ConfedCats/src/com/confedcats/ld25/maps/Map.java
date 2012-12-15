@@ -50,7 +50,7 @@ public abstract class Map {
 		for (int y=0; y<tiles.length; y++) {
 			for (int x=0; x<tiles[y].length; x++) {
 				System.out.println(String.format("(%s,%s)", x*40, y*40));
-				g.drawImage(tiles[y][x], x*40, y*40, (x+1)*40, (y+1)*40, null);
+				g.drawImage(tiles[y][x], x*40, y*40, 40, 40, null);
 			}
 		}
 	}
