@@ -5,14 +5,23 @@ import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
+
+import com.confedcats.ld25.enemies.BaseEnemy;
+import com.confedcats.ld25.enemies.ConfederateSoldier;
+import com.confedcats.ld25.maps.Map;
+import com.confedcats.ld25.maps.Rainbow;
 
 public class GamePanel extends JPanel {
 	// Create Buffers
 	private static final BufferedImage buff = new BufferedImage(Driver.WIDTH, Driver.HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private static final Graphics bg = buff.getGraphics();
 	Player player = new Player();
+	ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>();
+	
+	Map level1 = new Rainbow();
 	boolean jumpKey = false;
 	
 	public int currentFPS = 0;
@@ -20,6 +29,8 @@ public class GamePanel extends JPanel {
     public long start = 0;
 	public GamePanel() {
 		super();
+		
+		enemies.add(new ConfederateSoldier(100,300,0));
 		
 		// Force Repaint To Achieve 60fps
 		new java.util.Timer().scheduleAtFixedRate(new java.util.TimerTask(){
@@ -30,9 +41,9 @@ public class GamePanel extends JPanel {
 		addKeyListener(new KeyAdapter(){
 			public void keyPressed(KeyEvent event) {
 				if (event.getKeyCode()==KeyEvent.VK_LEFT) 
-					player.setxVel(-3);
+					player.setxVel(-5);
 				if (event.getKeyCode()==KeyEvent.VK_RIGHT) 
-					player.setxVel(3);
+					player.setxVel(5);
 				if (event.getKeyCode()==KeyEvent.VK_UP) {
 					jumpKey = true;
 				}
@@ -52,8 +63,18 @@ public class GamePanel extends JPanel {
 		bg.setColor(Color.BLACK);
 		bg.fillRect(0, 0, Driver.WIDTH, Driver.HEIGHT);
 		// Start Painting
+		//level1.paint(g);
+		
+		//Paints the player
 		bg.setColor(Color.GREEN);
 		bg.fillRect(player.getX(), player.getY(), 30, 30);
+		
+		//Paints the enemies
+		bg.setColor(Color.RED);
+		for (int i = 0; i < enemies.size(); i++){
+			bg.fillRect(enemies.get(i).getX(), enemies.get(i).getY(), 30, 30);
+		}
+		//Paints the FPS counter
 		bg.setColor(Color.WHITE);
 		bg.drawString(FPS+" FPS", 20, 20);
 		// End Painting
@@ -65,6 +86,9 @@ public class GamePanel extends JPanel {
 		calcFPS();
 		synchronized(player){
 			player.updatePlayerPos();
+		}
+		for (int i = 0; i < enemies.size(); i++){
+			enemies.get(i).updateEnemyPos();
 		}
 		player.jumpingStuff(jumpKey);
 	}
