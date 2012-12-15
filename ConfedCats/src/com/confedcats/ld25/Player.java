@@ -17,15 +17,8 @@ public class Player {
 	private int y;
 	private int width = 30;
 	private int height = 30;
-	//Corners for collision detection
-	private int topRightX;
-	private int topRightY;
-	private int topLeftX;
-	private int topLeftY;
-	private int bottomRightX;
-	private int bottomRightY;
-	private int bottomLeftX;
-	private int bottomLeftY;
+
+	private int lastXVel;
 	
 	private Tile[][] mapStorage;
 	
@@ -179,5 +172,37 @@ public class Player {
 	}
 	public void setyVel(int yVel) {
 		this.yVel = yVel;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public int getLastXVel() {
+		return lastXVel;
+	}
+
+	public void setLastXVel(int lastXVel) {
+		this.lastXVel = lastXVel;
+	}
+
+	public Tile[][] getMapStorage() {
+		return mapStorage;
+	}
+
+	public void setMapStorage(Tile[][] mapStorage) {
+		this.mapStorage = mapStorage;
 	}
 }
