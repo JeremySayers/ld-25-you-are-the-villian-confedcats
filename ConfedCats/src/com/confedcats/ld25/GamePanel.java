@@ -16,7 +16,7 @@ import com.confedcats.ld25.maps.Rainbow;
 
 public class GamePanel extends JPanel {
 	// Create Buffers
-	private static final BufferedImage buff = new BufferedImage(Driver.WIDTH, Driver.HEIGHT, BufferedImage.TYPE_INT_RGB);
+	private static final BufferedImage buff = new BufferedImage(Driver.WIDTH, Driver.HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	private static final Graphics bg = buff.getGraphics();
 	Player player = new Player();
 	ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>();
