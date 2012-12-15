@@ -1,10 +1,10 @@
 package com.confedcats.ld25.enemies;
 
-public abstract class Boss extends Enemy {
+public abstract class Boss extends BaseEnemy {
 	public Boss(){
 		
 	}
 	public boolean isBoss() {
-		return false;
+		return true;
 	}
 }

@@ -9,7 +9,9 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
-
+	// Create Buffers
+	private static final BufferedImage buff = new BufferedImage(Driver.WIDTH, Driver.HEIGHT, BufferedImage.TYPE_INT_RGB);
+	private static final Graphics bg = buff.getGraphics();
 	Player player = new Player();
 	boolean jumpKey = false;
 	public GamePanel() {
@@ -42,17 +44,15 @@ public class GamePanel extends JPanel {
 		});
 	}
 	public void paintComponent(Graphics g) {
-		// Create Buffers
-		BufferedImage buff = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics bg = buff.getGraphics();
 		// Clear Screen
 		bg.setColor(Color.BLACK);
-		bg.fillRect(0, 0, getWidth(), getHeight());
+		bg.fillRect(0, 0, Driver.WIDTH, Driver.HEIGHT);
 		// Start Painting
 		bg.setColor(Color.GREEN);
 		bg.fillRect(player.getX(), player.getY(), 30, 30);
 		// End Painting
-		g.drawImage(buff, 0, 0, null); // Paint Buffer To Graphics Handle
+		// Paint Buffer To Graphics Handle Stretching The Image To Container Size
+		g.drawImage(buff, 0, 0, getWidth(), getHeight(), 0, 0, Driver.WIDTH, Driver.HEIGHT, null);
 	}
 	public void tick() {
 		repaint();
