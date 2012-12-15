@@ -9,6 +9,8 @@ import java.util.HashMap;
 import com.confedcats.ld25.Driver;
 import com.confedcats.ld25.enemies.Boss;
 import com.confedcats.ld25.enemies.Enemy;
+import com.confedcats.ld25.tiles.ColorTile;
+import com.confedcats.ld25.tiles.Tile;
 
 public class Rainbow extends Map {
 	/* 
@@ -61,8 +63,8 @@ public class Rainbow extends Map {
 	public Enemy[] getValidEnemies() {
 		return new Enemy[]{};
 	}
-	public Image[] getMapTiles() {
-		return new Image[]{new BufferedImage(40, 40, BufferedImage.TYPE_INT_ARGB)};
+	public Tile[] getMapTiles() {
+		return new Tile[]{ColorTile.getTransparentTile(), new ColorTile(Color.BLUE), new ColorTile(Color.DARK_GRAY), new ColorTile(Color.PINK), new ColorTile(Color.RED), new ColorTile(Color.GREEN)};
 	}
 
 }
