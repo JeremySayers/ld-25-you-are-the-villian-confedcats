@@ -58,7 +58,7 @@ public class Driver extends Applet {
 					}
 				}
 			}
-		}, 1, 10);
+		}, 1, 100);
 	}
 	public void setFullscreen(boolean fulls) {
 		if (fulls) {

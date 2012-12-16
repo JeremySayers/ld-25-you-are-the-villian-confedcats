@@ -16,7 +16,6 @@ import com.confedcats.ld25.tiles.AnimationTile;
 import com.confedcats.ld25.tiles.ColorTile;
 import com.confedcats.ld25.tiles.Tile;
 import com.confedcats.ld25.tiles.Tile.TileType;
-import com.confedcats.ld25.weapons.Weapon;
 
 public abstract class Map {
 	private static final String PREFIX = "/com/confedcats/ld25/maps/";
@@ -28,7 +27,7 @@ public abstract class Map {
 	}
 	protected static BufferedImage loadImage(String fname) {
 		try {
-			return ImageIO.read(Weapon.class.getResource(PREFIX+fname).openStream());
+			return ImageIO.read(Map.class.getResource(PREFIX+fname).openStream());
 		} catch (Exception e) {
 		}
 		return null;
