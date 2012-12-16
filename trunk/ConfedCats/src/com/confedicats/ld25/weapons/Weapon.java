@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import com.confedicats.ld25.GamePanel;
 import com.confedicats.ld25.Player;
 import com.confedicats.ld25.weapons.ammo.Ammo;
 
@@ -58,6 +59,9 @@ public abstract class Weapon extends BufferedImage {
 	public abstract void release();
 	public abstract void shoot(Player player);
 	public void update(Graphics g) {
+		if (!GamePanel.player.getWeapon().equals(this)) return;
+		x = GamePanel.player.getX();
+		y = GamePanel.player.getY();
 		ArrayList<Ammo> toRemove = new ArrayList<Ammo>();
 		for (Ammo am:ammoFired) {
 			if (am.isDead()) toRemove.add(am);
