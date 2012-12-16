@@ -12,6 +12,7 @@ public abstract class BaseEnemy {
 	private int health;
 	private int xVel = 0;
 	private int yVel = 0;
+	private int multi = 5;
 	private int gravity = 1;
 	private int width = 30;
 	private int height = 30;
@@ -21,12 +22,19 @@ public abstract class BaseEnemy {
 	
 	private Tile[][] mapStorage;
 	
-	public BaseEnemy(int health, int x, int y){
+	public BaseEnemy(int health, int x, int y, int multi){
 		setHealth(health);
 		setX(x);
 		setY(y);
+		setMulti(multi);
 		int rand = (int) (Math.random()*2+1);
-		xVel = (rand == 1)?-1: 1;
+		xVel = (rand == 1)?-1*multi: 1*multi;
+	}
+	public int getMulti() {
+		return multi;
+	}
+	public void setMulti(int multi) {
+		this.multi = multi;
 	}
 	public abstract BufferedImage getLeft();
 	public abstract BufferedImage getRight();
@@ -43,6 +51,12 @@ public abstract class BaseEnemy {
 				jumpSpeed = 0;
 				isJumping = true;
 			}
+		}
+		//Check if THE PLAYER SHOULD BURNNNNNNN
+		System.out.println(mapStorage[(int) Math.floor((y+gravity+height)/40)][(int) (Math.floor(x)/40)].getTileType());
+		if (mapStorage[(int) Math.floor((y+gravity+height)/40)][(int) (Math.floor(x)/40)].getTileType() == TileType.PIT){
+			health = 0;
+			System.out.println("ENEMY BURNED");
 		}
 		if ((y+gravity+height)/40 < 14){
 			System.out.println(""+(y+gravity+height)/40);
@@ -74,7 +88,7 @@ public abstract class BaseEnemy {
 		if (mapStorage[(int) Math.ceil((y+gravity+height)/40)][(int) Math.ceil((x)/40)].getTileType() == TileType.EMPTY && mapStorage[(int) Math.ceil((y+gravity+height)/40)][(int) Math.ceil((x+width)/40)].getTileType() == TileType.EMPTY || mapStorage[(int) Math.ceil((y+gravity+height)/40)][(int) Math.ceil((x)/40)].getTileType() == TileType.SPOUT && mapStorage[(int) Math.ceil((y+gravity+height)/40)][(int) Math.ceil((x+width)/40)].getTileType() == TileType.SPOUT){
 			if (!xVelUpdate){
 				int rand = (int) (Math.random()*2+1);
-				xVel = (rand == 1)?-1: 1;
+				xVel = (rand == 1)?-1*multi: 1*multi;
 				xVelUpdate = true;
 				y-=1;
 			}

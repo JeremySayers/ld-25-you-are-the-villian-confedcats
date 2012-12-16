@@ -1,5 +1,6 @@
 package com.confedicats.ld25;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
@@ -7,6 +8,7 @@ import javax.imageio.ImageIO;
 import com.confedicats.ld25.maps.Map;
 import com.confedicats.ld25.tiles.Tile;
 import com.confedicats.ld25.tiles.Tile.TileType;
+import com.confedicats.ld25.weapons.Pistol;
 import com.confedicats.ld25.weapons.Weapon;
 
 public class Player {
@@ -42,7 +44,9 @@ public class Player {
 		}
 		return null;
 	}
-	
+	public Rectangle getBounds() {
+		return new Rectangle(getX(), getY(), 30, 30);
+	}
 	public void updatePlayerPos(Map map){
 		mapStorage = map.getTiles();
 		if (canMoveHorizontal(y,x)){
@@ -60,6 +64,25 @@ public class Player {
 				jumpSpeed += gravity;
 				y = y + jumpSpeed;
 			}
+		}
+		if (hitHG(y,x)){
+			int ranX = (int)(Math.random()*18+1);
+			int ranY = (int)(Math.random()*13+1);
+			
+			if (mapStorage[(int)(ranY+1)][(int)(ranX)].getTileType() == TileType.PLATFORM && mapStorage[(int)(ranY)][(int)(ranX)].getTileType() == TileType.EMPTY){
+				GamePanel.hg.alter(ranX*40+10,ranY*40+10,Pistol.class);
+			} else {
+				ranX = (int)(Math.random()*19+1);
+				ranY = (int)(Math.random()*13+1);
+			}
+		}
+	}
+	public boolean hitHG(int y,int x){
+		GamePanel.hg.getX();
+		if (getBounds().intersects(GamePanel.hg.getBounds())){
+			return true;
+		} else {
+			return false;
 		}
 	}
 	public boolean canMoveHorizontal(int y, int x){

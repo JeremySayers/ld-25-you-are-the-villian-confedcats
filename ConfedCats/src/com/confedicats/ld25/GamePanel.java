@@ -31,7 +31,7 @@ public class GamePanel extends JPanel {
 	public int currentFPS = 0;
     public int FPS = 0;
     public long start = 0;
-    public HoloGear hg = new HoloGear(Pistol.class, 730, 530);
+    public static HoloGear hg = new HoloGear(Pistol.class, 710, 430);
 	public GamePanel() {
 		super();
 		
@@ -70,7 +70,7 @@ public class GamePanel extends JPanel {
 					System.out.println(Sound.isMute()+"");
 				}
 				if (event.getKeyCode()==KeyEvent.VK_E ) 
-					enemies.add(new UnionSoldier(100,385,20));
+					enemies.add(new UnionSoldier(100,385,20,2));
 			}
 		});
 		level1.getMusic().play();
@@ -116,6 +116,7 @@ public class GamePanel extends JPanel {
 		for (int i = 0; i < enemies.size(); i++){
 			enemies.get(i).updateEnemyPos(level1);
 		}
+		checkEnemiesAlive();
 		player.jumpingStuff(jumpKey);
 		//checkJoystick();
 	}
@@ -126,6 +127,17 @@ public class GamePanel extends JPanel {
             currentFPS = 0;
             start = System.currentTimeMillis();
         }
+	}
+	
+	public void checkEnemiesAlive(){
+		for (int i = 0; i < enemies.size(); i++){
+			if (enemies.get(i).getHealth() == 0){
+				int tempMulti = enemies.get(i).getMulti();
+				enemies.remove(i);
+				enemies.add(new UnionSoldier(100,385,20,tempMulti*2));
+				i--;
+			}
+		}
 	}
 	/*
 	public void checkJoystick(){

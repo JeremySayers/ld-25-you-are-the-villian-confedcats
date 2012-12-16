@@ -7,8 +7,8 @@ import javax.imageio.ImageIO;
 public class UnionSoldier extends Enemy {
 	private BufferedImage LEFT;
 	private BufferedImage RIGHT;
-	public UnionSoldier(int health, int x, int y){
-		super(health, x, y);
+	public UnionSoldier(int health, int x, int y, int multi){
+		super(health, x, y,multi);
 		try {
 			LEFT = ImageIO.read(UnionSoldier.class.getResource("/com/confedicats/ld25/enemies/cc_enemy_basicl.png"));
 			RIGHT = ImageIO.read(UnionSoldier.class.getResource("/com/confedicats/ld25/enemies/cc_enemy_basicr.png"));
