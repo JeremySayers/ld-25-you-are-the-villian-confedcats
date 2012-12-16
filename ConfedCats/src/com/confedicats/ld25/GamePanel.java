@@ -87,9 +87,11 @@ public class GamePanel extends JPanel {
 				if (screen==Screen.RAINBOW||screen==Screen.LEVEL2||screen==Screen.INDUSTRIAL) {
 					if (event.getKeyCode()==KeyEvent.VK_LEFT){ 
 						player.setMovingLeft(false);
+						player.setLastXVel(-1);
 					}
 					if (event.getKeyCode()==KeyEvent.VK_RIGHT){
 						player.setMovingRight(false);
+						player.setLastXVel(1);
 					}
 					if (event.getKeyCode()==KeyEvent.VK_UP ){ 
 						player.setJumpKey(false);
@@ -124,9 +126,9 @@ public class GamePanel extends JPanel {
 				level.paint(bg);
 				//Paints the player
 				player.updateWeapon(bg);
-				if (player.getxVel()>0)
+				if (player.isMovingRight())
 					bg.drawImage(player.getRight(), player.getX(), player.getY(), null);
-				else if (player.getxVel()<0)
+				else if (player.isMovingLeft())
 					bg.drawImage(player.getLeft(), player.getX(), player.getY(), null);
 				else
 					bg.drawImage(player.getLastXVel()>0?player.getRight():player.getLeft(), player.getX(), player.getY(), null);
