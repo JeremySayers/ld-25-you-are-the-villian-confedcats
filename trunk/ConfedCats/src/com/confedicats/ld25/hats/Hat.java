@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 
 import com.confedicats.ld25.tiles.ColorTile;
 import com.confedicats.ld25.weapons.Weapon;
-import com.confedicats.ld25.weapons.ammo.Ammo;
 
 public class Hat {
 	private int health;

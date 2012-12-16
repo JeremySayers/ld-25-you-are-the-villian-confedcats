@@ -3,7 +3,9 @@ package com.confedicats.ld25.maps;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -21,6 +23,7 @@ public abstract class Map {
 	private static final String PREFIX = "/com/confedicats/ld25/maps/";
 	private BufferedImage buff = new BufferedImage(Driver.WIDTH, Driver.HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	private Tile[][] tiles;
+	private ArrayList<Point> spouts;
 	public Map() {
 		this.tiles = convertMap();
 		generateBuffer();
@@ -61,8 +64,11 @@ public abstract class Map {
 		Tile[][] tiles = getTiles();
 		for (int y=0; y<tiles.length; y++) {
 			for (int x=0; x<tiles[y].length; x++) {
-				if (tiles[y][x].getTileType()!=TileType.EMPTY)
+				TileType type = tiles[y][x].getTileType();
+				if (type!=TileType.EMPTY)
 					tiles[y][x].paintMe(g);
+				if (type==TileType.SPOUT)
+					spouts.add(new Point(x, y));
 			}
 		}
 	}
@@ -74,6 +80,9 @@ public abstract class Map {
 	public abstract TileType[] getMapTileTypes();
 	public abstract Sound getMusic();
 	public abstract String getName();
+	public ArrayList<Point> getSpouts() {
+		return spouts;
+	}
 	public Tile[][] getTiles() {
 		return tiles;
 	}

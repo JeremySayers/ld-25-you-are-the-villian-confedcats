@@ -31,7 +31,6 @@ public class GamePanel extends JPanel {
 	public int currentFPS = 0;
     public int FPS = 0;
     public long start = 0;
-	private Hat hat;
 	public GamePanel() {
 		super();
 		
@@ -74,7 +73,6 @@ public class GamePanel extends JPanel {
 			}
 		});
 		level1.getMusic().play();
-		hat = new Hat(Pistol.class, 80, 80);
 	}
 	public void paintComponent(Graphics g) {
 		// Clear Screen
@@ -91,7 +89,6 @@ public class GamePanel extends JPanel {
 		else
 			bg.drawImage(player.getLastXVel()>0?Player.PLAYER1_RIGHT:Player.PLAYER1_LEFT, player.getX(), player.getY(), null);
 		
-		//hat.paint(bg);
 		
 		//Paints the enemies
 		bg.setColor(Color.RED);
@@ -103,7 +100,7 @@ public class GamePanel extends JPanel {
 		}
 		//Paints the FPS counter
 		bg.setColor(Color.RED);
-		bg.drawString(FPS+" FPS (r38)", 20, 20);
+		bg.drawString(FPS+" FPS (r39)", 20, 20);
 		// End Painting
 		// Paint Buffer To Graphics Handle Stretching The Image To Container Size
 		g.drawImage(buff, 0, 0, getWidth(), getHeight(), 0, 0, Driver.WIDTH, Driver.HEIGHT, null);
