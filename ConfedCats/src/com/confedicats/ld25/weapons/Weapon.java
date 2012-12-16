@@ -7,19 +7,18 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import com.confedicats.ld25.Player;
 import com.confedicats.ld25.weapons.ammo.Ammo;
 
 public abstract class Weapon extends BufferedImage {
-	private int health;
 	private int x;
 	private int y;
 	private ArrayList<Ammo> ammoFired = new ArrayList<Ammo>();
 	private static final String PREFIX = "/com/confedicats/ld25/weapons/";
-	public Weapon(BufferedImage img, int health) {
+	public Weapon(BufferedImage img) {
 		super(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = getGraphics();
 		g.drawImage(img, 0, 0, null);
-		this.setHealth(health);
 	}
 	public static BufferedImage loadImage(String fname) {
 		try {
@@ -28,25 +27,20 @@ public abstract class Weapon extends BufferedImage {
 		}
 		return null;
 	}
-	public abstract Ammo getAmmo();
+	public void addAmmo(Ammo ammo) {
+		ammoFired.add(ammo);
+	}
+	public abstract Class<? extends Ammo> getAmmoClass();
 	public Rectangle getBounds() {
 		return new Rectangle(getX(), getY(), getWidth(), getHeight());
 	}
-	public int getHealth() {
-		return health;
-	}
+	public abstract BufferedImage getLeft();
+	public abstract BufferedImage getRight();
 	public int getX() {
 		return x;
 	}
 	public int getY() {
 		return y;
-	}
-	public void paint(Graphics g) {
-		update();
-		g.drawImage(this, getX(), getY(), null);
-	}
-	public void setHealth(int health) {
-		this.health = health;
 	}
 	public void setX(int x) {
 		this.x = x;
@@ -54,6 +48,13 @@ public abstract class Weapon extends BufferedImage {
 	public void setY(int y) {
 		this.y = y;
 	}
-	public abstract void shoot();
-	public abstract void update();
+	public abstract void shoot(Player player);
+	public void update(Graphics g) {
+		ArrayList<Ammo> toRemove = new ArrayList<Ammo>();
+		for (Ammo am:ammoFired) {
+			if (am.isDead()) toRemove.add(am);
+			am.paint(g);
+		}
+		ammoFired.removeAll(toRemove);
+	}
 }
