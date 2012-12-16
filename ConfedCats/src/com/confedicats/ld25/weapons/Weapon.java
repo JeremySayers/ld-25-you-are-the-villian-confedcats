@@ -1,4 +1,4 @@
-package com.confedcats.ld25.weapons;
+package com.confedicats.ld25.weapons;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -7,14 +7,14 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import com.confedcats.ld25.weapons.ammo.Ammo;
+import com.confedicats.ld25.weapons.ammo.Ammo;
 
 public abstract class Weapon extends BufferedImage {
 	private int health;
 	private int x;
 	private int y;
 	private ArrayList<Ammo> ammoFired = new ArrayList<Ammo>();
-	private static final String PREFIX = "/com/confedcats/ld25/weapons/";
+	private static final String PREFIX = "/com/confedicats/ld25/weapons/";
 	public Weapon(BufferedImage img, int health) {
 		super(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = getGraphics();

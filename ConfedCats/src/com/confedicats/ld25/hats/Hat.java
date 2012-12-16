@@ -1,13 +1,13 @@
-package com.confedcats.ld25.hats;
+package com.confedicats.ld25.hats;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import com.confedcats.ld25.tiles.ColorTile;
-import com.confedcats.ld25.weapons.Weapon;
-import com.confedcats.ld25.weapons.ammo.Ammo;
+import com.confedicats.ld25.tiles.ColorTile;
+import com.confedicats.ld25.weapons.Weapon;
+import com.confedicats.ld25.weapons.ammo.Ammo;
 
 public class Hat {
 	private int health;

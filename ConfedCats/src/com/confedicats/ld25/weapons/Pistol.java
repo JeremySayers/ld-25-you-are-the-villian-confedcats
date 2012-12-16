@@ -1,8 +1,8 @@
-package com.confedcats.ld25.weapons;
+package com.confedicats.ld25.weapons;
 
 import java.awt.image.BufferedImage;
 
-import com.confedcats.ld25.weapons.ammo.Ammo;
+import com.confedicats.ld25.weapons.ammo.Ammo;
 
 public class Pistol extends Weapon {
 

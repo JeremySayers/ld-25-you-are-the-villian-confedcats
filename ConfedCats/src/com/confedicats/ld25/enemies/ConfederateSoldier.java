@@ -1,4 +1,4 @@
-package com.confedcats.ld25.enemies;
+package com.confedicats.ld25.enemies;
 
 public class ConfederateSoldier extends Enemy {
 	public ConfederateSoldier(int health, int x, int y){

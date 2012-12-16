@@ -1,4 +1,4 @@
-package com.confedcats.ld25.sounds;
+package com.confedicats.ld25.sounds;
 
 import java.io.BufferedInputStream;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ public class Sound {
 	private Clip clip;
 	private boolean music;
 	private static boolean mute = false;
-	private static final String PREFIX = "/com/confedcats/ld25/sounds/";
+	private static final String PREFIX = "/com/confedicats/ld25/sounds/";
 	private static ArrayList<Sound> instances = new ArrayList<Sound>(); 
 	private Sound(AudioInputStream in, boolean music) {
 		try {

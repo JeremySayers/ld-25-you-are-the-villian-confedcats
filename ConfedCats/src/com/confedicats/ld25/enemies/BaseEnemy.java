@@ -1,9 +1,9 @@
-package com.confedcats.ld25.enemies;
+package com.confedicats.ld25.enemies;
 
-import com.confedcats.ld25.Player;
-import com.confedcats.ld25.maps.Map;
-import com.confedcats.ld25.tiles.Tile;
-import com.confedcats.ld25.tiles.Tile.TileType;
+import com.confedicats.ld25.Player;
+import com.confedicats.ld25.maps.Map;
+import com.confedicats.ld25.tiles.Tile;
+import com.confedicats.ld25.tiles.Tile.TileType;
 
 public abstract class BaseEnemy {
 	private boolean isJumping;

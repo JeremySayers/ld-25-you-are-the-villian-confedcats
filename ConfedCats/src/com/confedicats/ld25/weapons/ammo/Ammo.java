@@ -1,4 +1,4 @@
-package com.confedcats.ld25.weapons.ammo;
+package com.confedicats.ld25.weapons.ammo;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 public abstract class Ammo extends BufferedImage {
-	private static final String PREFIX = "/com/confedcats/ld25/weapons/ammo/";
+	private static final String PREFIX = "/com/confedicats/ld25/weapons/ammo/";
 	private boolean dead;
 	private int x;
 	private int y;

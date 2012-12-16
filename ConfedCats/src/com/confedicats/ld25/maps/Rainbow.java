@@ -1,4 +1,4 @@
-package com.confedcats.ld25.maps;
+package com.confedicats.ld25.maps;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,14 +6,14 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
-import com.confedcats.ld25.enemies.Boss;
-import com.confedcats.ld25.enemies.Enemy;
-import com.confedcats.ld25.sounds.Sound;
-import com.confedcats.ld25.tiles.AnimationTile;
-import com.confedcats.ld25.tiles.ColorTile;
-import com.confedcats.ld25.tiles.ImageTile;
-import com.confedcats.ld25.tiles.Tile;
-import com.confedcats.ld25.tiles.Tile.TileType;
+import com.confedicats.ld25.enemies.Boss;
+import com.confedicats.ld25.enemies.Enemy;
+import com.confedicats.ld25.sounds.Sound;
+import com.confedicats.ld25.tiles.AnimationTile;
+import com.confedicats.ld25.tiles.ColorTile;
+import com.confedicats.ld25.tiles.ImageTile;
+import com.confedicats.ld25.tiles.Tile;
+import com.confedicats.ld25.tiles.Tile.TileType;
 
 public class Rainbow extends Map {
 	/* 

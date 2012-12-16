@@ -1,4 +1,4 @@
-package com.confedcats.ld25.tiles;
+package com.confedicats.ld25.tiles;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -7,14 +7,14 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-import com.confedcats.ld25.weapons.Weapon;
+import com.confedicats.ld25.weapons.Weapon;
 
 public abstract class Tile extends BufferedImage {
 	public static enum TileType {PLATFORM, SPOUT, PIT, EMPTY};
 	private TileType type;
 	private int x;
 	private int y;
-	public static final String PREFIX = "/com/confedcats/ld25/maps/";
+	public static final String PREFIX = "/com/confedicats/ld25/maps/";
 	public Tile(Image image) {
 		super(40, 40, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = getGraphics();
