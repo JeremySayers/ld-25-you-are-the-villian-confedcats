@@ -68,7 +68,7 @@ public abstract class Map {
 				if (type!=TileType.EMPTY)
 					tiles[y][x].paintMe(g);
 				if (type==TileType.SPOUT)
-					spouts.add(new Point(x, y));
+					spouts.add(new Point(x*40, y*40));
 			}
 		}
 	}

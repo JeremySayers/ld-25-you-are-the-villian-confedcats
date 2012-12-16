@@ -2,6 +2,7 @@ package com.confedicats.ld25;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -43,8 +44,11 @@ public class GamePanel extends JPanel {
 		}, 1, 1000/60);
 		new java.util.Timer().scheduleAtFixedRate(new java.util.TimerTask(){
 			public void run() {
-				if ((int)(Math.random()*99+1) % 5 == 0)
-					enemies.add(new UnionSoldier(20,385,20,2));
+				if ((int)(Math.random()*8+1) % 4 == 0) {
+					ArrayList<Point> spouts = level.getSpouts();
+					Point spout = spouts.get((int)(Math.random()*spouts.size()));
+					enemies.add(new UnionSoldier(20,spout.x,20,2,false));
+				}
 			}
 		}, 1, 1000);
 		addKeyListener(new KeyAdapter(){
@@ -75,8 +79,6 @@ public class GamePanel extends JPanel {
 					Sound.setMute(!Sound.isMute());
 					System.out.println(Sound.isMute()+"");
 				}
-				if (event.getKeyCode()==KeyEvent.VK_E ) 
-					enemies.add(new UnionSoldier(20,385,20,2));
 				if (event.getKeyCode()==KeyEvent.VK_SPACE) {
 					player.shoot();
 				}
@@ -112,7 +114,7 @@ public class GamePanel extends JPanel {
 		}
 		//Paints the FPS counter
 		bg.setColor(Color.RED);
-		bg.drawString(FPS+" FPS (r41)", 20, 20);
+		bg.drawString(FPS+" FPS (r45)", 20, 20);
 		// End Painting
 		// Paint Buffer To Graphics Handle Stretching The Image To Container Size
 		g.drawImage(buff, 0, 0, getWidth(), getHeight(), 0, 0, Driver.WIDTH, Driver.HEIGHT, null);
@@ -142,9 +144,10 @@ public class GamePanel extends JPanel {
 	public void checkEnemiesAlive(){
 		for (int i = 0; i < enemies.size(); i++){
 			if (enemies.get(i).getHealth() == 0){
-				int tempMulti = enemies.get(i).getMulti();
 				enemies.remove(i);
-				enemies.add(new UnionSoldier(100,385,20,4));
+				ArrayList<Point> spouts = level.getSpouts();
+				Point spout = spouts.get((int)(Math.random()*spouts.size()));
+				enemies.add(new UnionSoldier(20,spout.x,20,4,true));
 				i--;
 			}
 		}
