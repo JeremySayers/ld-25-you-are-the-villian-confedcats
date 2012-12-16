@@ -9,11 +9,9 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import net.java.games.input.Controller;
 
 import com.confedcats.ld25.enemies.BaseEnemy;
 import com.confedcats.ld25.enemies.ConfederateSoldier;
-import com.confedcats.ld25.jInput.JInputJoystick;
 import com.confedcats.ld25.hats.Hat;
 import com.confedcats.ld25.maps.Map;
 import com.confedcats.ld25.maps.Rainbow;
@@ -118,7 +116,7 @@ public class GamePanel extends JPanel {
 			enemies.get(i).updateEnemyPos(level1);
 		}
 		player.jumpingStuff(jumpKey);
-		checkJoystick();
+		//checkJoystick();
 	}
 	public void calcFPS(){
 		currentFPS++;
@@ -128,6 +126,7 @@ public class GamePanel extends JPanel {
             start = System.currentTimeMillis();
         }
 	}
+	/*
 	public void checkJoystick(){
 		if(Driver.joystick.isControllerConnected()){
 			Driver.joystick.pollController();
@@ -144,7 +143,7 @@ public class GamePanel extends JPanel {
 				jumpKey =false;
 			}
 		}	
-	}
+	}*/
 	
 	
 	
