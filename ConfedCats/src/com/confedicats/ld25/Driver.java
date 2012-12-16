@@ -6,8 +6,6 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.net.URL;
-import java.rmi.RMISecurityManager;
 
 import javax.swing.JFrame;
 

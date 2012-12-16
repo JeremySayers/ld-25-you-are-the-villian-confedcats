@@ -7,8 +7,6 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-import com.confedicats.ld25.weapons.Weapon;
-
 public abstract class Tile extends BufferedImage {
 	public static enum TileType {PLATFORM, SPOUT, PIT, EMPTY};
 	private TileType type;
