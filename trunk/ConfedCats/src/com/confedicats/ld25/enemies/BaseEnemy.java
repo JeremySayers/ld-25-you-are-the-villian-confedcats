@@ -1,6 +1,7 @@
 package com.confedicats.ld25.enemies;
 
-import com.confedicats.ld25.Player;
+import java.awt.image.BufferedImage;
+
 import com.confedicats.ld25.maps.Map;
 import com.confedicats.ld25.tiles.Tile;
 import com.confedicats.ld25.tiles.Tile.TileType;
@@ -27,7 +28,8 @@ public abstract class BaseEnemy {
 		int rand = (int) (Math.random()*2+1);
 		xVel = (rand == 1)?-1: 1;
 	}
-	
+	public abstract BufferedImage getLeft();
+	public abstract BufferedImage getRight();
 	public void updateEnemyPos(Map map){
 		mapStorage = map.getTiles();
 		if (canMoveHorizontal(y,x)){

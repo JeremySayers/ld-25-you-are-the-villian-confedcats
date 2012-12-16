@@ -9,9 +9,8 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-
 import com.confedicats.ld25.enemies.BaseEnemy;
-import com.confedicats.ld25.enemies.ConfederateSoldier;
+import com.confedicats.ld25.enemies.UnionSoldier;
 import com.confedicats.ld25.hats.Hat;
 import com.confedicats.ld25.maps.Map;
 import com.confedicats.ld25.maps.Rainbow;
@@ -71,7 +70,7 @@ public class GamePanel extends JPanel {
 					System.out.println(Sound.isMute()+"");
 				}
 				if (event.getKeyCode()==KeyEvent.VK_E ) 
-					enemies.add(new ConfederateSoldier(100,385,20));
+					enemies.add(new UnionSoldier(100,385,20));
 			}
 		});
 		level1.getMusic().play();
@@ -96,12 +95,15 @@ public class GamePanel extends JPanel {
 		
 		//Paints the enemies
 		bg.setColor(Color.RED);
-		for (int i = 0; i < enemies.size(); i++){
-			bg.fillRect(enemies.get(i).getX(), enemies.get(i).getY(), 30, 30);
+		for (BaseEnemy be:enemies){
+			if (be.getxVel()>0)
+				bg.drawImage(be.getRight(), be.getX(), be.getY(), null);
+			else if (be.getxVel()<0)
+				bg.drawImage(be.getLeft(), be.getX(), be.getY(), null);
 		}
 		//Paints the FPS counter
 		bg.setColor(Color.RED);
-		bg.drawString(FPS+" FPS (r37)", 20, 20);
+		bg.drawString(FPS+" FPS (r38)", 20, 20);
 		// End Painting
 		// Paint Buffer To Graphics Handle Stretching The Image To Container Size
 		g.drawImage(buff, 0, 0, getWidth(), getHeight(), 0, 0, Driver.WIDTH, Driver.HEIGHT, null);
