@@ -7,6 +7,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ import com.confedicats.ld25.maps.Map;
 import com.confedicats.ld25.maps.Rainbow;
 import com.confedicats.ld25.sounds.Sound;
 import com.confedicats.ld25.weapons.Laser;
+import com.confedicats.ld25.weapons.Weapon;
 
 public class GamePanel extends JPanel {
 	public static enum Screen {MAIN_MENU, OPTIONS, RAINBOW, LEVEL2, INDUSTRIAL, GAME_OVER};
@@ -30,13 +32,13 @@ public class GamePanel extends JPanel {
 
 	public Screen screen = Screen.MAIN_MENU;
 	public static MainMenu menu = new MainMenu();
-	public static Map level = new Rainbow();
+	public static Map level;
 	boolean jumpKey = false;
 	
 	public int currentFPS = 0;
     public int FPS = 0;
     public long start = 0;
-    public static HoloGear hg = new HoloGear(Laser.class, 460, 200);
+    public static HoloGear hg = new HoloGear(Weapon.getNewWeapons(), 460, 200);
 	public GamePanel() {
 		super();
 		
@@ -62,13 +64,27 @@ public class GamePanel extends JPanel {
 				if (screen==Screen.MAIN_MENU) {
 					int width = Driver.POPOUT.isVisible() ? Driver.DEVICE.getDisplayMode().getWidth() : Driver.WIDTH;
 					int height = Driver.POPOUT.isVisible() ? Driver.DEVICE.getDisplayMode().getHeight() : Driver.HEIGHT;
-					if (MainMenu.START.contains(translateSize(width, height, e.getPoint()))) {
+					if (MainMenu.START_LOC.contains(translateSize(width, height, e.getPoint()))) {
 						setScreen(Screen.RAINBOW);
+					} else if (MainMenu.OPT_LOC.contains(translateSize(width, height, e.getPoint()))) {
+						setScreen(Screen.OPTIONS);
 					}
 				}
 			}
-			private Point translateSize(int width, int height, Point orig) {
-				return new Point((int)(orig.x*1.0/width*Driver.WIDTH), (int)(orig.y*1.0/height*Driver.HEIGHT));
+		});
+		addMouseMotionListener(new MouseMotionAdapter() {
+			public void mouseMoved(MouseEvent e) {
+				if (screen==Screen.MAIN_MENU) {
+					int width = Driver.POPOUT.isVisible() ? Driver.DEVICE.getDisplayMode().getWidth() : Driver.WIDTH;
+					int height = Driver.POPOUT.isVisible() ? Driver.DEVICE.getDisplayMode().getHeight() : Driver.HEIGHT;
+					MainMenu.start_hovered = false;
+					MainMenu.opt_hovered = false;
+					if (MainMenu.START_LOC.contains(translateSize(width, height, e.getPoint()))) {
+						MainMenu.start_hovered = true;
+					} else if (MainMenu.OPT_LOC.contains(translateSize(width, height, e.getPoint()))) {
+						MainMenu.opt_hovered = true;
+					}
+				}
 			}
 		});
 		addKeyListener(new KeyAdapter(){
@@ -80,6 +96,9 @@ public class GamePanel extends JPanel {
 						player.setMovingRight(true);
 					if (event.getKeyCode()==KeyEvent.VK_UP){
 						player.setJumpKey(true);
+					}
+					if (event.getKeyCode()==KeyEvent.VK_SPACE && player.getWeapon().isAutomatic()) {
+						player.shoot();
 					}
 				}
 			}
@@ -103,7 +122,10 @@ public class GamePanel extends JPanel {
 						System.out.println(Sound.isMute()+"");
 					}
 					if (event.getKeyCode()==KeyEvent.VK_SPACE) {
-						player.shoot();
+						if (!player.getWeapon().isAutomatic())
+							player.shoot();
+						else
+							player.release();
 					}
 				}
 			}
@@ -154,6 +176,9 @@ public class GamePanel extends JPanel {
 		// Paint Buffer To Graphics Handle Stretching The Image To Container Size
 		g.drawImage(buff, 0, 0, getWidth(), getHeight(), 0, 0, Driver.WIDTH, Driver.HEIGHT, null);
 	}
+	private Point translateSize(int width, int height, Point orig) {
+		return new Point((int)(orig.x*1.0/width*Driver.WIDTH), (int)(orig.y*1.0/height*Driver.HEIGHT));
+	}
 	public void tick() {
 		repaint();
 		calcFPS();
@@ -162,11 +187,13 @@ public class GamePanel extends JPanel {
 			enemies.get(i).jump();
 			enemies.get(i).updateKeys();
 		}
-		checkEnemiesAlive();
-		player.fall();
-		player.jump();
-		player.updateKeys();
-		player.checkHG();
+		if (screen==Screen.RAINBOW||screen==Screen.LEVEL2||screen==Screen.INDUSTRIAL) {
+			checkEnemiesAlive();
+			player.fall();
+			player.jump();
+			player.updateKeys();
+			player.checkHG();
+		}
 		
 		//checkJoystick();
 	}
@@ -175,6 +202,7 @@ public class GamePanel extends JPanel {
 		Sound.clearAll();
 		switch (newScreen) {
 			case MAIN_MENU:
+				menu.getMusic().play();
 				break;
 			case OPTIONS:
 				break;

@@ -18,11 +18,7 @@ public class Sound {
 	private static ArrayList<Sound> instances = new ArrayList<Sound>(); 
 	private Sound(AudioInputStream in, boolean music) {
 		try {
-		    AudioFormat baseFormat = in.getFormat();
-		    AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(), 16,
-		                                                baseFormat.getChannels(), baseFormat.getChannels() * 2,
-		                                                baseFormat.getSampleRate(), false);
-		    din = AudioSystem.getAudioInputStream(decodedFormat, in);
+			din = in;
 		    try {
 				clip = AudioSystem.getClip();
 			} catch (LineUnavailableException e) {
