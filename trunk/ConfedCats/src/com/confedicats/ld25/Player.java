@@ -30,7 +30,6 @@ public class Player {
 	private int width = 30;
 	private int height = 30;
 	private Weapon weapon = null;
-	
 	private boolean movingLeft;
 	private boolean movingRight;
 	private boolean jumpKey;
