@@ -26,6 +26,13 @@ public class Laser extends Weapon {
 		return PLAYER1_RIGHT;
 	}
 
+	public boolean isAutomatic() {
+		return false;
+	}
+
+	public void release() {
+	}
+
 	public void shoot(Player player) {
 		try {
 			Ammo ammo = getAmmoClass().getConstructor(int.class, int.class, int.class, int.class).newInstance(player.getX(), player.getY(), player.getxVel()<0?-1:player.getxVel()>0?1:player.getLastXVel()<0?-1:1, 6);

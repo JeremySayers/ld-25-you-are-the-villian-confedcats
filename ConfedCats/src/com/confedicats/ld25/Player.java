@@ -9,7 +9,6 @@ import javax.imageio.ImageIO;
 import com.confedicats.ld25.sounds.Sound;
 import com.confedicats.ld25.tiles.Tile;
 import com.confedicats.ld25.tiles.Tile.TileType;
-import com.confedicats.ld25.weapons.Laser;
 import com.confedicats.ld25.weapons.Weapon;
 
 public class Player {
@@ -203,9 +202,8 @@ public class Player {
 			}
 			int ranX = (int)(Math.random()*18+1);
 			int ranY = (int)(Math.random()*13+1);
-			
 			if (mapStorage[(int)(ranY+1)][(int)(ranX)].getTileType() == TileType.PLATFORM && mapStorage[(int)(ranY)][(int)(ranX)].getTileType() == TileType.EMPTY && ranX !=8 && ranY != 5){
-				GamePanel.hg.alter(ranX*40+10,ranY*40+10,Laser.class);
+				GamePanel.hg.alter(ranX*40+10,ranY*40+10, Weapon.getNewWeapons());
 			} else {
 				ranX = (int)(Math.random()*19+1);
 				ranY = (int)(Math.random()*13+1);
@@ -356,5 +354,13 @@ public class Player {
 		if (weapon!=null) {
 			weapon.update(g);
 		}
+	}
+
+	public Weapon getWeapon() {
+		return weapon;
+	}
+
+	public void release() {
+		getWeapon().release();
 	}
 }
