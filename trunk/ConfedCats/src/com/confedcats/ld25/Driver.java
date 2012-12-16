@@ -9,9 +9,6 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 
-import net.java.games.input.Controller;
-
-import com.confedcats.ld25.jInput.JInputJoystick;
 import com.confedcats.ld25.sounds.Sound;
 
 public class Driver extends Applet {
@@ -22,7 +19,7 @@ public class Driver extends Applet {
 	public static final JFrame POPOUT = new JFrame("Confederate Cats");
 	private boolean muted = false;
 	// First you need to create controller.
-	public static final JInputJoystick joystick = new JInputJoystick(Controller.Type.GAMEPAD);
+	//public static final JInputJoystick joystick = new JInputJoystick(Controller.Type.GAMEPAD);
 	// Check if the controller was found.
 	public void init() {
 		// Initialize Applet
@@ -46,7 +43,7 @@ public class Driver extends Applet {
 		});
 		/* End Of Full Screen Pop Out Class */
 		
-		if(!joystick.isControllerConnected()){
+		/*if(!joystick.isControllerConnected()){
 			   System.out.println("No controller found!");
 		}
 		new java.util.Timer().schedule(new java.util.TimerTask(){
@@ -59,7 +56,9 @@ public class Driver extends Applet {
 				}
 			}
 		}, 1, 100);
+		 */
 	}
+	
 	public void setFullscreen(boolean fulls) {
 		if (fulls) {
 			POPOUT.add(PANEL, BorderLayout.CENTER);
