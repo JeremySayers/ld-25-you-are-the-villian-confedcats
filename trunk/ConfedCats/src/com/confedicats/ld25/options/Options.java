@@ -6,15 +6,25 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
+import com.confedicats.ld25.Driver;
 import com.confedicats.ld25.sounds.Sound;
 import com.confedicats.ld25.weapons.Weapon;
 
 public class Options {
-	private static final BufferedImage BG = loadImage("cc_options_bg.png");
-	private static final String PREFIX = "/com/confedicats/ld25/options";
+	private static final BufferedImage BG = loadImage("cc_options.png");
+	private static final String PREFIX = "/com/confedicats/ld25/options/";
 	private static BufferedImage BGM_ON = loadImage("cc_options_bgm2.png");
 	private static BufferedImage BGM_OFF = loadImage("cc_options_bgm1.png");
-	public static final Rectangle BGM_LOC = new Rectangle(300,180,200,80);
+	public static final Rectangle BGM_LOC = new Rectangle(200,230,200,80);
+	private static BufferedImage SFX_ON = loadImage("cc_options_sfx2.png");
+	private static BufferedImage SFX_OFF = loadImage("cc_options_sfx1.png");
+	public static final Rectangle SFX_LOC = new Rectangle(400,230,200,80);
+	private static BufferedImage MUTE_ON = loadImage("cc_options_muteall2.png");
+	private static BufferedImage MUTE_OFF = loadImage("cc_options_muteall1.png");
+	public static final Rectangle MUTE_LOC = new Rectangle(320,300,170,130);
+	private static BufferedImage FULL_ON = loadImage("cc_options_fson2.png");
+	private static BufferedImage FULL_OFF = loadImage("cc_options_fsoff1.png");
+	public static final Rectangle FULL_LOC = new Rectangle(100,430,650,80);
 	private static final Sound MUSIC = Sound.create("menumusic.au", true);
 	public Options(){
 	}
@@ -29,6 +39,10 @@ public class Options {
 	
 	public void paint(Graphics g) {
 		g.drawImage(BG, 0, 0, null);
+		g.drawImage(Sound.isMuteBGM()?BGM_ON:BGM_OFF, BGM_LOC.x, BGM_LOC.y, null);
+		g.drawImage(Sound.isMuteSFX()?SFX_ON:SFX_OFF, SFX_LOC.x, SFX_LOC.y, null);
+		g.drawImage(Sound.isMute()?MUTE_ON:MUTE_OFF, MUTE_LOC.x, MUTE_LOC.y, null);
+		g.drawImage(Driver.POPOUT.isVisible()?FULL_ON:FULL_OFF, FULL_LOC.x, FULL_LOC.y, null);
 	}
 
 	public Sound getMusic() {

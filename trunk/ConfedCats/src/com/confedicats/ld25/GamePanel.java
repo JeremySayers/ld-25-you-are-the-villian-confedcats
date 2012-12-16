@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -18,8 +19,8 @@ import com.confedicats.ld25.enemies.UnionSoldier;
 import com.confedicats.ld25.hologear.HoloGear;
 import com.confedicats.ld25.maps.Map;
 import com.confedicats.ld25.maps.Rainbow;
+import com.confedicats.ld25.options.Options;
 import com.confedicats.ld25.sounds.Sound;
-import com.confedicats.ld25.weapons.Laser;
 import com.confedicats.ld25.weapons.Weapon;
 
 public class GamePanel extends JPanel {
@@ -38,6 +39,7 @@ public class GamePanel extends JPanel {
 	public int currentFPS = 0;
     public int FPS = 0;
     public long start = 0;
+	private Options options;
     public static HoloGear hg = new HoloGear(Weapon.getNewWeapons(), 460, 200);
 	public GamePanel() {
 		super();
@@ -61,13 +63,26 @@ public class GamePanel extends JPanel {
 		}, 1, 1000);
 		addMouseListener(new MouseAdapter(){
 			public void mouseReleased(MouseEvent e){
+				int width = Driver.POPOUT.isVisible() ? Driver.DEVICE.getDisplayMode().getWidth() : Driver.WIDTH;
+				int height = Driver.POPOUT.isVisible() ? Driver.DEVICE.getDisplayMode().getHeight() : Driver.HEIGHT;
+				Point scaled = translateSize(width, height, e.getPoint());
 				if (screen==Screen.MAIN_MENU) {
-					int width = Driver.POPOUT.isVisible() ? Driver.DEVICE.getDisplayMode().getWidth() : Driver.WIDTH;
-					int height = Driver.POPOUT.isVisible() ? Driver.DEVICE.getDisplayMode().getHeight() : Driver.HEIGHT;
-					if (MainMenu.START_LOC.contains(translateSize(width, height, e.getPoint()))) {
+					if (MainMenu.START_LOC.contains(scaled)) {
 						setScreen(Screen.RAINBOW);
-					} else if (MainMenu.OPT_LOC.contains(translateSize(width, height, e.getPoint()))) {
+					} else if (MainMenu.OPT_LOC.contains(scaled)) {
 						setScreen(Screen.OPTIONS);
+					}
+				} else if (screen==Screen.OPTIONS) {
+					if (Options.BGM_LOC.contains(scaled)) {
+						Sound.setMuteBGM(!Sound.isMuteBGM());
+					} else if (Options.SFX_LOC.contains(scaled)) {
+						Sound.setMuteSFX(!Sound.isMuteSFX());
+					} else if (Options.MUTE_LOC.contains(scaled)) {
+						Sound.setMute(!Sound.isMute());
+					} else if (Options.FULL_LOC.contains(scaled)) {
+						for (KeyListener kl:Driver.PANEL.getKeyListeners()) {
+							kl.keyReleased(new KeyEvent(Driver.PANEL, KeyEvent.KEY_LOCATION_STANDARD, System.currentTimeMillis(), 0, KeyEvent.VK_F, 'f'));
+						}
 					}
 				}
 			}
@@ -141,6 +156,7 @@ public class GamePanel extends JPanel {
 				menu.paint(bg);
 				break;
 			case OPTIONS:
+				options.paint(bg);
 				break;
 			case RAINBOW:
 			case LEVEL2:
@@ -205,6 +221,8 @@ public class GamePanel extends JPanel {
 				menu.getMusic().play();
 				break;
 			case OPTIONS:
+				options = new Options();
+				options.getMusic().play();
 				break;
 			case RAINBOW:
 				level = new Rainbow();
@@ -232,6 +250,7 @@ public class GamePanel extends JPanel {
 		for (int i = 0; i < enemies.size(); i++){
 			if (enemies.get(i).getHealth() == 0){
 				enemies.remove(i);
+				Sound.create("fallinpit.wav", false).play();
 				ArrayList<Point> spouts = level.getSpouts();
 				Point spout = spouts.get((int)(Math.random()*spouts.size()));
 				enemies.add(new UnionSoldier(20,spout.x,20,4,true));
