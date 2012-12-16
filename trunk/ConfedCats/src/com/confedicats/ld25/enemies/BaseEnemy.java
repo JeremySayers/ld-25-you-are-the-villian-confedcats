@@ -1,5 +1,6 @@
 package com.confedicats.ld25.enemies;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import com.confedicats.ld25.maps.Map;
@@ -30,6 +31,9 @@ public abstract class BaseEnemy {
 		int rand = (int) (Math.random()*2+1);
 		xVel = (rand == 1)?-1*multi: 1*multi;
 	}
+	public Rectangle getBounds() {
+		return new Rectangle(getX(), getY(), 30, 30);
+	}
 	public int getMulti() {
 		return multi;
 	}
@@ -53,13 +57,10 @@ public abstract class BaseEnemy {
 			}
 		}
 		//Check if THE PLAYER SHOULD BURNNNNNNN
-		System.out.println(mapStorage[(int) Math.floor((y+gravity+height)/40)][(int) (Math.floor(x)/40)].getTileType());
 		if (mapStorage[(int) Math.floor((y+gravity+height)/40)][(int) (Math.floor(x)/40)].getTileType() == TileType.PIT){
 			health = 0;
-			System.out.println("ENEMY BURNED");
 		}
 		if ((y+gravity+height)/40 < 14){
-			System.out.println(""+(y+gravity+height)/40);
 			if (canMoveVertical(y,x)){
 				if (isJumping){
 					jumpSpeed += gravity;

@@ -1,5 +1,6 @@
 package com.confedicats.ld25;
 
+import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
@@ -8,12 +9,12 @@ import javax.imageio.ImageIO;
 import com.confedicats.ld25.maps.Map;
 import com.confedicats.ld25.tiles.Tile;
 import com.confedicats.ld25.tiles.Tile.TileType;
-import com.confedicats.ld25.weapons.Pistol;
+import com.confedicats.ld25.weapons.Laser;
 import com.confedicats.ld25.weapons.Weapon;
 
 public class Player {
-	public static final BufferedImage PLAYER1_LEFT = loadImage("p1l.png");
-	public static final BufferedImage PLAYER1_RIGHT = loadImage("p1r.png");
+	private static final BufferedImage PLAYER1_LEFT = loadImage("p1l.png");
+	private static final BufferedImage PLAYER1_RIGHT = loadImage("p1r.png");
 	private static final String PREFIX = "/com/confedicats/ld25/players/";
 	private boolean isAlive;
 	private boolean isJumping = false;
@@ -27,6 +28,7 @@ public class Player {
 	private int y;
 	private int width = 30;
 	private int height = 30;
+	private Weapon weapon = null;
 
 	private int lastXVel;
 	
@@ -47,6 +49,14 @@ public class Player {
 	public Rectangle getBounds() {
 		return new Rectangle(getX(), getY(), 30, 30);
 	}
+	public BufferedImage getLeft(){
+		if (weapon != null) return weapon.getLeft();
+		return PLAYER1_LEFT;
+	}
+	public BufferedImage getRight(){
+		if (weapon != null) return weapon.getRight();
+		return PLAYER1_RIGHT;
+	}
 	public void updatePlayerPos(Map map){
 		mapStorage = map.getTiles();
 		if (canMoveHorizontal(y,x)){
@@ -66,11 +76,15 @@ public class Player {
 			}
 		}
 		if (hitHG(y,x)){
+			try {
+				weapon = GamePanel.hg.getWeapon().getConstructor().newInstance();
+			} catch (Exception e) {
+			}
 			int ranX = (int)(Math.random()*18+1);
 			int ranY = (int)(Math.random()*13+1);
 			
 			if (mapStorage[(int)(ranY+1)][(int)(ranX)].getTileType() == TileType.PLATFORM && mapStorage[(int)(ranY)][(int)(ranX)].getTileType() == TileType.EMPTY && ranX !=8 && ranY != 5){
-				GamePanel.hg.alter(ranX*40+10,ranY*40+10,Pistol.class);
+				GamePanel.hg.alter(ranX*40+10,ranY*40+10,Laser.class);
 			} else {
 				ranX = (int)(Math.random()*19+1);
 				ranY = (int)(Math.random()*13+1);
@@ -243,5 +257,16 @@ public class Player {
 
 	public void setMapStorage(Tile[][] mapStorage) {
 		this.mapStorage = mapStorage;
+	}
+
+	public void shoot() {
+		if (weapon!=null)
+			weapon.shoot(this);
+	}
+
+	public void updateWeapon(Graphics g) {
+		if (weapon!=null) {
+			weapon.update(g);
+		}
 	}
 }

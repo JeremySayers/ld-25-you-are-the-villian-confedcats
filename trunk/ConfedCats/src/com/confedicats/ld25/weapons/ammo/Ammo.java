@@ -11,7 +11,7 @@ public abstract class Ammo extends BufferedImage {
 	private boolean dead;
 	private int x;
 	private int y;
-	public Ammo(BufferedImage img, int health, int x, int y) {
+	public Ammo(BufferedImage img, int x, int y) {
 		super(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = getGraphics();
 		g.drawImage(img, 0, 0, null);
@@ -28,7 +28,6 @@ public abstract class Ammo extends BufferedImage {
 	public Rectangle getBounds() {
 		return new Rectangle(getX(), getY(), getWidth(), getHeight());
 	}
-	public abstract void getDamage();
 	public int getX() {
 		return x;
 	}
