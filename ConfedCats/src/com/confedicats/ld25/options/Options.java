@@ -25,7 +25,10 @@ public class Options {
 	private static BufferedImage FULL_ON = loadImage("cc_options_fson2.png");
 	private static BufferedImage FULL_OFF = loadImage("cc_options_fsoff1.png");
 	public static final Rectangle FULL_LOC = new Rectangle(100,430,650,80);
-	private static final Sound MUSIC = Sound.create("menumusic.au", true);
+	private static BufferedImage BACK_NORMAL = loadImage("cc_options_back1.png");
+	private static BufferedImage BACK_HOVER = loadImage("cc_options_back2.png");
+	public static final Rectangle BACK_LOC = new Rectangle(100,530,200,80);
+	public static boolean back_hovered = false;
 	public Options(){
 	}
 	
@@ -43,9 +46,11 @@ public class Options {
 		g.drawImage(Sound.isMuteSFX()?SFX_ON:SFX_OFF, SFX_LOC.x, SFX_LOC.y, null);
 		g.drawImage(Sound.isMute()?MUTE_ON:MUTE_OFF, MUTE_LOC.x, MUTE_LOC.y, null);
 		g.drawImage(Driver.POPOUT.isVisible()?FULL_ON:FULL_OFF, FULL_LOC.x, FULL_LOC.y, null);
+		g.drawImage(back_hovered?BACK_HOVER:BACK_NORMAL, BACK_LOC.x, BACK_LOC.y, null);
+		System.out.println(back_hovered);
 	}
 
 	public Sound getMusic() {
-		return MUSIC;
+		return Sound.create("menumusic.au", true);
 	}
 }
