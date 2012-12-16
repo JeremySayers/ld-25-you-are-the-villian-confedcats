@@ -49,10 +49,10 @@ public class GamePanel extends JPanel {
 		new java.util.Timer().scheduleAtFixedRate(new java.util.TimerTask(){
 			public void run() {
 				if (screen==Screen.RAINBOW||screen==Screen.LEVEL2||screen==Screen.INDUSTRIAL) {
-					if ((int)(Math.random()*8+1) % 4 == 0) {
+					if ((int)(Math.random()*3+1) == 1) {
 						ArrayList<Point> spouts = level.getSpouts();
 						Point spout = spouts.get((int)(Math.random()*spouts.size()));
-						enemies.add(new UnionSoldier(20,spout.x,20,2,false));
+						enemies.add(new UnionSoldier(20,spout.x,20,1,false));
 					}
 				}
 			}
@@ -138,9 +138,9 @@ public class GamePanel extends JPanel {
 				//Paints the enemies
 				bg.setColor(Color.RED);
 				for (BaseEnemy be:enemies){
-					if (be.getxVel()>0)
+					if (be.isMovingRight())
 						bg.drawImage(be.getRight(), be.getX(), be.getY(), null);
-					else if (be.getxVel()<0)
+					else if (be.isMovingLeft())
 						bg.drawImage(be.getLeft(), be.getX(), be.getY(), null);
 				}
 				break;
@@ -158,13 +158,16 @@ public class GamePanel extends JPanel {
 		repaint();
 		calcFPS();
 		for (int i = 0; i < enemies.size(); i++){
-			enemies.get(i).updateEnemyPos(level);
+			enemies.get(i).fall();
+			enemies.get(i).jump();
+			enemies.get(i).updateKeys();
 		}
 		checkEnemiesAlive();
 		player.fall();
 		player.jump();
 		player.updateKeys();
 		player.checkHG();
+		
 		//checkJoystick();
 	}
 	public void setScreen(Screen newScreen) {
