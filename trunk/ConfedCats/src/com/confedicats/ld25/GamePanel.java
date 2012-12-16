@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 import com.confedicats.ld25.enemies.BaseEnemy;
 import com.confedicats.ld25.enemies.UnionSoldier;
-import com.confedicats.ld25.hats.Hat;
+import com.confedicats.ld25.hologear.HoloGear;
 import com.confedicats.ld25.maps.Map;
 import com.confedicats.ld25.maps.Rainbow;
 import com.confedicats.ld25.sounds.Sound;
@@ -31,6 +31,7 @@ public class GamePanel extends JPanel {
 	public int currentFPS = 0;
     public int FPS = 0;
     public long start = 0;
+    public HoloGear hg = new HoloGear(Pistol.class, 730, 530);
 	public GamePanel() {
 		super();
 		
@@ -89,6 +90,7 @@ public class GamePanel extends JPanel {
 		else
 			bg.drawImage(player.getLastXVel()>0?Player.PLAYER1_RIGHT:Player.PLAYER1_LEFT, player.getX(), player.getY(), null);
 		
+		hg.paint(bg);
 		
 		//Paints the enemies
 		bg.setColor(Color.RED);
@@ -100,7 +102,7 @@ public class GamePanel extends JPanel {
 		}
 		//Paints the FPS counter
 		bg.setColor(Color.RED);
-		bg.drawString(FPS+" FPS (r40)", 20, 20);
+		bg.drawString(FPS+" FPS (r41)", 20, 20);
 		// End Painting
 		// Paint Buffer To Graphics Handle Stretching The Image To Container Size
 		g.drawImage(buff, 0, 0, getWidth(), getHeight(), 0, 0, Driver.WIDTH, Driver.HEIGHT, null);

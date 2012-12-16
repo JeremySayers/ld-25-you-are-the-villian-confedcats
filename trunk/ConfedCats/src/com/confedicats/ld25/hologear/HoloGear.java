@@ -1,20 +1,22 @@
-package com.confedicats.ld25.hats;
+package com.confedicats.ld25.hologear;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import com.confedicats.ld25.tiles.AnimationTile;
 import com.confedicats.ld25.tiles.ColorTile;
+import com.confedicats.ld25.tiles.Tile.TileType;
 import com.confedicats.ld25.weapons.Weapon;
 
-public class Hat {
+public class HoloGear {
 	private int health;
 	private int x;
 	private int y;
 	private Class<? extends Weapon> weapon;
-	private static final BufferedImage buff = new ColorTile(Color.BLUE);
-	public Hat(Class<? extends Weapon> weap, int x, int y) {
+	private static final AnimationTile tile = new AnimationTile("cc_hologear1.png", "cc_hologear2.png", "cc_hologear3.png", "cc_hologear4.png");
+	public HoloGear(Class<? extends Weapon> weap, int x, int y) {
 		weapon = weap;
 		this.x = x;
 		this.y = y;
@@ -36,7 +38,8 @@ public class Hat {
 	}
 	public void paint(Graphics g) {
 		update();
-		g.drawImage(buff, getX(), getY(), 30, 30, null);
+		tile.register(TileType.EMPTY, getX(), getY());
+		tile.paintMe(g);
 	}
 	public void setHealth(int health) {
 		this.health = health;
