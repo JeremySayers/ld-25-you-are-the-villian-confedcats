@@ -1,4 +1,4 @@
-package com.confedcats.ld25.maps;
+package com.confedicats.ld25.maps;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -8,17 +8,17 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import com.confedcats.ld25.Driver;
-import com.confedcats.ld25.enemies.Boss;
-import com.confedcats.ld25.enemies.Enemy;
-import com.confedcats.ld25.sounds.Sound;
-import com.confedcats.ld25.tiles.AnimationTile;
-import com.confedcats.ld25.tiles.ColorTile;
-import com.confedcats.ld25.tiles.Tile;
-import com.confedcats.ld25.tiles.Tile.TileType;
+import com.confedicats.ld25.Driver;
+import com.confedicats.ld25.enemies.Boss;
+import com.confedicats.ld25.enemies.Enemy;
+import com.confedicats.ld25.sounds.Sound;
+import com.confedicats.ld25.tiles.AnimationTile;
+import com.confedicats.ld25.tiles.ColorTile;
+import com.confedicats.ld25.tiles.Tile;
+import com.confedicats.ld25.tiles.Tile.TileType;
 
 public abstract class Map {
-	private static final String PREFIX = "/com/confedcats/ld25/maps/";
+	private static final String PREFIX = "/com/confedicats/ld25/maps/";
 	private BufferedImage buff = new BufferedImage(Driver.WIDTH, Driver.HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	private Tile[][] tiles;
 	public Map() {

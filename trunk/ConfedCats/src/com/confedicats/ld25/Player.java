@@ -1,18 +1,18 @@
-package com.confedcats.ld25;
+package com.confedicats.ld25;
 
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-import com.confedcats.ld25.maps.Map;
-import com.confedcats.ld25.tiles.Tile;
-import com.confedcats.ld25.tiles.Tile.TileType;
-import com.confedcats.ld25.weapons.Weapon;
+import com.confedicats.ld25.maps.Map;
+import com.confedicats.ld25.tiles.Tile;
+import com.confedicats.ld25.tiles.Tile.TileType;
+import com.confedicats.ld25.weapons.Weapon;
 
 public class Player {
 	public static final BufferedImage PLAYER1_LEFT = loadImage("p1l.png");
 	public static final BufferedImage PLAYER1_RIGHT = loadImage("p1r.png");
-	private static final String PREFIX = "/com/confedcats/ld25/players/";
+	private static final String PREFIX = "/com/confedicats/ld25/players/";
 	private boolean isAlive;
 	private boolean isJumping = false;
 	private int jumpSpeed = 0;

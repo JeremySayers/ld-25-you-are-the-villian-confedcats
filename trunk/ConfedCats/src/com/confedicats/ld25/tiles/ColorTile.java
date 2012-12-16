@@ -1,4 +1,4 @@
-package com.confedcats.ld25.tiles;
+package com.confedicats.ld25.tiles;
 
 import java.awt.Color;
 import java.awt.Graphics;

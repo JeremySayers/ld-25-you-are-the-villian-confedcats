@@ -1,4 +1,4 @@
-package com.confedcats.ld25;
+package com.confedicats.ld25;
 import java.applet.Applet;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -11,14 +11,14 @@ import java.rmi.RMISecurityManager;
 
 import javax.swing.JFrame;
 
-import com.confedcats.ld25.sounds.Sound;
+import com.confedicats.ld25.sounds.Sound;
 
 public class Driver extends Applet {
 	public static final GraphicsDevice DEVICE = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 	public static final int HEIGHT = 600;
 	public static final int WIDTH = 800;
 	public static final GamePanel PANEL = new GamePanel();
-	public static final JFrame POPOUT = new JFrame("Confederate Cats");
+	public static final JFrame POPOUT = new JFrame("ConfediCats");
 	private boolean muted = false;
 	// First you need to create controller.
 	//public static final JInputJoystick joystick = new JInputJoystick(Controller.Type.GAMEPAD);

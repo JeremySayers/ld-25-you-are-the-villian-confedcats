@@ -1,4 +1,4 @@
-package com.confedcats.ld25;
+package com.confedicats.ld25;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 
-import com.confedcats.ld25.enemies.BaseEnemy;
-import com.confedcats.ld25.enemies.ConfederateSoldier;
-import com.confedcats.ld25.hats.Hat;
-import com.confedcats.ld25.maps.Map;
-import com.confedcats.ld25.maps.Rainbow;
-import com.confedcats.ld25.sounds.Sound;
-import com.confedcats.ld25.weapons.Pistol;
+import com.confedicats.ld25.enemies.BaseEnemy;
+import com.confedicats.ld25.enemies.ConfederateSoldier;
+import com.confedicats.ld25.hats.Hat;
+import com.confedicats.ld25.maps.Map;
+import com.confedicats.ld25.maps.Rainbow;
+import com.confedicats.ld25.sounds.Sound;
+import com.confedicats.ld25.weapons.Pistol;
 
 public class GamePanel extends JPanel {
 	// Create Buffers
@@ -101,7 +101,7 @@ public class GamePanel extends JPanel {
 		}
 		//Paints the FPS counter
 		bg.setColor(Color.RED);
-		bg.drawString(FPS+" FPS (r36)", 20, 20);
+		bg.drawString(FPS+" FPS (r37)", 20, 20);
 		// End Painting
 		// Paint Buffer To Graphics Handle Stretching The Image To Container Size
 		g.drawImage(buff, 0, 0, getWidth(), getHeight(), 0, 0, Driver.WIDTH, Driver.HEIGHT, null);
