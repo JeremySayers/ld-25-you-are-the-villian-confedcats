@@ -1,12 +1,9 @@
 package com.confedicats.ld25.hologear;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 
 import com.confedicats.ld25.tiles.AnimationTile;
-import com.confedicats.ld25.tiles.ColorTile;
 import com.confedicats.ld25.tiles.Tile.TileType;
 import com.confedicats.ld25.weapons.Weapon;
 
@@ -15,6 +12,7 @@ public class HoloGear {
 	private int x;
 	private int y;
 	private Class<? extends Weapon> weapon;
+	public static int COUNT;
 	private static final AnimationTile tile = new AnimationTile("cc_hologear1.png", "cc_hologear2.png", "cc_hologear3.png", "cc_hologear4.png");
 	public HoloGear(Class<? extends Weapon> weap, int x, int y) {
 		weapon = weap;
@@ -25,6 +23,7 @@ public class HoloGear {
 		weapon = weap;
 		this.x = x;
 		this.y = y;
+		COUNT++;
 	}
 	public Rectangle getBounds() {
 		return new Rectangle(getX(), getY(), 30, 30);

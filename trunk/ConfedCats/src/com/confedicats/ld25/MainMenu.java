@@ -20,10 +20,10 @@ public class MainMenu {
 	private static BufferedImage OPT_HOVER = loadImage("cc_main_options2.png");
 	public static final Rectangle OPT_LOC = new Rectangle(250,330,300,80);
 	public static boolean opt_hovered = false;
-	private static final Sound MUSIC = Sound.create("menumusic.au", true);
 	public MainMenu(){
 		start_hovered = false;
 		opt_hovered = false;
+		Sound.create("menumusic.au", true); // Load sound (aka cache sound) 
 	}
 	
 	private static BufferedImage loadImage(String fname) {
@@ -41,6 +41,6 @@ public class MainMenu {
 	}
 
 	public Sound getMusic() {
-		return MUSIC;
+		return Sound.create("menumusic.au", true);
 	}
 }

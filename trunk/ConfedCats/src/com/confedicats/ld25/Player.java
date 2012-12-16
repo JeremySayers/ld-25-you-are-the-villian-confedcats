@@ -65,39 +65,156 @@ public class Player {
 		}
 		return null;
 	}
+	public static int roundToClosestGrid(double i){
+	    return (int) ((Math.floor(i/40) *40))/40;
+	}
+	public void checkHG(){
+	if (hitHG(y,x)){
+			Sound.create("pickup.wav", false).play();
+			try {
+				weapon = GamePanel.hg.getWeapon().getConstructor().newInstance();
+			} catch (Exception e) {
+			}
+			int ranX = (int)(Math.random()*18+1);
+			int ranY = (int)(Math.random()*13+1);
+			if (mapStorage[(int)(ranY+1)][(int)(ranX)].getTileType() == TileType.PLATFORM && mapStorage[(int)(ranY)][(int)(ranX)].getTileType() == TileType.EMPTY && ranX !=8 && ranY != 5){
+				GamePanel.hg.alter(ranX*40+10,ranY*40+10, Weapon.getNewWeapons());
+			} else {
+				ranX = (int)(Math.random()*19+1);
+				ranY = (int)(Math.random()*13+1);
+			}
+		}	
+	}
+	public void fall() {
+		  if (!isJumping) {
+			mapStorage = GamePanel.level.getTiles();
+		    getMyCorners (x, y+1,mapStorage);
+		    if (downLeft == TileType.EMPTY && downRight == TileType.EMPTY) {
+		      jumpSpeed = 0;
+		      isJumping = true;
+		    }
+		  }
+	}
+
 	public Rectangle getBounds() {
 		return new Rectangle(getX(), getY(), 30, 30);
 	}
+
+	public int getDirection() {
+		return direction;
+	}
+
+	public int getGravity() {
+		return gravity;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public int getJumpSpeed() {
+		return jumpSpeed;
+	}
+	public int getJumpStart() {
+		return jumpStart;
+	}
+	public int getLastXVel() {
+		return lastXVel;
+	} 
 	public BufferedImage getLeft(){
 		if (weapon != null) return weapon.getLeft();
 		return PLAYER1_LEFT;
 	}
-	public boolean isMovingLeft() {
-		return movingLeft;
+	public Tile[][] getMapStorage() {
+		return mapStorage;
+	}
+	public void getMyCorners (int x, int y,Tile tiles[][]) {
+		  downY = (int) Math.floor((y+30-1)/40);
+		  upY = (int) Math.floor((y)/40);
+		  leftX = (int) Math.floor((x)/40);
+		  rightX = (int) Math.floor((x+30-1)/40);
+		  //check if they are walls
+		  upLeft = tiles[upY][leftX].getTileType();
+		  downLeft = tiles[downY][leftX].getTileType();
+		  upRight = tiles[upY][rightX].getTileType();
+		  downRight = tiles[downY][rightX].getTileType();
+	}
+	public BufferedImage getRight(){
+		if (weapon != null) return weapon.getRight();
+		return PLAYER1_RIGHT;
+	}
+	public int getSpeed() {
+		return speed;
+	}
+	public Weapon getWeapon() {
+		return weapon;
+	}
+	
+	
+	public int getWidth() {
+		return width;
+	}
+	public int getX() {
+		return x;
+	}
+	public int getxVel() {
+		return xVel;
+	}
+	
+	
+	public int getY() {
+		return y;
 	}
 
-	public void setMovingLeft(boolean movingLeft) {
-		this.movingLeft = movingLeft;
+	public int getyVel() {
+		return yVel;
 	}
 
-	public boolean isMovingRight() {
-		return movingRight;
+	public boolean hasWeapon() {
+		return getWeapon()!=null;
 	}
 
-	public void setMovingRight(boolean movingRight) {
-		this.movingRight = movingRight;
+	public boolean hitHG(int y,int x){
+		GamePanel.hg.getX();
+		if (getBounds().intersects(GamePanel.hg.getBounds())){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isAlive() {
+		return isAlive;
+	}
+
+	public boolean isJumping() {
+		return isJumping;
 	}
 
 	public boolean isJumpKey() {
 		return jumpKey;
 	}
 
-	public void setJumpKey(boolean jumpKey) {
-		this.jumpKey = jumpKey;
+	public boolean isMovingLeft() {
+		return movingLeft;
 	}
-	public BufferedImage getRight(){
-		if (weapon != null) return weapon.getRight();
-		return PLAYER1_RIGHT;
+
+	public boolean isMovingRight() {
+		return movingRight;
+	}
+	public void jump() {
+		  jumpSpeed = jumpSpeed+gravity;
+		  if (jumpSpeed>40-height) {
+		    jumpSpeed = 40-height;
+		  }
+		  if (jumpSpeed<0) {
+		    movePlayer(0, -1, -1);  
+		  } else if (jumpSpeed>0) {
+		    movePlayer(0, 1, 1);  
+		  }
+	}
+	public void log(String string){
+		System.out.println(string);
 	}
 	public void movePlayer(int xVel, int yVel, int jump) {
 		mapStorage = GamePanel.level.getTiles();
@@ -146,39 +263,90 @@ public class Player {
 		  }
 		  xTile = (int)(Math.floor(x/40));
 		  yTile = (int)(Math.floor(y/40));
-	} 
-	public void getMyCorners (int x, int y,Tile tiles[][]) {
-		  downY = (int) Math.floor((y+30-1)/40);
-		  upY = (int) Math.floor((y)/40);
-		  leftX = (int) Math.floor((x)/40);
-		  rightX = (int) Math.floor((x+30-1)/40);
-		  //check if they are walls
-		  upLeft = tiles[upY][leftX].getTileType();
-		  downLeft = tiles[downY][leftX].getTileType();
-		  upRight = tiles[upY][rightX].getTileType();
-		  downRight = tiles[downY][rightX].getTileType();
 	}
-	public void jump() {
-		  jumpSpeed = jumpSpeed+gravity;
-		  if (jumpSpeed>40-height) {
-		    jumpSpeed = 40-height;
-		  }
-		  if (jumpSpeed<0) {
-		    movePlayer(0, -1, -1);  
-		  } else if (jumpSpeed>0) {
-		    movePlayer(0, 1, 1);  
-		  }
+	public void playerReset(){
+		x = 385;
+		y = 525;
 	}
-	public void fall() {
-		  if (!isJumping) {
-			mapStorage = GamePanel.level.getTiles();
-		    getMyCorners (x, y+1,mapStorage);
-		    if (downLeft == TileType.EMPTY && downRight == TileType.EMPTY) {
-		      jumpSpeed = 0;
-		      isJumping = true;
-		    }
-		  }
+	public void release() {
+		getWeapon().release();
 	}
+	public void setAlive(boolean isAlive) {
+		this.isAlive = isAlive;
+	}
+
+	public void setDirection(int direction) {
+		this.direction = direction;
+	}
+
+	public void setGravity(int gravity) {
+		this.gravity = gravity;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public void setJumping(boolean isJumping) {
+		this.isJumping = isJumping;
+	}
+	public void setJumpKey(boolean jumpKey) {
+		this.jumpKey = jumpKey;
+	}
+
+	public void setJumpSpeed(int jumpSpeed) {
+		this.jumpSpeed = jumpSpeed;
+	}
+
+	public void setjumpStart(int jumpStart) {
+		this.jumpStart = jumpStart;
+	}
+
+	public void setLastXVel(int lastXVel) {
+		this.lastXVel = lastXVel;
+	}
+
+	public void setMapStorage(Tile[][] mapStorage) {
+		this.mapStorage = mapStorage;
+	}
+
+	public void setMovingLeft(boolean movingLeft) {
+		this.movingLeft = movingLeft;
+	}
+
+	public void setMovingRight(boolean movingRight) {
+		this.movingRight = movingRight;
+	}
+
+	public void setSpeed(int speed) {
+		this.speed = speed;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public void setxVel(int xVel) {
+		this.xVel = xVel;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public void setyVel(int yVel) {
+		this.yVel = yVel;
+	}
+
+	public void shoot() {
+		if (weapon!=null)
+			weapon.shoot(this);
+	}
+
 	public void updateKeys(){
 		if (movingLeft)
 			movePlayer(-1,0,0);
@@ -193,174 +361,10 @@ public class Player {
 		}
 			
 	}
-	public void checkHG(){
-	if (hitHG(y,x)){
-			Sound.create("pickup.wav", false).play();
-			try {
-				weapon = GamePanel.hg.getWeapon().getConstructor().newInstance();
-			} catch (Exception e) {
-			}
-			int ranX = (int)(Math.random()*18+1);
-			int ranY = (int)(Math.random()*13+1);
-			if (mapStorage[(int)(ranY+1)][(int)(ranX)].getTileType() == TileType.PLATFORM && mapStorage[(int)(ranY)][(int)(ranX)].getTileType() == TileType.EMPTY && ranX !=8 && ranY != 5){
-				GamePanel.hg.alter(ranX*40+10,ranY*40+10, Weapon.getNewWeapons());
-			} else {
-				ranX = (int)(Math.random()*19+1);
-				ranY = (int)(Math.random()*13+1);
-			}
-		}	
-	}
-	public boolean hitHG(int y,int x){
-		GamePanel.hg.getX();
-		if (getBounds().intersects(GamePanel.hg.getBounds())){
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	
-	public void playerReset(){
-		x = 385;
-		y = 525;
-	}
-	public static int roundToClosestGrid(double i){
-	    return (int) ((Math.floor(i/40) *40))/40;
-	}
-	public void log(String string){
-		System.out.println(string);
-	}
-	
-	
-	public boolean isJumping() {
-		return isJumping;
-	}
-
-	public void setJumping(boolean isJumping) {
-		this.isJumping = isJumping;
-	}
-
-	public int getJumpSpeed() {
-		return jumpSpeed;
-	}
-
-	public void setJumpSpeed(int jumpSpeed) {
-		this.jumpSpeed = jumpSpeed;
-	}
-
-	public int getJumpStart() {
-		return jumpStart;
-	}
-
-	public void setjumpStart(int jumpStart) {
-		this.jumpStart = jumpStart;
-	}
-
-	public int getGravity() {
-		return gravity;
-	}
-
-	public void setGravity(int gravity) {
-		this.gravity = gravity;
-	}
-
-	public int getDirection() {
-		return direction;
-	}
-	public int getxVel() {
-		return xVel;
-	}
-	public int getyVel() {
-		return yVel;
-	}
-	public boolean isAlive() {
-		return isAlive;
-	}
-	public void setAlive(boolean isAlive) {
-		this.isAlive = isAlive;
-	}
-	public void setDirection(int direction) {
-		this.direction = direction;
-	}
-	public int getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public void setxVel(int xVel) {
-		this.xVel = xVel;
-	}
-	public void setyVel(int yVel) {
-		this.yVel = yVel;
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
-	public int getLastXVel() {
-		return lastXVel;
-	}
-
-	public int getSpeed() {
-		return speed;
-	}
-
-	public void setSpeed(int speed) {
-		this.speed = speed;
-	}
-
-	public void setLastXVel(int lastXVel) {
-		this.lastXVel = lastXVel;
-	}
-
-	public Tile[][] getMapStorage() {
-		return mapStorage;
-	}
-
-	public void setMapStorage(Tile[][] mapStorage) {
-		this.mapStorage = mapStorage;
-	}
-
-	public void shoot() {
-		if (weapon!=null)
-			weapon.shoot(this);
-	}
 
 	public void updateWeapon(Graphics g) {
 		if (weapon!=null) {
 			weapon.update(g);
 		}
-	}
-
-	public Weapon getWeapon() {
-		return weapon;
-	}
-
-	public void release() {
-		getWeapon().release();
 	}
 }

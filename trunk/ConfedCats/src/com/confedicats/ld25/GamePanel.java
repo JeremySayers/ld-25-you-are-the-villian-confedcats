@@ -1,6 +1,8 @@
 package com.confedicats.ld25;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.KeyAdapter;
@@ -32,6 +34,7 @@ public class GamePanel extends JPanel {
 	public static ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>();
 
 	public Screen screen = Screen.MAIN_MENU;
+	public static Font font;
 	public static MainMenu menu = new MainMenu();
 	public static Map level;
 	boolean jumpKey = false;
@@ -43,6 +46,12 @@ public class GamePanel extends JPanel {
     public static HoloGear hg = new HoloGear(Weapon.getNewWeapons(), 460, 200);
 	public GamePanel() {
 		super();
+		
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, GamePanel.class.getResource("/PressStart2P.ttf").openStream()).deriveFont(48f);
+		} catch (Exception e1) {
+			font = new Font("Arial Black", Font.PLAIN, 48);
+		}
 		
 		// Force Repaint To Achieve 60fps
 		new java.util.Timer().scheduleAtFixedRate(new java.util.TimerTask(){
@@ -83,22 +92,27 @@ public class GamePanel extends JPanel {
 						for (KeyListener kl:Driver.PANEL.getKeyListeners()) {
 							kl.keyReleased(new KeyEvent(Driver.PANEL, KeyEvent.KEY_LOCATION_STANDARD, System.currentTimeMillis(), 0, KeyEvent.VK_F, 'f'));
 						}
-					}
+					} else if (Options.BACK_LOC.contains(scaled)) {
+						setScreen(Screen.MAIN_MENU);
+					} 
 				}
 			}
 		});
 		addMouseMotionListener(new MouseMotionAdapter() {
 			public void mouseMoved(MouseEvent e) {
+				int width = Driver.POPOUT.isVisible() ? Driver.DEVICE.getDisplayMode().getWidth() : Driver.WIDTH;
+				int height = Driver.POPOUT.isVisible() ? Driver.DEVICE.getDisplayMode().getHeight() : Driver.HEIGHT;
+				Point scaled = translateSize(width, height, e.getPoint());
 				if (screen==Screen.MAIN_MENU) {
-					int width = Driver.POPOUT.isVisible() ? Driver.DEVICE.getDisplayMode().getWidth() : Driver.WIDTH;
-					int height = Driver.POPOUT.isVisible() ? Driver.DEVICE.getDisplayMode().getHeight() : Driver.HEIGHT;
 					MainMenu.start_hovered = false;
 					MainMenu.opt_hovered = false;
-					if (MainMenu.START_LOC.contains(translateSize(width, height, e.getPoint()))) {
+					if (MainMenu.START_LOC.contains(scaled)) {
 						MainMenu.start_hovered = true;
-					} else if (MainMenu.OPT_LOC.contains(translateSize(width, height, e.getPoint()))) {
+					} else if (MainMenu.OPT_LOC.contains(scaled)) {
 						MainMenu.opt_hovered = true;
 					}
+				} else if (screen==Screen.OPTIONS) {
+					Options.back_hovered = Options.BACK_LOC.contains(scaled);
 				}
 			}
 		});
@@ -112,7 +126,7 @@ public class GamePanel extends JPanel {
 					if (event.getKeyCode()==KeyEvent.VK_UP){
 						player.setJumpKey(true);
 					}
-					if (event.getKeyCode()==KeyEvent.VK_SPACE && player.getWeapon().isAutomatic()) {
+					if (event.getKeyCode()==KeyEvent.VK_SPACE && player.hasWeapon() && player.getWeapon().isAutomatic()) {
 						player.shoot();
 					}
 				}
@@ -136,7 +150,7 @@ public class GamePanel extends JPanel {
 						Sound.setMute(!Sound.isMute());
 						System.out.println(Sound.isMute()+"");
 					}
-					if (event.getKeyCode()==KeyEvent.VK_SPACE) {
+					if (event.getKeyCode()==KeyEvent.VK_SPACE && player.hasWeapon()) {
 						if (!player.getWeapon().isAutomatic())
 							player.shoot();
 						else
@@ -146,97 +160,6 @@ public class GamePanel extends JPanel {
 			}
 		});
 	}
-	public void paintComponent(Graphics g) {
-		// Clear Screen
-		bg.setColor(Color.BLACK);
-		bg.fillRect(0, 0, Driver.WIDTH, Driver.HEIGHT);
-		// Start Painting
-		switch (screen) {
-			case MAIN_MENU:
-				menu.paint(bg);
-				break;
-			case OPTIONS:
-				options.paint(bg);
-				break;
-			case RAINBOW:
-			case LEVEL2:
-			case INDUSTRIAL:
-				level.paint(bg);
-				//Paints the player
-				player.updateWeapon(bg);
-				if (player.isMovingRight())
-					bg.drawImage(player.getRight(), player.getX(), player.getY(), null);
-				else if (player.isMovingLeft())
-					bg.drawImage(player.getLeft(), player.getX(), player.getY(), null);
-				else
-					bg.drawImage(player.getLastXVel()>0?player.getRight():player.getLeft(), player.getX(), player.getY(), null);
-				
-				hg.paint(bg);
-				
-				//Paints the enemies
-				bg.setColor(Color.RED);
-				for (BaseEnemy be:enemies){
-					if (be.isMovingRight())
-						bg.drawImage(be.getRight(), be.getX(), be.getY(), null);
-					else if (be.isMovingLeft())
-						bg.drawImage(be.getLeft(), be.getX(), be.getY(), null);
-				}
-				break;
-			case GAME_OVER:
-				break;
-		}
-		//Paints the FPS counter
-		//bg.setColor(Color.RED);
-		//bg.drawString(FPS+" FPS (r46)", 20, 20);
-		// End Painting
-		// Paint Buffer To Graphics Handle Stretching The Image To Container Size
-		g.drawImage(buff, 0, 0, getWidth(), getHeight(), 0, 0, Driver.WIDTH, Driver.HEIGHT, null);
-	}
-	private Point translateSize(int width, int height, Point orig) {
-		return new Point((int)(orig.x*1.0/width*Driver.WIDTH), (int)(orig.y*1.0/height*Driver.HEIGHT));
-	}
-	public void tick() {
-		repaint();
-		calcFPS();
-		for (int i = 0; i < enemies.size(); i++){
-			enemies.get(i).fall();
-			enemies.get(i).jump();
-			enemies.get(i).updateKeys();
-		}
-		if (screen==Screen.RAINBOW||screen==Screen.LEVEL2||screen==Screen.INDUSTRIAL) {
-			checkEnemiesAlive();
-			player.fall();
-			player.jump();
-			player.updateKeys();
-			player.checkHG();
-		}
-		
-		//checkJoystick();
-	}
-	public void setScreen(Screen newScreen) {
-		Sound.stopAll();
-		Sound.clearAll();
-		switch (newScreen) {
-			case MAIN_MENU:
-				menu.getMusic().play();
-				break;
-			case OPTIONS:
-				options = new Options();
-				options.getMusic().play();
-				break;
-			case RAINBOW:
-				level = new Rainbow();
-				level.getMusic().play();
-				break;
-			case LEVEL2:
-				break;
-			case INDUSTRIAL:
-				break;
-			case GAME_OVER:
-				break;
-		}
-		screen = newScreen;
-	}
 	public void calcFPS(){
 		currentFPS++;
         if(System.currentTimeMillis() - start >= 1000) {
@@ -245,7 +168,6 @@ public class GamePanel extends JPanel {
             start = System.currentTimeMillis();
         }
 	}
-	
 	public void checkEnemiesAlive(){
 		for (int i = 0; i < enemies.size(); i++){
 			if (enemies.get(i).getHealth() == 0){
@@ -278,6 +200,105 @@ public class GamePanel extends JPanel {
 			}	
 		} catch (NullPointerException e){}
 	}*/
+	public void paintComponent(Graphics g) {
+		// Clear Screen
+		bg.setColor(Color.BLACK);
+		bg.fillRect(0, 0, Driver.WIDTH, Driver.HEIGHT);
+		// Start Painting
+		switch (screen) {
+			case MAIN_MENU:
+				menu.paint(bg);
+				break;
+			case OPTIONS:
+				options.paint(bg);
+				break;
+			case RAINBOW:
+			case LEVEL2:
+			case INDUSTRIAL:
+				level.paint(bg);
+				
+				bg.setFont(font);
+				bg.setColor(Color.BLACK);
+				String count = ""+HoloGear.COUNT;
+				FontMetrics fm = bg.getFontMetrics();
+				bg.drawString(count, 400-fm.stringWidth(count)/2, 100);
+				
+				//Paints the player
+				player.updateWeapon(bg);
+				if (player.isMovingRight())
+					bg.drawImage(player.getRight(), player.getX(), player.getY(), null);
+				else if (player.isMovingLeft())
+					bg.drawImage(player.getLeft(), player.getX(), player.getY(), null);
+				else
+					bg.drawImage(player.getLastXVel()>0?player.getRight():player.getLeft(), player.getX(), player.getY(), null);
+				
+				hg.paint(bg);
+				
+				//Paints the enemies
+				bg.setColor(Color.RED);
+				for (BaseEnemy be:enemies){
+					if (be.isMovingRight())
+						bg.drawImage(be.getRight(), be.getX(), be.getY(), null);
+					else if (be.isMovingLeft())
+						bg.drawImage(be.getLeft(), be.getX(), be.getY(), null);
+				}
+				break;
+			case GAME_OVER:
+				break;
+		}
+		//Paints the FPS counter
+		//bg.setColor(Color.RED);
+		//bg.drawString(FPS+" FPS (r46)", 20, 20);
+		// End Painting
+		// Paint Buffer To Graphics Handle Stretching The Image To Container Size
+		g.drawImage(buff, 0, 0, getWidth(), getHeight(), 0, 0, Driver.WIDTH, Driver.HEIGHT, null);
+	}
+	public void setScreen(Screen newScreen) {
+		Sound.stopAll();
+		Sound.clearAll();
+		switch (newScreen) {
+			case MAIN_MENU:
+				menu.getMusic().play();
+				break;
+			case OPTIONS:
+				options = new Options();
+				options.getMusic().play();
+				break;
+			case RAINBOW:
+				level = new Rainbow();
+				level.getMusic().play();
+				break;
+			case LEVEL2:
+				break;
+			case INDUSTRIAL:
+				break;
+			case GAME_OVER:
+				break;
+		}
+		screen = newScreen;
+	}
+	public void tick() {
+		repaint();
+		calcFPS();
+		for (int i = 0; i < enemies.size(); i++){
+			enemies.get(i).fall();
+			enemies.get(i).jump();
+			enemies.get(i).updateKeys();
+		}
+		if (screen==Screen.RAINBOW||screen==Screen.LEVEL2||screen==Screen.INDUSTRIAL) {
+			checkEnemiesAlive();
+			player.fall();
+			player.jump();
+			player.updateKeys();
+			player.checkHG();
+		}
+		
+		//checkJoystick();
+	}
+	
+	private Point translateSize(int width, int height, Point orig) {
+		return new Point((int)(orig.x*1.0/width*Driver.WIDTH), (int)(orig.y*1.0/height*Driver.HEIGHT));
+	}
 	
 	
 	
