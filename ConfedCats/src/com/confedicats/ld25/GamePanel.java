@@ -134,7 +134,7 @@ public class GamePanel extends JPanel {
 			if (enemies.get(i).getHealth() == 0){
 				int tempMulti = enemies.get(i).getMulti();
 				enemies.remove(i);
-				enemies.add(new UnionSoldier(100,385,20,tempMulti*2));
+				enemies.add(new UnionSoldier(100,385,20,4));
 				i--;
 			}
 		}
