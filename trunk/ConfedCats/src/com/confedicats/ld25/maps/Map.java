@@ -23,7 +23,7 @@ public abstract class Map {
 	private static final String PREFIX = "/com/confedicats/ld25/maps/";
 	private BufferedImage buff = new BufferedImage(Driver.WIDTH, Driver.HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	private Tile[][] tiles;
-	private ArrayList<Point> spouts;
+	private ArrayList<Point> spouts = new ArrayList<Point>();
 	public Map() {
 		this.tiles = convertMap();
 		generateBuffer();
