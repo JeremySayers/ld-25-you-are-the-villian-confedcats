@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -23,6 +24,8 @@ import com.confedicats.ld25.maps.Map;
 import com.confedicats.ld25.maps.Rainbow;
 import com.confedicats.ld25.options.Options;
 import com.confedicats.ld25.sounds.Sound;
+import com.confedicats.ld25.tiles.Tile;
+import com.confedicats.ld25.tiles.Tile.TileType;
 import com.confedicats.ld25.weapons.Weapon;
 
 public class GamePanel extends JPanel {
@@ -30,7 +33,7 @@ public class GamePanel extends JPanel {
 	// Create Buffers
 	private static final BufferedImage buff = new BufferedImage(Driver.WIDTH, Driver.HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	private static final Graphics bg = buff.getGraphics();
-	public static Player player = new Player(385,460);
+	public static Player player = new Player(0, 0);
 	public static ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>();
 
 	public Screen screen = Screen.MAIN_MENU;
@@ -43,6 +46,8 @@ public class GamePanel extends JPanel {
     public int FPS = 0;
     public long start = 0;
 	private Options options;
+	private int ticktock = 0;
+	private boolean flashVisible = false;
     public static HoloGear hg = new HoloGear(Weapon.getNewWeapons(), 460, 200);
 	public GamePanel() {
 		super();
@@ -95,6 +100,8 @@ public class GamePanel extends JPanel {
 					} else if (Options.BACK_LOC.contains(scaled)) {
 						setScreen(Screen.MAIN_MENU);
 					} 
+				} else if (screen==Screen.GAME_OVER) {
+					setScreen(Screen.MAIN_MENU);
 				}
 			}
 		});
@@ -169,7 +176,15 @@ public class GamePanel extends JPanel {
         }
 	}
 	public void checkEnemiesAlive(){
+		Tile[] tiles = level.getTiles()[14];
 		for (int i = 0; i < enemies.size(); i++){
+			for (Tile tile:tiles) {
+				Rectangle bounds = new Rectangle(tile.getBounds());
+				bounds.setLocation(bounds.x, bounds.y-20);
+				if (tile.getTileType()==TileType.PIT && enemies.get(i).getBounds().intersects(bounds)) {
+					enemies.get(i).setHealth(0);
+				}
+			}
 			if (enemies.get(i).getHealth() == 0){
 				enemies.remove(i);
 				Sound.create("fallinpit.wav", false).play();
@@ -205,6 +220,10 @@ public class GamePanel extends JPanel {
 		bg.setColor(Color.BLACK);
 		bg.fillRect(0, 0, Driver.WIDTH, Driver.HEIGHT);
 		// Start Painting
+		bg.setFont(font);
+		bg.setColor(Color.BLACK);
+		String count = ""+HoloGear.COUNT;
+		FontMetrics fm = bg.getFontMetrics();
 		switch (screen) {
 			case MAIN_MENU:
 				menu.paint(bg);
@@ -217,10 +236,6 @@ public class GamePanel extends JPanel {
 			case INDUSTRIAL:
 				level.paint(bg);
 				
-				bg.setFont(font);
-				bg.setColor(Color.BLACK);
-				String count = ""+HoloGear.COUNT;
-				FontMetrics fm = bg.getFontMetrics();
 				bg.drawString(count, 400-fm.stringWidth(count)/2, 100);
 				
 				//Paints the player
@@ -244,7 +259,47 @@ public class GamePanel extends JPanel {
 				}
 				break;
 			case GAME_OVER:
-				break;
+				level.paint(bg);
+				
+				//Paints the player
+				if (player.isMovingRight())
+					bg.drawImage(player.getRight(), player.getX(), player.getY(), null);
+				else if (player.isMovingLeft())
+					bg.drawImage(player.getLeft(), player.getX(), player.getY(), null);
+				else
+					bg.drawImage(player.getLastXVel()>0?player.getRight():player.getLeft(), player.getX(), player.getY(), null);
+				
+				hg.paint(bg);
+				
+				//Paints the enemies
+				bg.setColor(Color.RED);
+				for (BaseEnemy be:enemies){
+					if (be.isMovingRight())
+						bg.drawImage(be.getRight(), be.getX(), be.getY(), null);
+					else if (be.isMovingLeft())
+						bg.drawImage(be.getLeft(), be.getX(), be.getY(), null);
+				}
+				
+				bg.setColor(Color.BLACK);
+				if (ticktock==12) {
+					ticktock=0;
+					flashVisible = !flashVisible;
+				} else {
+					ticktock++;
+				}
+				if (flashVisible) {
+					bg.setFont(bg.getFont().deriveFont(75f));
+					fm = bg.getFontMetrics();
+					String go = "GAME OVER!";
+					bg.drawString(go, 400-fm.stringWidth(go)/2, 200);
+				}
+				bg.setFont(bg.getFont().deriveFont(150f));
+				fm = bg.getFontMetrics();
+				bg.drawString(count, 400-fm.stringWidth(count)/2, 400);
+				bg.setFont(bg.getFont().deriveFont(30f));
+				fm = bg.getFontMetrics();
+				String click = "Click To Continue!";
+				bg.drawString(click, 400-fm.stringWidth(click)/2, 500);
 		}
 		//Paints the FPS counter
 		//bg.setColor(Color.RED);
@@ -265,14 +320,24 @@ public class GamePanel extends JPanel {
 				options.getMusic().play();
 				break;
 			case RAINBOW:
+				HoloGear.COUNT = 0;
+				enemies.clear();
 				level = new Rainbow();
+				ArrayList<Point> spouts = level.getSpouts();
+				Point spout = spouts.get((int)(Math.random()*spouts.size()));
+				player = new Player(spout.x, 20);
 				level.getMusic().play();
 				break;
 			case LEVEL2:
+				HoloGear.COUNT = 0;
+				enemies.clear();
 				break;
 			case INDUSTRIAL:
+				HoloGear.COUNT = 0;
+				enemies.clear();
 				break;
 			case GAME_OVER:
+				Sound.create("gameover.au", true).play();
 				break;
 		}
 		screen = newScreen;
@@ -280,17 +345,25 @@ public class GamePanel extends JPanel {
 	public void tick() {
 		repaint();
 		calcFPS();
-		for (int i = 0; i < enemies.size(); i++){
-			enemies.get(i).fall();
-			enemies.get(i).jump();
-			enemies.get(i).updateKeys();
-		}
 		if (screen==Screen.RAINBOW||screen==Screen.LEVEL2||screen==Screen.INDUSTRIAL) {
+			for (int i = 0; i < enemies.size(); i++){
+				enemies.get(i).fall();
+				enemies.get(i).jump();
+				enemies.get(i).updateKeys();
+			}
 			checkEnemiesAlive();
 			player.fall();
 			player.jump();
 			player.updateKeys();
 			player.checkHG();
+			Tile[] tiles = level.getTiles()[14];
+			for (Tile tile:tiles) {
+				Rectangle bounds = new Rectangle(tile.getBounds());
+				bounds.setLocation(bounds.x, bounds.y-20);
+				if (tile.getTileType()==TileType.PIT && player.getBounds().intersects(bounds)) {
+					setScreen(Screen.GAME_OVER);
+				}
+			}
 		}
 		
 		//checkJoystick();
