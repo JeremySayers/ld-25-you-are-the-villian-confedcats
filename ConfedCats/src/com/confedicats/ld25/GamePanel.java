@@ -25,7 +25,7 @@ public class GamePanel extends JPanel {
 	// Create Buffers
 	private static final BufferedImage buff = new BufferedImage(Driver.WIDTH, Driver.HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	private static final Graphics bg = buff.getGraphics();
-	public static Player player = new Player();
+	public static Player player = new Player(385,460);
 	public static ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>();
 
 	public Screen screen = Screen.MAIN_MENU;
@@ -74,28 +74,26 @@ public class GamePanel extends JPanel {
 		addKeyListener(new KeyAdapter(){
 			public void keyPressed(KeyEvent event) {
 				if (screen==Screen.RAINBOW||screen==Screen.LEVEL2||screen==Screen.INDUSTRIAL) {
-					if (event.getKeyCode()==KeyEvent.VK_LEFT) 
-						player.setxVel(-5);
+					if (event.getKeyCode()==KeyEvent.VK_LEFT)
+						player.setMovingLeft(true);
 					if (event.getKeyCode()==KeyEvent.VK_RIGHT) 
-						player.setxVel(5);
-					if (event.getKeyCode()==KeyEvent.VK_UP) {
-						jumpKey = true;
+						player.setMovingRight(true);
+					if (event.getKeyCode()==KeyEvent.VK_UP){
+						player.setJumpKey(true);
 					}
 				}
 			}
 			public void keyReleased(KeyEvent event) {
 				if (screen==Screen.RAINBOW||screen==Screen.LEVEL2||screen==Screen.INDUSTRIAL) {
-					if (event.getKeyCode()==KeyEvent.VK_LEFT && player.getxVel() < 0){ 
-						player.setxVel(0);
-						player.setLastXVel(-1);
+					if (event.getKeyCode()==KeyEvent.VK_LEFT){ 
+						player.setMovingLeft(false);
 					}
-					if (event.getKeyCode()==KeyEvent.VK_RIGHT && player.getxVel() > 0){
-						player.setxVel(0);
-						player.setLastXVel(1);
+					if (event.getKeyCode()==KeyEvent.VK_RIGHT){
+						player.setMovingRight(false);
 					}
-						
-					if (event.getKeyCode()==KeyEvent.VK_UP ) 
-						jumpKey = false;
+					if (event.getKeyCode()==KeyEvent.VK_UP ){ 
+						player.setJumpKey(false);
+					}
 					if (event.getKeyCode()==KeyEvent.VK_R ) 
 						player.playerReset();
 					if (event.getKeyCode()==KeyEvent.VK_M ) {
@@ -157,14 +155,14 @@ public class GamePanel extends JPanel {
 	public void tick() {
 		repaint();
 		calcFPS();
-		synchronized(player){
-			player.updatePlayerPos(level);
-		}
 		for (int i = 0; i < enemies.size(); i++){
 			enemies.get(i).updateEnemyPos(level);
 		}
 		checkEnemiesAlive();
-		player.jumpingStuff(jumpKey);
+		player.fall();
+		player.jump();
+		player.updateKeys();
+		player.checkHG();
 		//checkJoystick();
 	}
 	public void setScreen(Screen newScreen) {
