@@ -100,8 +100,8 @@ public class GamePanel extends JPanel {
 			bg.fillRect(enemies.get(i).getX(), enemies.get(i).getY(), 30, 30);
 		}
 		//Paints the FPS counter
-		bg.setColor(Color.WHITE);
-		bg.drawString(FPS+" FPS", 20, 20);
+		bg.setColor(Color.RED);
+		bg.drawString(FPS+" FPS (r36)", 20, 20);
 		// End Painting
 		// Paint Buffer To Graphics Handle Stretching The Image To Container Size
 		g.drawImage(buff, 0, 0, getWidth(), getHeight(), 0, 0, Driver.WIDTH, Driver.HEIGHT, null);
@@ -128,21 +128,23 @@ public class GamePanel extends JPanel {
 	}
 	/*
 	public void checkJoystick(){
-		if(Driver.joystick.isControllerConnected()){
-			Driver.joystick.pollController();
-			if (Driver.joystick.getXAxisPercentage() > 60){
-				player.setxVel(5);
-			} else if (Driver.joystick.getXAxisPercentage() < 40){
-				player.setxVel(-5);
-			} else {
-				player.setxVel(0);
-			}
-			if (Driver.joystick.getButtonValue(1)){
-				jumpKey = true;
-			} else {
-				jumpKey =false;
-			}
-		}	
+		try {
+			if(Driver.joystick.isControllerConnected()){
+				Driver.joystick.pollController();
+				if (Driver.joystick.getXAxisPercentage() > 60){
+					player.setxVel(5);
+				} else if (Driver.joystick.getXAxisPercentage() < 40){
+					player.setxVel(-5);
+				} else {
+					player.setxVel(0);
+				}
+				if (Driver.joystick.getButtonValue(1)){
+					jumpKey = true;
+				} else {
+					jumpKey =false;
+				}
+			}	
+		} catch (NullPointerException e){}
 	}*/
 	
 	

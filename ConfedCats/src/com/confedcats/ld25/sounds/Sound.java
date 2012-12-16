@@ -1,5 +1,6 @@
 package com.confedcats.ld25.sounds;
 
+import java.io.BufferedInputStream;
 import java.util.ArrayList;
 
 import javax.sound.sampled.AudioFormat;
@@ -16,17 +17,21 @@ public class Sound {
 	private static final String PREFIX = "/com/confedcats/ld25/sounds/";
 	private static ArrayList<Sound> instances = new ArrayList<Sound>(); 
 	private Sound(AudioInputStream in, boolean music) {
-	    AudioFormat baseFormat = in.getFormat();
-	    AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(), 16,
-	                                                baseFormat.getChannels(), baseFormat.getChannels() * 2,
-	                                                baseFormat.getSampleRate(), false);
-	    din = AudioSystem.getAudioInputStream(decodedFormat, in);
-	    try {
-			clip = AudioSystem.getClip();
-		} catch (LineUnavailableException e) {
+		try {
+		    AudioFormat baseFormat = in.getFormat();
+		    AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(), 16,
+		                                                baseFormat.getChannels(), baseFormat.getChannels() * 2,
+		                                                baseFormat.getSampleRate(), false);
+		    din = AudioSystem.getAudioInputStream(decodedFormat, in);
+		    try {
+				clip = AudioSystem.getClip();
+			} catch (LineUnavailableException e) {
+			}
+		    this.music = music;
+		    instances.add(this);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-	    this.music = music;
-	    instances.add(this);
 	}
 	public static void clearAll() {
 		stopAll();
@@ -37,8 +42,9 @@ public class Sound {
 	}
 	private static AudioInputStream getAudioStream(String fname) {
 		try {
-			return AudioSystem.getAudioInputStream(Sound.class.getResource(PREFIX+fname).openStream());
+			return AudioSystem.getAudioInputStream(new BufferedInputStream(Sound.class.getResource(PREFIX+fname).openStream()));
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
