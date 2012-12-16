@@ -69,7 +69,7 @@ public class Player {
 			int ranX = (int)(Math.random()*18+1);
 			int ranY = (int)(Math.random()*13+1);
 			
-			if (mapStorage[(int)(ranY+1)][(int)(ranX)].getTileType() == TileType.PLATFORM && mapStorage[(int)(ranY)][(int)(ranX)].getTileType() == TileType.EMPTY){
+			if (mapStorage[(int)(ranY+1)][(int)(ranX)].getTileType() == TileType.PLATFORM && mapStorage[(int)(ranY)][(int)(ranX)].getTileType() == TileType.EMPTY && ranX !=8 && ranY != 5){
 				GamePanel.hg.alter(ranX*40+10,ranY*40+10,Pistol.class);
 			} else {
 				ranX = (int)(Math.random()*19+1);
