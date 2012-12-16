@@ -27,7 +27,6 @@ public class Sound {
 		    this.music = music;
 		    instances.add(this);
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 	public static void clearAll() {
@@ -98,15 +97,25 @@ public class Sound {
 		return music;
 	}
 	public boolean isPlaying() {
-		return clip.isRunning();
+		try {
+			return clip.isRunning();
+		} catch (Exception e){
+		}
+		return false;
 	}
 	private void pause() {
-		clip.stop();
+		try {
+			clip.stop();
+		} catch (Exception e){
+		}
 	}
 	public void play() {
 		playSound();
-		if (!isMute() && isMusic() && !isMuteBGM())
-			clip.loop(Clip.LOOP_CONTINUOUSLY);
+		try {
+			if (!isMute() && isMusic() && !isMuteBGM())
+				clip.loop(Clip.LOOP_CONTINUOUSLY);
+		} catch (Exception e){
+		}
 	}
 	private void playSound() {
 		try {
@@ -120,7 +129,10 @@ public class Sound {
 		play();
 	}
 	public void stop() {
-		clip.stop();
-		clip.close();
+		try {
+			clip.stop();
+			clip.close();
+		} catch (Exception e){
+		}
 	}
 }
