@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.confedicats.ld25.Driver;
 import com.confedicats.ld25.GamePanel;
 import com.confedicats.ld25.enemies.BaseEnemy;
+import com.confedicats.ld25.sounds.Sound;
 import com.confedicats.ld25.tiles.Tile;
 import com.confedicats.ld25.tiles.Tile.TileType;
 
@@ -34,7 +35,10 @@ public class LaserAmmo extends Ammo {
 		for (BaseEnemy be:GamePanel.enemies) {
 			if (be.getBounds().intersects(getBounds())) {
 				be.setHealth(be.getHealth()-10);
-				if (be.getHealth()<=0) removeEnemies.add(be);
+				if (be.getHealth()<=0) {
+					removeEnemies.add(be);
+					Sound.create("enemydeath.wav", false).play();
+				}
 				setDead(true);
 				break;
 			}
