@@ -3,6 +3,7 @@ package com.confedicats.ld25.weapons;
 import java.awt.image.BufferedImage;
 
 import com.confedicats.ld25.Player;
+import com.confedicats.ld25.sounds.Sound;
 import com.confedicats.ld25.weapons.ammo.Ammo;
 import com.confedicats.ld25.weapons.ammo.LaserAmmo;
 
@@ -29,6 +30,7 @@ public class Laser extends Weapon {
 		try {
 			Ammo ammo = getAmmoClass().getConstructor(int.class, int.class, int.class, int.class).newInstance(player.getX(), player.getY(), player.getxVel()<0?-1:player.getxVel()>0?1:player.getLastXVel()<0?-1:1, 6);
 			addAmmo(ammo);
+			Sound.create("laser.wav", false).play();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

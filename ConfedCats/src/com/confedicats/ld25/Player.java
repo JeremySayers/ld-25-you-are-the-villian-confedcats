@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 import com.confedicats.ld25.maps.Map;
+import com.confedicats.ld25.sounds.Sound;
 import com.confedicats.ld25.tiles.Tile;
 import com.confedicats.ld25.tiles.Tile.TileType;
 import com.confedicats.ld25.weapons.Laser;
@@ -76,6 +77,7 @@ public class Player {
 			}
 		}
 		if (hitHG(y,x)){
+			Sound.create("pickup.wav", false).play();
 			try {
 				weapon = GamePanel.hg.getWeapon().getConstructor().newInstance();
 			} catch (Exception e) {
@@ -146,6 +148,7 @@ public class Player {
 			if (!isJumping()){
 				setJumpSpeed(getStartJumpSpeed());
 				setJumping(true);
+				Sound.create("jump.wav", false).play();
 			}
 		}
 	}
