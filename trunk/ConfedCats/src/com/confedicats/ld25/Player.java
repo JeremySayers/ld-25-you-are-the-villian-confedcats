@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-import com.confedicats.ld25.maps.Map;
 import com.confedicats.ld25.sounds.Sound;
 import com.confedicats.ld25.tiles.Tile;
 import com.confedicats.ld25.tiles.Tile.TileType;
@@ -20,24 +19,45 @@ public class Player {
 	private boolean isAlive;
 	private boolean isJumping = false;
 	private int jumpSpeed = 0;
-	private int startJumpSpeed = -20;
+	private int jumpStart = -18;
 	private int gravity = 1;
 	private int direction; //0 - Left, 1 - Right
 	private int xVel;
 	private int yVel;
+	private int speed;
 	private int x;
 	private int y;
 	private int width = 30;
 	private int height = 30;
 	private Weapon weapon = null;
+	
+	private boolean movingLeft;
+	private boolean movingRight;
+	private boolean jumpKey;
+	
+	private int downY, upY, leftX, rightX, xTile, yTile;
+	TileType downRight;
+	TileType upRight;
+	TileType downLeft;
+	TileType upLeft;
+
+	
 
 	private int lastXVel;
 	
 	private Tile[][] mapStorage;
 	
-	public Player(){
-		x = 385;
-		y = 445;
+	public Player(int x, int y){
+		setX(x);
+		setY(y);
+		xTile = (int)(Math.floor(x/40));
+		yTile = (int)(Math.floor(y/40));
+		setxVel(0);
+		setyVel(0);
+		setGravity(1);
+		setWidth(30);
+		setHeight(30);
+		setSpeed(5);
 	}
 	
 	protected static BufferedImage loadImage(String fname) {
@@ -54,29 +74,129 @@ public class Player {
 		if (weapon != null) return weapon.getLeft();
 		return PLAYER1_LEFT;
 	}
+	public boolean isMovingLeft() {
+		return movingLeft;
+	}
+
+	public void setMovingLeft(boolean movingLeft) {
+		this.movingLeft = movingLeft;
+	}
+
+	public boolean isMovingRight() {
+		return movingRight;
+	}
+
+	public void setMovingRight(boolean movingRight) {
+		this.movingRight = movingRight;
+	}
+
+	public boolean isJumpKey() {
+		return jumpKey;
+	}
+
+	public void setJumpKey(boolean jumpKey) {
+		this.jumpKey = jumpKey;
+	}
 	public BufferedImage getRight(){
 		if (weapon != null) return weapon.getRight();
 		return PLAYER1_RIGHT;
 	}
-	public void updatePlayerPos(Map map){
-		mapStorage = map.getTiles();
-		if (canMoveHorizontal(y,x)){
-			setX(getX()+getxVel());
+	public void movePlayer(int xVel, int yVel, int jump) {
+		mapStorage = GamePanel.level.getTiles();
+		if (Math.abs(jump)==1) {
+		    speed=jumpSpeed*jump;
+		  } else {
+		    speed=5;
 		}
-		 
-		if ((y+gravity+height)/40 != 15){
-			if (mapStorage[(int) Math.floor((y+gravity+height)/40)][(int) (Math.floor(x)/40)].getTileType() == TileType.EMPTY && isJumping == false){
-				jumpSpeed = 0;
-				isJumping = true;
+		  getMyCorners(x, y+speed*yVel,mapStorage);
+		  if (yVel == -1) {
+		    if (upLeft == TileType.EMPTY && upRight== TileType.EMPTY) {
+		      y += speed*yVel;
+		    } else {
+		      y = yTile*40;
+		      jumpSpeed = 0;
+		    }
+		  }
+		  if (yVel == 1) {
+		    if (downLeft == TileType.EMPTY && downRight == TileType.EMPTY) {
+		      y += speed*yVel;
+		    } else {
+		      y = (yTile+1)*40-height;
+		      isJumping = false;
+		    }
+		  }
+		  getMyCorners (x+speed*xVel, y,mapStorage);
+		  if (xVel == -1) {
+			  
+		    if (downLeft== TileType.EMPTY && upLeft == TileType.EMPTY) {
+		      x += speed*xVel;
+		    } else {
+		    	
+		    	System.out.println("DL: "+downLeft);
+		      x = xTile*40;
+		    }
+		    fall();
+		  }
+		  if (xVel == 1) {
+			 
+		    if (upRight == TileType.EMPTY && downRight == TileType.EMPTY) {
+		      x += speed*xVel;
+		    } else {
+		       x = (xTile+1)*40-width;
+		    }
+		    fall();
+		  }
+		  xTile = (int)(Math.floor(x/40));
+		  yTile = (int)(Math.floor(y/40));
+	} 
+	public void getMyCorners (int x, int y,Tile tiles[][]) {
+		  downY = (int) Math.floor((y+30-1)/40);
+		  upY = (int) Math.floor((y)/40);
+		  leftX = (int) Math.floor((x)/40);
+		  rightX = (int) Math.floor((x+30-1)/40);
+		  //check if they are walls
+		  upLeft = tiles[upY][leftX].getTileType();
+		  downLeft = tiles[downY][leftX].getTileType();
+		  upRight = tiles[upY][rightX].getTileType();
+		  downRight = tiles[downY][rightX].getTileType();
+	}
+	public void jump() {
+		  jumpSpeed = jumpSpeed+gravity;
+		  if (jumpSpeed>40-height) {
+		    jumpSpeed = 40-height;
+		  }
+		  if (jumpSpeed<0) {
+		    movePlayer(0, -1, -1);  
+		  } else if (jumpSpeed>0) {
+		    movePlayer(0, 1, 1);  
+		  }
+	}
+	public void fall() {
+		  if (!isJumping) {
+			mapStorage = GamePanel.level.getTiles();
+		    getMyCorners (x, y+1,mapStorage);
+		    if (downLeft == TileType.EMPTY && downRight == TileType.EMPTY) {
+		      jumpSpeed = 0;
+		      isJumping = true;
+		    }
+		  }
+	}
+	public void updateKeys(){
+		if (movingLeft)
+			movePlayer(-1,0,0);
+		if (movingRight)
+			movePlayer(1,0,0);
+		if (jumpKey){
+			if (!isJumping){
+			setJumping(true);
+			setJumpSpeed(getJumpStart());
+			System.out.println("Should be jumping!");
 			}
 		}
-		if (canMoveVertical(y,x)){
-			if (isJumping){
-				jumpSpeed += gravity;
-				y = y + jumpSpeed;
-			}
-		}
-		if (hitHG(y,x)){
+			
+	}
+	public void checkHG(){
+	if (hitHG(y,x)){
 			Sound.create("pickup.wav", false).play();
 			try {
 				weapon = GamePanel.hg.getWeapon().getConstructor().newInstance();
@@ -91,7 +211,7 @@ public class Player {
 				ranX = (int)(Math.random()*19+1);
 				ranY = (int)(Math.random()*13+1);
 			}
-		}
+		}	
 	}
 	public boolean hitHG(int y,int x){
 		GamePanel.hg.getX();
@@ -101,39 +221,7 @@ public class Player {
 			return false;
 		}
 	}
-	public boolean canMoveHorizontal(int y, int x){
-		if (xVel > 0){
-			if (mapStorage[(int) Math.ceil(y/40)][(int) (Math.ceil(x+width+xVel)/40)].getTileType() == TileType.EMPTY){
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			if (mapStorage[(int) Math.floor(y/40)][(int) (Math.floor(x+xVel)/40)].getTileType() == TileType.EMPTY){
-				return true;
-			} else {
-				return false;
-			}
-		}
-	}
-	public boolean canMoveVertical(int y, int x){
-		if (jumpSpeed < 0){
-			if (mapStorage[(int) Math.floor((y+jumpSpeed)/40)][(int) (Math.floor(x)/40)].getTileType() == TileType.EMPTY && mapStorage[(int) Math.floor((y+jumpSpeed)/40)][(int) (Math.floor(x+width)/40)].getTileType() == TileType.EMPTY){
-				return true;
-			}else {
-				jumpSpeed = 0;
-				return false;
-			}
-		} else {
-			if (mapStorage[(int) Math.ceil((y+gravity+height)/40)][(int) Math.ceil((x)/40)].getTileType() == TileType.EMPTY && mapStorage[(int) Math.ceil((y+gravity+height)/40)][(int) Math.ceil((x+width)/40)].getTileType() == TileType.EMPTY){
-				return true;
-			} else {
-				isJumping = false;
-				jumpSpeed = 0;
-				return false;
-			}
-		}
-	}
+	
 	
 	public void playerReset(){
 		x = 385;
@@ -141,16 +229,6 @@ public class Player {
 	}
 	public static int roundToClosestGrid(double i){
 	    return (int) ((Math.floor(i/40) *40))/40;
-	}
-	public void jumpingStuff(boolean jumpKey){
-		if (jumpKey){
-			
-			if (!isJumping()){
-				setJumpSpeed(getStartJumpSpeed());
-				setJumping(true);
-				Sound.create("jump.wav", false).play();
-			}
-		}
 	}
 	public void log(String string){
 		System.out.println(string);
@@ -173,12 +251,12 @@ public class Player {
 		this.jumpSpeed = jumpSpeed;
 	}
 
-	public int getStartJumpSpeed() {
-		return startJumpSpeed;
+	public int getJumpStart() {
+		return jumpStart;
 	}
 
-	public void setStartJumpSpeed(int startJumpSpeed) {
-		this.startJumpSpeed = startJumpSpeed;
+	public void setjumpStart(int jumpStart) {
+		this.jumpStart = jumpStart;
 	}
 
 	public int getGravity() {
@@ -248,6 +326,14 @@ public class Player {
 
 	public int getLastXVel() {
 		return lastXVel;
+	}
+
+	public int getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(int speed) {
+		this.speed = speed;
 	}
 
 	public void setLastXVel(int lastXVel) {
