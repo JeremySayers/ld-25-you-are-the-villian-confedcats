@@ -29,18 +29,18 @@ import com.confedicats.ld25.tiles.Tile.TileType;
 import com.confedicats.ld25.weapons.Weapon;
 
 public class GamePanel extends JPanel {
-	public static enum Screen {MAIN_MENU, OPTIONS, RAINBOW, TOWN, INDUSTRIAL, GAME_OVER};
+	public static enum Screen {MAIN_MENU, OPTIONS, RAINBOW, TOWN, INDUSTRIAL, GAME_OVER, LEVEL_SELECT};
 	// Create Buffers
 	private static final BufferedImage buff = new BufferedImage(Driver.WIDTH, Driver.HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	private static final Graphics bg = buff.getGraphics();
 	public static ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>();
 
-	public Screen screen = Screen.MAIN_MENU;
+	private Screen screen = Screen.MAIN_MENU;
 	public static Font font;
 	public static MainMenu menu = new MainMenu();
 	public static Map level;
 
-	public static Player player = new Player(0, 0);
+	public static Player player;
 	boolean jumpKey = false;
 	
 	public int currentFPS = 0;
@@ -52,7 +52,7 @@ public class GamePanel extends JPanel {
 	private boolean moveHG = true;
 	
 	Tile[][] mapStorage;
-    public static HoloGear hg = new HoloGear(Weapon.getNewWeapons(), 460, 200);
+    public static HoloGear hg = new HoloGear(Weapon.getNewWeapon(), 460, 200);
 	public GamePanel() {
 		super();
 		
@@ -71,7 +71,7 @@ public class GamePanel extends JPanel {
 		}, 1, 1000/60);
 		new java.util.Timer().scheduleAtFixedRate(new java.util.TimerTask(){
 			public void run() {
-				if (screen==Screen.RAINBOW||screen==Screen.TOWN||screen==Screen.INDUSTRIAL) {
+				if (getScreen()==Screen.RAINBOW||getScreen()==Screen.TOWN||getScreen()==Screen.INDUSTRIAL) {
 					if ((int)(Math.random()*3+1) == 1) {
 						ArrayList<Point> spouts = level.getSpouts();
 						Point spout = spouts.get((int)(Math.random()*spouts.size()));
@@ -85,13 +85,13 @@ public class GamePanel extends JPanel {
 				int width = Driver.POPOUT.isVisible() ? Driver.DEVICE.getDisplayMode().getWidth() : Driver.WIDTH;
 				int height = Driver.POPOUT.isVisible() ? Driver.DEVICE.getDisplayMode().getHeight() : Driver.HEIGHT;
 				Point scaled = translateSize(width, height, e.getPoint());
-				if (screen==Screen.MAIN_MENU) {
+				if (getScreen()==Screen.MAIN_MENU) {
 					if (MainMenu.START_LOC.contains(scaled)) {
 						setScreen(Screen.RAINBOW);
 					} else if (MainMenu.OPT_LOC.contains(scaled)) {
 						setScreen(Screen.OPTIONS);
 					}
-				} else if (screen==Screen.OPTIONS) {
+				} else if (getScreen()==Screen.OPTIONS) {
 					if (Options.BGM_LOC.contains(scaled)) {
 						Sound.setMuteBGM(!Sound.isMuteBGM());
 					} else if (Options.SFX_LOC.contains(scaled)) {
@@ -105,7 +105,7 @@ public class GamePanel extends JPanel {
 					} else if (Options.BACK_LOC.contains(scaled)) {
 						setScreen(Screen.MAIN_MENU);
 					} 
-				} else if (screen==Screen.GAME_OVER) {
+				} else if (getScreen()==Screen.GAME_OVER) {
 					setScreen(Screen.RAINBOW);
 				}
 			}
@@ -115,7 +115,7 @@ public class GamePanel extends JPanel {
 				int width = Driver.POPOUT.isVisible() ? Driver.DEVICE.getDisplayMode().getWidth() : Driver.WIDTH;
 				int height = Driver.POPOUT.isVisible() ? Driver.DEVICE.getDisplayMode().getHeight() : Driver.HEIGHT;
 				Point scaled = translateSize(width, height, e.getPoint());
-				if (screen==Screen.MAIN_MENU) {
+				if (getScreen()==Screen.MAIN_MENU) {
 					MainMenu.start_hovered = false;
 					MainMenu.opt_hovered = false;
 					if (MainMenu.START_LOC.contains(scaled)) {
@@ -123,14 +123,14 @@ public class GamePanel extends JPanel {
 					} else if (MainMenu.OPT_LOC.contains(scaled)) {
 						MainMenu.opt_hovered = true;
 					}
-				} else if (screen==Screen.OPTIONS) {
+				} else if (getScreen()==Screen.OPTIONS) {
 					Options.back_hovered = Options.BACK_LOC.contains(scaled);
 				}
 			}
 		});
 		addKeyListener(new KeyAdapter(){
 			public void keyPressed(KeyEvent event) {
-				if (screen==Screen.RAINBOW||screen==Screen.TOWN||screen==Screen.INDUSTRIAL) {
+				if (getScreen()==Screen.RAINBOW||getScreen()==Screen.TOWN||getScreen()==Screen.INDUSTRIAL) {
 					if (event.getKeyCode()==KeyEvent.VK_LEFT)
 						player.setMovingLeft(true);
 					if (event.getKeyCode()==KeyEvent.VK_RIGHT) 
@@ -141,17 +141,17 @@ public class GamePanel extends JPanel {
 					if (event.getKeyCode()==KeyEvent.VK_SPACE && player.hasWeapon() && player.getWeapon().isAutomatic()) {
 						player.shoot();
 					}
-				} else if (screen==Screen.GAME_OVER) {
+				} else if (getScreen()==Screen.GAME_OVER) {
 					setScreen(level instanceof Town ? Screen.TOWN : Screen.RAINBOW);
 				}
 			}
 			public void keyReleased(KeyEvent event) {
-				if (screen==Screen.MAIN_MENU) {
+				if (getScreen()==Screen.MAIN_MENU) {
 					if (event.getKeyCode()==KeyEvent.VK_2) {
 						setScreen(Screen.TOWN);
 					}
 				}
-				if (screen==Screen.RAINBOW||screen==Screen.TOWN||screen==Screen.INDUSTRIAL) {
+				if (getScreen()==Screen.RAINBOW||getScreen()==Screen.TOWN||getScreen()==Screen.INDUSTRIAL) {
 					if (event.getKeyCode()==KeyEvent.VK_LEFT){ 
 						player.setMovingLeft(false);
 						player.setLastXVel(-1);
@@ -230,7 +230,7 @@ public class GamePanel extends JPanel {
 		bg.setColor(Color.BLACK);
 		String count = ""+HoloGear.COUNT;
 		FontMetrics fm = bg.getFontMetrics();
-		switch (screen) {
+		switch (getScreen()) {
 			case MAIN_MENU:
 				menu.paint(bg);
 				break;
@@ -306,6 +306,8 @@ public class GamePanel extends JPanel {
 				fm = bg.getFontMetrics();
 				String click = "Press Any Key To Continue!";
 				bg.drawString(click, 400-fm.stringWidth(click)/2, 500);
+			case LEVEL_SELECT:
+				break;
 		}
 		//Paints the FPS counter
 		//bg.setColor(Color.RED);
@@ -320,8 +322,6 @@ public class GamePanel extends JPanel {
 			Sound.clearAll();
 		} catch (Exception e){
 		}
-		ArrayList<Point> spouts;
-		Point spout;
 		switch (newScreen) {
 			case MAIN_MENU:
 				menu.getMusic().play();
@@ -330,22 +330,20 @@ public class GamePanel extends JPanel {
 				options = new Options();
 				options.getMusic().play();
 				break;
+			case LEVEL_SELECT:
+				break;
 			case RAINBOW:
 				HoloGear.COUNT = 0;
 				enemies.clear();
 				level = new Rainbow();
-				spouts = level.getSpouts();
-				spout = spouts.get((int)(Math.random()*spouts.size()));
-				player = new Player(spout.x, 20);
+				player = new Player();
 				level.getMusic().play();
 				break;
 			case TOWN:
 				HoloGear.COUNT = 0;
 				enemies.clear();
 				level = new Town();
-				spouts = level.getSpouts();
-				spout = spouts.get((int)(Math.random()*spouts.size()));
-				player = new Player(spout.x, 20);
+				player = new Player();
 				level.getMusic().play();
 				break;
 			case INDUSTRIAL:
@@ -361,7 +359,7 @@ public class GamePanel extends JPanel {
 	public void tick() {
 		repaint();
 		calcFPS();
-		if (screen==Screen.RAINBOW||screen==Screen.TOWN||screen==Screen.INDUSTRIAL) {
+		if (getScreen()==Screen.RAINBOW||getScreen()==Screen.TOWN||getScreen()==Screen.INDUSTRIAL) {
 			for (int i = 0; i < enemies.size(); i++){
 				enemies.get(i).fall();
 				enemies.get(i).jump();
@@ -372,9 +370,8 @@ public class GamePanel extends JPanel {
 			player.jump();
 			player.updateKeys();
 			player.checkHG();
-			Tile[] tiles = level.getTiles()[14];
 			if (!player.isAlive())
-					setScreen(Screen.GAME_OVER);
+				setScreen(Screen.GAME_OVER);
 			if (moveHG)
 				moveHGOnCreation();
 			
@@ -393,7 +390,7 @@ public class GamePanel extends JPanel {
 		boolean foundNewLoc = false;
 		while (!foundNewLoc){
 			if (mapStorage[(int)(ranY+1)][(int)(ranX)].getTileType() == TileType.PLATFORM && mapStorage[(int)(ranY)][(int)(ranX)].getTileType() == TileType.EMPTY && ranX !=8 && ranY != 5){
-				GamePanel.hg.firstPlace(ranX*40+10,ranY*40+10, Weapon.getNewWeapons());
+				GamePanel.hg.firstPlace(ranX*40+10,ranY*40+10, Weapon.getNewWeapon());
 				foundNewLoc = true;
 			} else {
 				ranX = (int)(Math.random()*19+1);
@@ -401,6 +398,9 @@ public class GamePanel extends JPanel {
 			}
 		}
 		moveHG = false;
+	}
+	public Screen getScreen() {
+		return screen;
 	}
 	
 	

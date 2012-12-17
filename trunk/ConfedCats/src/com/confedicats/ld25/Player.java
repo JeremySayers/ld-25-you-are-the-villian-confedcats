@@ -1,8 +1,10 @@
 package com.confedicats.ld25;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -45,9 +47,12 @@ public class Player {
 	
 	private Tile[][] mapStorage;
 	
-	public Player(int x, int y){
-		setX(x);
-		setY(y);
+	public Player(){
+		ArrayList<Point> spouts = GamePanel.level.getSpouts();
+		Point spout = spouts.get((int)(Math.random()*spouts.size()));
+		setX(spout.x);
+		setY(20);
+		setWeapon(Weapon.getNewWeapon());
 		xTile = (int)(Math.floor(x/40));
 		yTile = (int)(Math.floor(y/40));
 		setxVel(0);
@@ -73,16 +78,13 @@ public class Player {
 	public void checkHG(){
 	if (hitHG(y,x)){
 			Sound.create("pickup.wav", false).play();
-			try {
-				weapon = GamePanel.hg.getWeapon().getConstructor().newInstance();
-			} catch (Exception e) {
-			}
+			setWeapon(GamePanel.hg.getWeapon());
 			int ranX = (int)(Math.random()*18+1);
 			int ranY = (int)(Math.random()*13+1);
 			boolean foundNewLoc = false;
 			while (!foundNewLoc){
 				if (mapStorage[(int)(ranY+1)][(int)(ranX)].getTileType() == TileType.PLATFORM && mapStorage[(int)(ranY)][(int)(ranX)].getTileType() == TileType.EMPTY && ranX !=8 && ranY != 5){
-					GamePanel.hg.alter(ranX*40+10,ranY*40+10, Weapon.getNewWeapons());
+					GamePanel.hg.alter(ranX*40+10,ranY*40+10, Weapon.getNewWeapon());
 					foundNewLoc = true;
 				} else {
 					ranX = (int)(Math.random()*19+1);
@@ -325,6 +327,17 @@ public class Player {
 
 	public void setSpeed(int speed) {
 		this.speed = speed;
+	}
+	
+	public void setWeapon(Class<? extends Weapon> weapon) {
+		// Force Weapon Change
+		while (this.weapon!=null && weapon.equals(this.weapon.getClass())) {
+			weapon = Weapon.getNewWeapon();
+		}
+		try {
+			this.weapon = weapon.getConstructor().newInstance();
+		} catch (Exception e) {
+		}
 	}
 
 	public void setWidth(int width) {

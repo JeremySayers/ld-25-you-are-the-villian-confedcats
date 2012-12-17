@@ -21,7 +21,7 @@ public abstract class Weapon extends BufferedImage {
 		Graphics g = getGraphics();
 		g.drawImage(img, 0, 0, null);
 	}
-	public static Class<? extends Weapon> getNewWeapons() {
+	public static Class<? extends Weapon> getNewWeapon() {
 		ArrayList<Class<? extends Weapon>> possible = getPossibleWeapons();
 		return possible.get((int)(Math.round(Math.random()*(possible.size()-1))));
 	}
