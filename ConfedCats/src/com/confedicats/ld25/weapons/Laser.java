@@ -8,6 +8,7 @@ import com.confedicats.ld25.weapons.ammo.Ammo;
 import com.confedicats.ld25.weapons.ammo.LaserAmmo;
 
 public class Laser extends Weapon {
+	int xv;
 	public static final BufferedImage PLAYER1_LEFT = loadImage("cc_laser_l.png");
 	public static final BufferedImage PLAYER1_RIGHT = loadImage("cc_laser_r.png");
 	public Laser() {
@@ -35,7 +36,15 @@ public class Laser extends Weapon {
 
 	public void shoot(Player player) {
 		try {
-			Ammo ammo = getAmmoClass().getConstructor(int.class, int.class, int.class, int.class).newInstance(player.getX(), player.getY(), player.getxVel()<0?-1:player.getxVel()>0?1:player.getLastXVel()<0?-1:1, 6);
+			if (player.isMovingLeft()){
+				xv = -1;
+			} else if (player.isMovingRight()){
+			    xv = 1;
+			} else {
+				xv = player.getLastXVel();
+			}
+			
+			Ammo ammo = getAmmoClass().getConstructor(int.class, int.class, int.class, int.class).newInstance(player.getX(), player.getY(),xv, 6);
 			addAmmo(ammo);
 			Sound.create("laser.wav", false).play();
 		} catch (Exception e) {
