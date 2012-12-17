@@ -25,6 +25,11 @@ public class HoloGear {
 		this.y = y;
 		COUNT++;
 	}
+	public void firstPlace(int x, int y,Class<? extends Weapon> weap){
+		weapon = weap;
+		this.x = x;
+		this.y = y;
+	}
 	public Rectangle getBounds() {
 		return new Rectangle(getX(), getY(), 30, 30);
 	}
