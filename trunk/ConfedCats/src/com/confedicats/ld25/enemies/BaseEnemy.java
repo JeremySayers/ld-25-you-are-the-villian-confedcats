@@ -35,6 +35,7 @@ public abstract class BaseEnemy {
 	
 	TileType upLeft;
 	private Tile[][] mapStorage;
+	public static int KILL_COUNT = 0;
 	public BaseEnemy(int health, int x, int y, int multi){
 		setHealth(health);
 		setX(x);

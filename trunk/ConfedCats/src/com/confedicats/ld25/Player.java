@@ -215,7 +215,7 @@ public class Player {
 	public boolean isMovingRight() {
 		return movingRight;
 	}
-	private boolean isScytheFired() {
+	public boolean isScytheFired() {
 		return weapon instanceof Scythe && ((Scythe)weapon).isFired();
 	}
 	public void jump() {

@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -19,6 +20,7 @@ import javax.swing.JPanel;
 import com.confedicats.ld25.enemies.BaseEnemy;
 import com.confedicats.ld25.enemies.UnionSoldier;
 import com.confedicats.ld25.hologear.HoloGear;
+import com.confedicats.ld25.maps.LevelSelect;
 import com.confedicats.ld25.maps.Map;
 import com.confedicats.ld25.maps.Rainbow;
 import com.confedicats.ld25.maps.Town;
@@ -36,6 +38,7 @@ public class GamePanel extends JPanel {
 	public static ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>();
 
 	private Screen screen = Screen.MAIN_MENU;
+	private Screen lastScreen = Screen.MAIN_MENU;
 	public static Font font;
 	public static MainMenu menu = new MainMenu();
 	public static Map level;
@@ -47,6 +50,7 @@ public class GamePanel extends JPanel {
     public int FPS = 0;
     public long start = 0;
 	private Options options;
+	private static final LevelSelect LEVEL_SELECT = new LevelSelect();
 	private int ticktock = 0;
 	private boolean flashVisible = false;
 	private boolean moveHG = true;
@@ -87,7 +91,7 @@ public class GamePanel extends JPanel {
 				Point scaled = translateSize(width, height, e.getPoint());
 				if (getScreen()==Screen.MAIN_MENU) {
 					if (MainMenu.START_LOC.contains(scaled)) {
-						setScreen(Screen.RAINBOW);
+						setScreen(Screen.LEVEL_SELECT);
 					} else if (MainMenu.OPT_LOC.contains(scaled)) {
 						setScreen(Screen.OPTIONS);
 					}
@@ -103,10 +107,18 @@ public class GamePanel extends JPanel {
 							kl.keyReleased(new KeyEvent(Driver.PANEL, KeyEvent.KEY_LOCATION_STANDARD, System.currentTimeMillis(), 0, KeyEvent.VK_F, 'f'));
 						}
 					} else if (Options.BACK_LOC.contains(scaled)) {
-						setScreen(Screen.MAIN_MENU);
+						setScreen(lastScreen);
 					} 
+				} else if (getScreen()==Screen.LEVEL_SELECT) {
+					if (LevelSelect.BACK_LOC.contains(scaled)) {
+						setScreen(lastScreen); 
+					} else if (LevelSelect.RAINBOW_LOC.contains(scaled)) {
+						setScreen(Screen.RAINBOW);
+					} else if (LevelSelect.TOWN_LOC.contains(scaled)) {
+						setScreen(Screen.TOWN);
+					}
 				} else if (getScreen()==Screen.GAME_OVER) {
-					setScreen(Screen.RAINBOW);
+					setScreen(lastScreen);
 				}
 			}
 		});
@@ -125,6 +137,8 @@ public class GamePanel extends JPanel {
 					}
 				} else if (getScreen()==Screen.OPTIONS) {
 					Options.back_hovered = Options.BACK_LOC.contains(scaled);
+				} else if (getScreen()==Screen.LEVEL_SELECT) {
+					LevelSelect.back_hovered = LevelSelect.BACK_LOC.contains(scaled);
 				}
 			}
 		});
@@ -163,8 +177,6 @@ public class GamePanel extends JPanel {
 					if (event.getKeyCode()==KeyEvent.VK_UP ){ 
 						player.setJumpKey(false);
 					}
-					if (event.getKeyCode()==KeyEvent.VK_R ) 
-						player.playerReset();
 					if (event.getKeyCode()==KeyEvent.VK_M ) {
 						Sound.setMute(!Sound.isMute());
 					}
@@ -173,6 +185,9 @@ public class GamePanel extends JPanel {
 							player.shoot();
 						else
 							player.release();
+					}
+					if (event.getKeyCode()==KeyEvent.VK_ESCAPE) {
+						setScreen(Screen.MAIN_MENU);
 					}
 				}
 			}
@@ -187,8 +202,11 @@ public class GamePanel extends JPanel {
         }
 	}
 	public void checkEnemiesAlive(){
+		Rectangle playerBounds = player.getBounds();
+		if (player.isScytheFired() && (player.isMovingLeft() || player.getLastXVel()<0))
+			playerBounds.x+=11;
 		for (int i = 0; i < enemies.size(); i++){
-			if (enemies.get(i).getBounds().intersects(player.getBounds())){
+			if (enemies.get(i).getBounds().intersects(playerBounds)){
 				player.setAlive(false);
 			}
 			if (enemies.get(i).getHealth() == -Integer.MAX_VALUE){
@@ -230,6 +248,7 @@ public class GamePanel extends JPanel {
 		bg.setColor(Color.BLACK);
 		String count = ""+HoloGear.COUNT;
 		FontMetrics fm = bg.getFontMetrics();
+		String kills = BaseEnemy.KILL_COUNT+" KILLS";
 		switch (getScreen()) {
 			case MAIN_MENU:
 				menu.paint(bg);
@@ -242,7 +261,12 @@ public class GamePanel extends JPanel {
 			case INDUSTRIAL:
 				level.paint(bg);
 				
-				bg.drawString(count, 400-fm.stringWidth(count)/2, 100);
+				bg.drawString(count, 400-fm.stringWidth(count)/2, 95);
+				bg.setFont(bg.getFont().deriveFont(14f));
+				fm = bg.getFontMetrics();
+				bg.setColor(Color.WHITE);
+				bg.drawString(kills, 400-fm.stringWidth(kills)/2, 115);
+				bg.setColor(Color.BLACK);
 				
 				//Paints the player
 				player.updateWeapon(bg);
@@ -304,9 +328,14 @@ public class GamePanel extends JPanel {
 				bg.drawString(count, 400-fm.stringWidth(count)/2, 400);
 				bg.setFont(bg.getFont().deriveFont(30f));
 				fm = bg.getFontMetrics();
+				bg.setColor(Color.WHITE);
+				bg.drawString(kills, 400-fm.stringWidth(kills)/2, 475);
+				bg.setColor(Color.BLACK);
 				String click = "Press Any Key To Continue!";
-				bg.drawString(click, 400-fm.stringWidth(click)/2, 500);
+				bg.drawString(click, 400-fm.stringWidth(click)/2, 545);
+				break;
 			case LEVEL_SELECT:
+				LEVEL_SELECT.paint(bg);
 				break;
 		}
 		//Paints the FPS counter
@@ -331,9 +360,11 @@ public class GamePanel extends JPanel {
 				options.getMusic().play();
 				break;
 			case LEVEL_SELECT:
+				menu.getMusic().play();
 				break;
 			case RAINBOW:
 				HoloGear.COUNT = 0;
+				BaseEnemy.KILL_COUNT = 0;
 				enemies.clear();
 				level = new Rainbow();
 				player = new Player();
@@ -341,6 +372,7 @@ public class GamePanel extends JPanel {
 				break;
 			case TOWN:
 				HoloGear.COUNT = 0;
+				BaseEnemy.KILL_COUNT = 0;
 				enemies.clear();
 				level = new Town();
 				player = new Player();
@@ -348,12 +380,14 @@ public class GamePanel extends JPanel {
 				break;
 			case INDUSTRIAL:
 				HoloGear.COUNT = 0;
+				BaseEnemy.KILL_COUNT = 0;
 				enemies.clear();
 				break;
 			case GAME_OVER:
 				Sound.create("gameover.au", true).play();
 				break;
 		}
+		lastScreen = screen;
 		screen = newScreen;
 	}
 	public void tick() {

@@ -44,6 +44,7 @@ public class Explosion {
 			if (el.intersects(en.getBounds())) {
 				Sound.create("enemydeath.wav", false).play();
 				GamePanel.enemies.remove(en);
+				BaseEnemy.KILL_COUNT++;
 				i--;
 			}
 		}

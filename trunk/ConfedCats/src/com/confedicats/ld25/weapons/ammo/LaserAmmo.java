@@ -39,6 +39,7 @@ public class LaserAmmo extends Ammo {
 				if (be.getHealth()<=0) {
 					removeEnemies.add(be);
 					Sound.create("enemydeath.wav", false).play();
+					BaseEnemy.KILL_COUNT++;
 				}
 				setDead(true);
 				break;
