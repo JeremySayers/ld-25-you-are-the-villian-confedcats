@@ -6,10 +6,13 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import com.confedicats.ld25.sounds.Sound;
+import com.confedicats.ld25.weapons.Weapon;
 
 public class Driver extends Applet {
 	public static final GraphicsDevice DEVICE = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -80,5 +83,13 @@ public class Driver extends Applet {
 	public void stop() {
 		muted = Sound.isMute();
 		Sound.setMute(true);
+	}
+
+	public static BufferedImage loadRawImage(String fpath) {
+		try {
+			return ImageIO.read(Driver.class.getResource(fpath).openStream());
+		} catch (Exception e) {
+		}
+		return null;
 	}
 }

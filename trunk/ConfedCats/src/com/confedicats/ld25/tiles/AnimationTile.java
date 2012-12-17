@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
 
+import com.confedicats.ld25.Driver;
+
 
 public class AnimationTile extends Tile {
 	private ArrayList<Image> frames = new ArrayList<Image>();
@@ -17,7 +19,10 @@ public class AnimationTile extends Tile {
 	public AnimationTile(String... fnames) {
 		super(new ColorTile(Color.GREEN));
 		for (String f:fnames) {
-			frames.add(loadImage(f));
+			if (f.startsWith("/"))
+				frames.add(Driver.loadRawImage(f));
+			else
+				frames.add(loadImage(f));
 		}
 	}
 	public AnimationTile clone() {
