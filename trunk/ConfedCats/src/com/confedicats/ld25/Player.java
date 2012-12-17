@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import com.confedicats.ld25.sounds.Sound;
 import com.confedicats.ld25.tiles.Tile;
 import com.confedicats.ld25.tiles.Tile.TileType;
+import com.confedicats.ld25.weapons.Scythe;
 import com.confedicats.ld25.weapons.Weapon;
 
 public class Player {
@@ -213,6 +214,9 @@ public class Player {
 
 	public boolean isMovingRight() {
 		return movingRight;
+	}
+	private boolean isScytheFired() {
+		return weapon instanceof Scythe && ((Scythe)weapon).isFired();
 	}
 	public void jump() {
 		  jumpSpeed = jumpSpeed+gravity;
