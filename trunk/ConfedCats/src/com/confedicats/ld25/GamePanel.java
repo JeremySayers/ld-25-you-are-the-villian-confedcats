@@ -101,7 +101,7 @@ public class GamePanel extends JPanel {
 						setScreen(Screen.MAIN_MENU);
 					} 
 				} else if (screen==Screen.GAME_OVER) {
-					setScreen(Screen.MAIN_MENU);
+					setScreen(Screen.RAINBOW);
 				}
 			}
 		});
@@ -136,6 +136,8 @@ public class GamePanel extends JPanel {
 					if (event.getKeyCode()==KeyEvent.VK_SPACE && player.hasWeapon() && player.getWeapon().isAutomatic()) {
 						player.shoot();
 					}
+				} else if (screen==Screen.GAME_OVER) {
+					setScreen(Screen.RAINBOW);
 				}
 			}
 			public void keyReleased(KeyEvent event) {
@@ -297,7 +299,7 @@ public class GamePanel extends JPanel {
 				bg.drawString(count, 400-fm.stringWidth(count)/2, 400);
 				bg.setFont(bg.getFont().deriveFont(30f));
 				fm = bg.getFontMetrics();
-				String click = "Click To Continue!";
+				String click = "Press Any Key To Continue!";
 				bg.drawString(click, 400-fm.stringWidth(click)/2, 500);
 		}
 		//Paints the FPS counter
