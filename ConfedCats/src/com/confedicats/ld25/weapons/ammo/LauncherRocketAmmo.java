@@ -72,11 +72,8 @@ public class LauncherRocketAmmo extends Ammo {
 		ArrayList<BaseEnemy> removeEnemies = new ArrayList<BaseEnemy>();
 		for (BaseEnemy be:GamePanel.enemies) {
 			if (be.getBounds().intersects(getBounds())) {
-				be.setHealth(be.getHealth()-25);
-				if (be.getHealth()<=0) {
-					removeEnemies.add(be);
-					Sound.create("enemydeath.wav", false).play();
-				}
+				removeEnemies.add(be);
+				Sound.create("enemydeath.wav", false).play();
 				setDead(true);
 				break;
 			}
