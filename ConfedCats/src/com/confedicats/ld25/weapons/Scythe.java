@@ -43,6 +43,10 @@ public class Scythe extends Weapon {
 		return true;
 	}
 
+	public boolean isFired() {
+		return fired;
+	}
+
 	public void release() {
 		fired = false;
 	}
