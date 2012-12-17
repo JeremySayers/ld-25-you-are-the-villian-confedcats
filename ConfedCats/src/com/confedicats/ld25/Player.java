@@ -53,7 +53,6 @@ public class Player {
 		Point spout = spouts.get((int)(Math.random()*spouts.size()));
 		setX(spout.x);
 		setY(20);
-		setWeapon(Weapon.getNewWeapon());
 		xTile = (int)(Math.floor(x/40));
 		yTile = (int)(Math.floor(y/40));
 		setxVel(0);
@@ -63,7 +62,7 @@ public class Player {
 		setHeight(30);
 		setSpeed(5);
 		isAlive = true;
-		
+		setWeapon(Weapon.getNewWeapon());
 	}
 	
 	protected static BufferedImage loadImage(String fname) {
@@ -77,22 +76,26 @@ public class Player {
 	    return (int) ((Math.floor(i/40) *40))/40;
 	}
 	public void checkHG(){
-	if (hitHG(y,x)){
+		if (hitHG(y,x)){
 			Sound.create("pickup.wav", false).play();
 			setWeapon(GamePanel.hg.getWeapon());
-			int ranX = (int)(Math.random()*18+1);
-			int ranY = (int)(Math.random()*13+1);
-			boolean foundNewLoc = false;
-			while (!foundNewLoc){
-				if (mapStorage[(int)(ranY+1)][(int)(ranX)].getTileType() == TileType.PLATFORM && mapStorage[(int)(ranY)][(int)(ranX)].getTileType() == TileType.EMPTY && ranX !=8 && ranY != 5){
-					GamePanel.hg.alter(ranX*40+10,ranY*40+10, Weapon.getNewWeapon());
-					foundNewLoc = true;
-				} else {
-					ranX = (int)(Math.random()*19+1);
-					ranY = (int)(Math.random()*13+1);
-				}
-			}
+			moveHG();
 		}	
+	}
+	public void moveHG() {
+		int ranX = (int)(Math.random()*18+1);
+		int ranY = (int)(Math.random()*13+1);
+		boolean foundNewLoc = false;
+		mapStorage = GamePanel.level.getTiles();
+		while (!foundNewLoc){			
+			if (mapStorage[(int)(ranY+1)][(int)(ranX)].getTileType() == TileType.PLATFORM && mapStorage[(int)(ranY)][(int)(ranX)].getTileType() == TileType.EMPTY && ranX !=8 && ranY != 5){
+				GamePanel.hg.alter(ranX*40+10,ranY*40+10, Weapon.getNewWeapon());
+				foundNewLoc = true;
+			} else {
+				ranX = (int)(Math.random()*19+1);
+				ranY = (int)(Math.random()*13+1);
+			}
+		}
 	}
 	public void fall() {
 		  if (!isJumping) {

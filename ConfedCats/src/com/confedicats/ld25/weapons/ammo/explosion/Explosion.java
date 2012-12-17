@@ -12,7 +12,7 @@ import com.confedicats.ld25.tiles.Tile.TileType;
 public class Explosion {
 	private int x;
 	private int y;
-	private static final String PREFIX = "../weapons/ammo/explosion/";
+	private static final String PREFIX = "/com/confedicats/ld25/weapons/ammo/explosion/";
 	private AnimationTile animation = new AnimationTile(PREFIX+"cc_explosion1.png",PREFIX+"cc_explosion2.png",
 			PREFIX+"cc_explosion3.png",PREFIX+"cc_explosion4.png",PREFIX+"cc_explosion5.png",
 			PREFIX+"cc_explosion6.png",PREFIX+"cc_explosion7.png",PREFIX+"cc_explosion8.png",

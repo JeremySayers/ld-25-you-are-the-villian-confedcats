@@ -5,30 +5,20 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import javax.imageio.ImageIO;
-
-import com.confedicats.ld25.weapons.Weapon;
+import com.confedicats.ld25.Driver;
 
 public class LevelSelect {
-	private static final BufferedImage BG = loadImage("../cc_main_bg.png");
-	private static final String PREFIX = "/com/confedicats/ld25/maps/";
+	private static final BufferedImage BG = Driver.loadRawImage("/com/confedicats/ld25/cc_main_bg.png");
 	private static final BufferedImage RAINBOW = new Rainbow().getBuff();
 	public static final Rectangle RAINBOW_LOC = new Rectangle(195, 200, 200, 150);
 	private static final BufferedImage TOWN = new Town().getBuff();
 	public static final Rectangle TOWN_LOC = new Rectangle(405, 200, 200, 150);
-	private static BufferedImage BACK_NORMAL = loadImage("../options/cc_options_back1.png");
-	private static BufferedImage BACK_HOVER = loadImage("../options/cc_options_back2.png");
+	private static BufferedImage BACK_NORMAL = Driver.loadRawImage("/com/confedicats/ld25/options/cc_options_back1.png");
+	private static BufferedImage BACK_HOVER = Driver.loadRawImage("/com/confedicats/ld25/options/cc_options_back2.png");
 	public static final Rectangle BACK_LOC = new Rectangle(5,490,200,80);
 	public static boolean back_hovered = false;
 	public LevelSelect() {
 		
-	}
-	private static BufferedImage loadImage(String fname) {
-		try {
-			return ImageIO.read(Weapon.class.getResource(PREFIX+fname).openStream());
-		} catch (Exception e) {
-		}
-		return null;
 	}
 	public void paint(Graphics g) {
 		g.drawImage(BG, 0, 0, null);

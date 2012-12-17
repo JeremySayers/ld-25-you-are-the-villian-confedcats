@@ -368,6 +368,7 @@ public class GamePanel extends JPanel {
 				enemies.clear();
 				level = new Rainbow();
 				player = new Player();
+				player.moveHG();
 				level.getMusic().play();
 				break;
 			case TOWN:
@@ -376,6 +377,7 @@ public class GamePanel extends JPanel {
 				enemies.clear();
 				level = new Town();
 				player = new Player();
+				player.moveHG();
 				level.getMusic().play();
 				break;
 			case INDUSTRIAL:

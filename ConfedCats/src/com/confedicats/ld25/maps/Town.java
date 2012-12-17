@@ -64,7 +64,7 @@ public class Town extends Map {
 	public Tile[] getMapTiles() {
 		return new Tile[]{new ColorTile(), new ImageTile(PREFIX+"cc_town_platl.png"), new ImageTile(PREFIX+"cc_town_platc.png"), 
 				new ImageTile(PREFIX+"cc_town_platr.png"), new ImageTile(PREFIX+"cc_town_corner.png"), 
-				new AnimationTile(PREFIX+"../cc_firepit1.png", PREFIX+"../cc_firepit2.png"), new ColorTile(),
+				new AnimationTile("/com/confedicats/ld25/maps/cc_firepit1.png", "/com/confedicats/ld25/maps/cc_firepit2.png"), new ColorTile(),
 				new ColorTile(Color.BLACK)};
 	}
 	
