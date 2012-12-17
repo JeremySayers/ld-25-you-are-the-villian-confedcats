@@ -25,6 +25,7 @@ import com.confedicats.ld25.maps.Town;
 import com.confedicats.ld25.options.Options;
 import com.confedicats.ld25.sounds.Sound;
 import com.confedicats.ld25.tiles.Tile;
+import com.confedicats.ld25.tiles.Tile.TileType;
 import com.confedicats.ld25.weapons.Weapon;
 
 public class GamePanel extends JPanel {
@@ -32,13 +33,14 @@ public class GamePanel extends JPanel {
 	// Create Buffers
 	private static final BufferedImage buff = new BufferedImage(Driver.WIDTH, Driver.HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	private static final Graphics bg = buff.getGraphics();
-	public static Player player = new Player(0, 0);
 	public static ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>();
 
 	public Screen screen = Screen.MAIN_MENU;
 	public static Font font;
 	public static MainMenu menu = new MainMenu();
 	public static Map level;
+
+	public static Player player = new Player(0, 0);
 	boolean jumpKey = false;
 	
 	public int currentFPS = 0;
@@ -47,6 +49,9 @@ public class GamePanel extends JPanel {
 	private Options options;
 	private int ticktock = 0;
 	private boolean flashVisible = false;
+	private boolean moveHG = true;
+	
+	Tile[][] mapStorage;
     public static HoloGear hg = new HoloGear(Weapon.getNewWeapons(), 460, 200);
 	public GamePanel() {
 		super();
@@ -56,6 +61,7 @@ public class GamePanel extends JPanel {
 		} catch (Exception e1) {
 			font = new Font("Arial Black", Font.PLAIN, 48);
 		}
+		
 		
 		// Force Repaint To Achieve 60fps
 		new java.util.Timer().scheduleAtFixedRate(new java.util.TimerTask(){
@@ -369,6 +375,8 @@ public class GamePanel extends JPanel {
 			Tile[] tiles = level.getTiles()[14];
 			if (!player.isAlive())
 					setScreen(Screen.GAME_OVER);
+			if (moveHG)
+				moveHGOnCreation();
 			
 		}
 		
@@ -378,7 +386,22 @@ public class GamePanel extends JPanel {
 	private Point translateSize(int width, int height, Point orig) {
 		return new Point((int)(orig.x*1.0/width*Driver.WIDTH), (int)(orig.y*1.0/height*Driver.HEIGHT));
 	}
-	
+	public void moveHGOnCreation(){
+		mapStorage = GamePanel.level.getTiles();
+		int ranX = (int)(Math.random()*18+1);
+		int ranY = (int)(Math.random()*13+1);
+		boolean foundNewLoc = false;
+		while (!foundNewLoc){
+			if (mapStorage[(int)(ranY+1)][(int)(ranX)].getTileType() == TileType.PLATFORM && mapStorage[(int)(ranY)][(int)(ranX)].getTileType() == TileType.EMPTY && ranX !=8 && ranY != 5){
+				GamePanel.hg.firstPlace(ranX*40+10,ranY*40+10, Weapon.getNewWeapons());
+				foundNewLoc = true;
+			} else {
+				ranX = (int)(Math.random()*19+1);
+				ranY = (int)(Math.random()*13+1);
+			}
+		}
+		moveHG = false;
+	}
 	
 	
 }

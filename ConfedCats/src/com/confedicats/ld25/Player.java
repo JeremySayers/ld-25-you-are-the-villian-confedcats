@@ -57,6 +57,7 @@ public class Player {
 		setHeight(30);
 		setSpeed(5);
 		isAlive = true;
+		
 	}
 	
 	protected static BufferedImage loadImage(String fname) {
@@ -78,11 +79,15 @@ public class Player {
 			}
 			int ranX = (int)(Math.random()*18+1);
 			int ranY = (int)(Math.random()*13+1);
-			if (mapStorage[(int)(ranY+1)][(int)(ranX)].getTileType() == TileType.PLATFORM && mapStorage[(int)(ranY)][(int)(ranX)].getTileType() == TileType.EMPTY && ranX !=8 && ranY != 5){
-				GamePanel.hg.alter(ranX*40+10,ranY*40+10, Weapon.getNewWeapons());
-			} else {
-				ranX = (int)(Math.random()*19+1);
-				ranY = (int)(Math.random()*13+1);
+			boolean foundNewLoc = false;
+			while (!foundNewLoc){
+				if (mapStorage[(int)(ranY+1)][(int)(ranX)].getTileType() == TileType.PLATFORM && mapStorage[(int)(ranY)][(int)(ranX)].getTileType() == TileType.EMPTY && ranX !=8 && ranY != 5){
+					GamePanel.hg.alter(ranX*40+10,ranY*40+10, Weapon.getNewWeapons());
+					foundNewLoc = true;
+				} else {
+					ranX = (int)(Math.random()*19+1);
+					ranY = (int)(Math.random()*13+1);
+				}
 			}
 		}	
 	}
