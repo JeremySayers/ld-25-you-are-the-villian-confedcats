@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 public abstract class Tile extends BufferedImage {
-	public static enum TileType {PLATFORM, SPOUT, PIT, EMPTY};
+	public static enum TileType {PLATFORM, SPOUT, PIT, EMPTY, BEYOND_PIT};
 	private TileType type;
 	private int x;
 	private int y;
