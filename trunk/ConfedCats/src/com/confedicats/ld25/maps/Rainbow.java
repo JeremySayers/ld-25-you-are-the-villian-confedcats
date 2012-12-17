@@ -64,28 +64,28 @@ public class Rainbow extends Map {
 		return 0;
 	}
 
-	public Sound getMusic() {
-		return Sound.create("rainbow.au", true);
-	}
-	
-	public String getName() {
-		return "Rainbow";
-	}
-
-	public Enemy[] getValidEnemies() {
-		return new Enemy[]{};
-	}
 	public Tile[] getMapTiles() {
 		return new Tile[]{new ColorTile(), new ImageTile(PREFIX+"left.png"), new ImageTile(PREFIX+"center.png"), 
 				new ImageTile(PREFIX+"right.png"), new ImageTile(PREFIX+"tl.png"), new ImageTile(PREFIX+"tr.png"),
 				new ImageTile(PREFIX+"bl.png"), new ImageTile(PREFIX+"br.png"), new ImageTile(PREFIX+"vertical.png"),
 				new AnimationTile(PREFIX+"cc_firepit1.png", PREFIX+"cc_firepit2.png"), new ColorTile(), new ImageTile(PREFIX+"leftborder.png"), new ImageTile(PREFIX+"rightborder.png"),};
 	}
+	
 	public TileType[] getMapTileTypes() {
 		return new TileType[]{TileType.EMPTY, TileType.PLATFORM, TileType.PLATFORM, 
 				TileType.PLATFORM, TileType.PLATFORM, TileType.PLATFORM, 
 				TileType.PLATFORM, TileType.PLATFORM, TileType.PLATFORM,  TileType.PIT, 
 				TileType.SPOUT, TileType.PLATFORM, TileType.PLATFORM};
+	}
+
+	public Sound getMusic() {
+		return Sound.create("rainbow.au", true);
+	}
+	public String getName() {
+		return "Rainbow";
+	}
+	public Enemy[] getValidEnemies() {
+		return new Enemy[]{};
 	}
 
 }

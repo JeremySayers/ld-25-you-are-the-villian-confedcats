@@ -155,7 +155,6 @@ public class GamePanel extends JPanel {
 						player.playerReset();
 					if (event.getKeyCode()==KeyEvent.VK_M ) {
 						Sound.setMute(!Sound.isMute());
-						System.out.println(Sound.isMute()+"");
 					}
 					if (event.getKeyCode()==KeyEvent.VK_SPACE && player.hasWeapon()) {
 						if (!player.getWeapon().isAutomatic())
@@ -309,8 +308,11 @@ public class GamePanel extends JPanel {
 		g.drawImage(buff, 0, 0, getWidth(), getHeight(), 0, 0, Driver.WIDTH, Driver.HEIGHT, null);
 	}
 	public void setScreen(Screen newScreen) {
-		Sound.stopAll();
-		Sound.clearAll();
+		try {
+			Sound.stopAll();
+			Sound.clearAll();
+		} catch (Exception e){
+		}
 		switch (newScreen) {
 			case MAIN_MENU:
 				menu.getMusic().play();

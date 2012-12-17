@@ -18,6 +18,15 @@ public abstract class Tile extends BufferedImage {
 		Graphics g = getGraphics();
 		g.drawImage(image, 0, 0, null);
 	}
+	public static BufferedImage loadImage(String fname) {
+		try {
+			return ImageIO.read(Tile.class.getResource(PREFIX+fname).openStream());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	public abstract Tile clone();
 	public Rectangle getBounds() {
 		return new Rectangle(getX(), getY(), getWidth(), getHeight());
@@ -31,19 +40,10 @@ public abstract class Tile extends BufferedImage {
 	public int getY() {
 		return y;
 	}
-	public static BufferedImage loadImage(String fname) {
-		try {
-			return ImageIO.read(Tile.class.getResource(PREFIX+fname).openStream());
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+	public abstract void paintMe(Graphics g);
 	public void register(TileType type, int x, int y) {
 		this.type = type;
 		this.x = x;
 		this.y = y;
 	}
-	public abstract void paintMe(Graphics g);
 }

@@ -34,13 +34,13 @@ public class MainMenu {
 		return null;
 	}
 	
+	public Sound getMusic() {
+		return Sound.create("menumusic.au", true);
+	}
+
 	public void paint(Graphics g) {
 		g.drawImage(BG, 0, 0, null);
 		g.drawImage(start_hovered?START_HOVER:START_NORMAL, START_LOC.x, START_LOC.y, null);
 		g.drawImage(opt_hovered?OPT_HOVER:OPT_NORMAL, OPT_LOC.x, OPT_LOC.y, null);
-	}
-
-	public Sound getMusic() {
-		return Sound.create("menumusic.au", true);
 	}
 }

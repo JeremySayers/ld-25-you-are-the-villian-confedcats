@@ -21,10 +21,15 @@ public abstract class Weapon extends BufferedImage {
 		Graphics g = getGraphics();
 		g.drawImage(img, 0, 0, null);
 	}
+	public static Class<? extends Weapon> getNewWeapons() {
+		ArrayList<Class<? extends Weapon>> possible = getPossibleWeapons();
+		return possible.get((int)(Math.round(Math.random()*(possible.size()-1))));
+	}
 	public static ArrayList<Class<? extends Weapon>> getPossibleWeapons() {
 		ArrayList<Class<? extends Weapon>> possible = new ArrayList<Class<? extends Weapon>>();
 		possible.add(Laser.class);
 		possible.add(Scythe.class);
+		possible.add(LauncherRocket.class);
 		return possible;
 	}
 	public static BufferedImage loadImage(String fname) {
@@ -50,13 +55,13 @@ public abstract class Weapon extends BufferedImage {
 		return y;
 	}
 	public abstract boolean isAutomatic();
+	public abstract void release();
 	public void setX(int x) {
 		this.x = x;
 	}
 	public void setY(int y) {
 		this.y = y;
 	}
-	public abstract void release();
 	public abstract void shoot(Player player);
 	public void update(Graphics g) {
 		if (!GamePanel.player.getWeapon().equals(this)) return;
@@ -68,9 +73,5 @@ public abstract class Weapon extends BufferedImage {
 			am.paint(g);
 		}
 		ammoFired.removeAll(toRemove);
-	}
-	public static Class<? extends Weapon> getNewWeapons() {
-		ArrayList<Class<? extends Weapon>> possible = getPossibleWeapons();
-		return possible.get((int)(Math.round(Math.random()*(possible.size()-1))));
 	}
 }

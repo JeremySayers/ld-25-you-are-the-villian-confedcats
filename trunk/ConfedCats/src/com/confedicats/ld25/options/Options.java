@@ -40,6 +40,10 @@ public class Options {
 		return null;
 	}
 	
+	public Sound getMusic() {
+		return Sound.create("menumusic.au", true);
+	}
+
 	public void paint(Graphics g) {
 		g.drawImage(BG, 0, 0, null);
 		g.drawImage(Sound.isMuteBGM()?BGM_ON:BGM_OFF, BGM_LOC.x, BGM_LOC.y, null);
@@ -47,10 +51,5 @@ public class Options {
 		g.drawImage(Sound.isMute()?MUTE_ON:MUTE_OFF, MUTE_LOC.x, MUTE_LOC.y, null);
 		g.drawImage(Driver.POPOUT.isVisible()?FULL_ON:FULL_OFF, FULL_LOC.x, FULL_LOC.y, null);
 		g.drawImage(back_hovered?BACK_HOVER:BACK_NORMAL, BACK_LOC.x, BACK_LOC.y, null);
-		System.out.println(back_hovered);
-	}
-
-	public Sound getMusic() {
-		return Sound.create("menumusic.au", true);
 	}
 }

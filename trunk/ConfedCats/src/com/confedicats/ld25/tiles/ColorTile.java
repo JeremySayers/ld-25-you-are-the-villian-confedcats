@@ -24,19 +24,19 @@ public class ColorTile extends Tile {
 		g.fillRect(0, 0, img.getWidth(), img.getHeight());
 		return img;
 	}
-	public Color getColor() {
-		return col;
-	}
 	public static ColorTile getTransparentTile() {
 		return new ColorTile();
-	}
-	private boolean isTransparent() {
-		return trans;
 	}
 	public Tile clone() {
 		if (isTransparent())
 			return getTransparentTile();
 		return new ColorTile(getColor());
+	}
+	public Color getColor() {
+		return col;
+	}
+	private boolean isTransparent() {
+		return trans;
 	}
 	public void paintMe(Graphics g){
 		g.drawImage(this, getX(), getY(), null);
