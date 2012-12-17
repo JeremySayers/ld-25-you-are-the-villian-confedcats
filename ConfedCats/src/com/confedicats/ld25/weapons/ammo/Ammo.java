@@ -38,7 +38,7 @@ public abstract class Ammo extends BufferedImage {
 		return dead;
 	}
 	public void paint(Graphics g) {
-		update();
+		update(g);
 		g.drawImage(this, getX(), getY(), null);
 	}
 	public void setDead(boolean dead) {
@@ -50,5 +50,5 @@ public abstract class Ammo extends BufferedImage {
 	public void setY(int y) {
 		this.y = y;
 	}
-	public abstract void update();
+	public abstract void update(Graphics g);
 }

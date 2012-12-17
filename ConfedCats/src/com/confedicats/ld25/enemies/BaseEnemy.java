@@ -12,23 +12,11 @@ public abstract class BaseEnemy {
 	private boolean isJumping;
 	private int jumpSpeed;
 	private int jumpStart = -18;
-	public int getJumpSpeed() {
-		return jumpSpeed;
-	}
-	public void setJumpSpeed(int jumpSpeed) {
-		this.jumpSpeed = jumpSpeed;
-	}
-	public int getJumpStart() {
-		return jumpStart;
-	}
-	public void setJumpStart(int jumpStart) {
-		this.jumpStart = jumpStart;
-	}
-
 	private int health;
 	private int xVel = 0;
 	private int yVel = 0;
 	private int multi = 1;
+
 	private int gravity = 1;
 	private int width = 30;
 	private int height = 30;
@@ -36,18 +24,17 @@ public abstract class BaseEnemy {
 	private int y;
 	private boolean xVelUpdate = false;
 	private boolean firstFall = true;
-	
 	private boolean movingLeft;
 	private boolean movingRight;
 	private boolean jumpKey;
-	
 	private int downY, upY, leftX, rightX, xTile, yTile;
+	
 	TileType downRight;
 	TileType upRight;
 	TileType downLeft;
+	
 	TileType upLeft;
 	private Tile[][] mapStorage;
-	
 	public BaseEnemy(int health, int x, int y, int multi){
 		setHealth(health);
 		setX(x);
@@ -62,26 +49,86 @@ public abstract class BaseEnemy {
 	    	  movingLeft = true;
 	    	  movingRight = false;
 	      }
-		 System.out.println("Im alive!");
+	}
+	public void fall() {
+		  if (!isJumping) {
+			mapStorage = GamePanel.level.getTiles();
+		    getMyCorners (x, y+1,mapStorage);
+		    if (downLeft == TileType.EMPTY && downRight == TileType.EMPTY || downLeft == TileType.SPOUT && downRight == TileType.SPOUT || downLeft == TileType.EMPTY && downRight == TileType.SPOUT || downLeft == TileType.SPOUT && downRight == TileType.EMPTY) {
+		      jumpSpeed = 0;
+		      isJumping = true;
+		      firstFall = true;
+		    }
+		  }
 	}
 	public Rectangle getBounds() {
 		return new Rectangle(getX(), getY(), 30, 30);
 	}
+	public int getGravity() {
+		return gravity;
+	}
+	
+	public int getHealth() {
+		return health;
+	}
+	public int getJumpSpeed() {
+		return jumpSpeed;
+	}
+	public int getJumpStart() {
+		return jumpStart;
+	}
+	public abstract BufferedImage getLeft();
 	public int getMulti() {
 		return multi;
 	}
-	public void setMulti(int multi) {
-		this.multi = multi;
+	public void getMyCorners (int x, int y,Tile tiles[][]) {
+		  downY = (int) Math.floor((y+30-1)/40);
+		  upY = (int) Math.floor((y)/40);
+		  leftX = (int) Math.floor((x)/40);
+		  rightX = (int) Math.floor((x+30-1)/40);
+		  //check if they are walls
+		  upLeft = tiles[upY][leftX].getTileType();
+		  downLeft = tiles[downY][leftX].getTileType();
+		  upRight = tiles[upY][rightX].getTileType();
+		  downRight = tiles[downY][rightX].getTileType();
 	}
-	public abstract BufferedImage getLeft();
 	public abstract BufferedImage getRight();
-	public void updateEnemyPos(Map map){
-		mapStorage = map.getTiles();
-		
-		//Check if THE PLAYER SHOULD BURNNNNNNN
-		if (mapStorage[(int) Math.floor((y+gravity+height)/40)][(int) (Math.floor(x)/40)].getTileType() == TileType.PIT){
-			health = 0;
-		}
+	public int getX() {
+		return x;
+	} 
+	public int getxVel() {
+		return xVel;
+	}
+	public int getY() {
+		return y;
+	}
+	public int getyVel() {
+		return yVel;
+	}
+	public abstract boolean isBoss();
+	
+	public boolean isJumping() {
+		return isJumping;
+	}
+	public boolean isJumpKey() {
+		return jumpKey;
+	}
+	public boolean isMovingLeft() {
+		return movingLeft;
+	}
+	public boolean isMovingRight() {
+		return movingRight;
+	}
+	public void jump() {
+		  jumpSpeed = jumpSpeed+gravity;
+		  if (jumpSpeed>40-height) {
+		    jumpSpeed = 40-height;
+		  }
+		  if (jumpSpeed<0) {
+		    movePlayer(0, -1, -1);  
+		  } else if (jumpSpeed>0) {
+		    movePlayer(0, 1, 1);  
+		  }
 	}
 	public void movePlayer(int xVel, int yVel, int jump) {
 		mapStorage = GamePanel.level.getTiles();
@@ -124,7 +171,6 @@ public abstract class BaseEnemy {
 		    if (downLeft == TileType.EMPTY && upLeft == TileType.EMPTY) {
 		      x += multi*xVel;
 		    } else {
-		    System.out.println("DL: "+downLeft);
 		      movingLeft = false;
 		      movingRight = true;
 		      return;
@@ -144,40 +190,55 @@ public abstract class BaseEnemy {
 		  }
 		  xTile = (int)(Math.floor(x/40));
 		  yTile = (int)(Math.floor(y/40));
-	} 
-	public void getMyCorners (int x, int y,Tile tiles[][]) {
-		  downY = (int) Math.floor((y+30-1)/40);
-		  upY = (int) Math.floor((y)/40);
-		  leftX = (int) Math.floor((x)/40);
-		  rightX = (int) Math.floor((x+30-1)/40);
-		  //check if they are walls
-		  upLeft = tiles[upY][leftX].getTileType();
-		  downLeft = tiles[downY][leftX].getTileType();
-		  upRight = tiles[upY][rightX].getTileType();
-		  downRight = tiles[downY][rightX].getTileType();
 	}
-	public void jump() {
-		  jumpSpeed = jumpSpeed+gravity;
-		  if (jumpSpeed>40-height) {
-		    jumpSpeed = 40-height;
-		  }
-		  if (jumpSpeed<0) {
-		    movePlayer(0, -1, -1);  
-		  } else if (jumpSpeed>0) {
-		    movePlayer(0, 1, 1);  
-		  }
+	public void setGravity(int gravity) {
+		this.gravity = gravity;
 	}
-	public void fall() {
-		  if (!isJumping) {
-			mapStorage = GamePanel.level.getTiles();
-		    getMyCorners (x, y+1,mapStorage);
-		    if (downLeft == TileType.EMPTY && downRight == TileType.EMPTY || downLeft == TileType.SPOUT && downRight == TileType.SPOUT || downLeft == TileType.EMPTY && downRight == TileType.SPOUT || downLeft == TileType.SPOUT && downRight == TileType.EMPTY) {
-		      jumpSpeed = 0;
-		      isJumping = true;
-		      firstFall = true;
-		    }
-		  }
+	public void setHealth(int health) {
+		this.health = health;
 	}
+	public void setJumping(boolean isJumping) {
+		this.isJumping = isJumping;
+	}
+	public void setJumpKey(boolean jumpKey) {
+		this.jumpKey = jumpKey;
+	}
+	public void setJumpSpeed(int jumpSpeed) {
+		this.jumpSpeed = jumpSpeed;
+	}
+	public void setJumpStart(int jumpStart) {
+		this.jumpStart = jumpStart;
+	}
+	public void setMovingLeft(boolean movingLeft) {
+		this.movingLeft = movingLeft;
+	}
+	public void setMovingRight(boolean movingRight) {
+		this.movingRight = movingRight;
+	}
+	public void setMulti(int multi) {
+		this.multi = multi;
+	}
+	public void setX(int x) {
+		this.x = x;
+	}
+	public void setxVel(int xVel) {
+		this.xVel = xVel;
+	}
+	public void setY(int y) {
+		this.y = y;
+	}
+	public void setyVel(int yVel) {
+		this.yVel = yVel;
+	}
+	public void updateEnemyPos(Map map){
+		mapStorage = map.getTiles();
+		
+		//Check if THE PLAYER SHOULD BURNNNNNNN
+		if (mapStorage[(int) Math.floor((y+gravity+height)/40)][(int) (Math.floor(x)/40)].getTileType() == TileType.PIT){
+			health = 0;
+		}
+	}
+	
 	public void updateKeys(){
 		if (movingLeft)
 			movePlayer(-1,0,0);
@@ -185,74 +246,10 @@ public abstract class BaseEnemy {
 			movePlayer(1,0,0);
 		if (jumpKey){
 			if (!isJumping){
-			setJumping(true);
-			setJumpSpeed(getJumpStart());
-			System.out.println("Should be jumping!");
+				setJumping(true);
+				setJumpSpeed(getJumpStart());
 			}
 		}
 			
 	}
-	
-	public int getHealth() {
-		return health;
-	}
-	public void setHealth(int health) {
-		this.health = health;
-	}
-	public int getxVel() {
-		return xVel;
-	}
-	public void setxVel(int xVel) {
-		this.xVel = xVel;
-	}
-	public int getyVel() {
-		return yVel;
-	}
-	public void setyVel(int yVel) {
-		this.yVel = yVel;
-	}
-	public int getGravity() {
-		return gravity;
-	}
-	public void setGravity(int gravity) {
-		this.gravity = gravity;
-	}
-	public int getX() {
-		return x;
-	}
-	public boolean isMovingLeft() {
-		return movingLeft;
-	}
-	public void setMovingLeft(boolean movingLeft) {
-		this.movingLeft = movingLeft;
-	}
-	public boolean isMovingRight() {
-		return movingRight;
-	}
-	public void setMovingRight(boolean movingRight) {
-		this.movingRight = movingRight;
-	}
-	public boolean isJumpKey() {
-		return jumpKey;
-	}
-	public void setJumpKey(boolean jumpKey) {
-		this.jumpKey = jumpKey;
-	}
-	public boolean isJumping() {
-		return isJumping;
-	}
-	public void setJumping(boolean isJumping) {
-		this.isJumping = isJumping;
-	}
-	public void setX(int x) {
-		this.x = x;
-	}
-	public int getY() {
-		return y;
-	}
-	public void setY(int y) {
-		this.y = y;
-	}
-	
-	public abstract boolean isBoss();
 }

@@ -1,5 +1,6 @@
 package com.confedicats.ld25.weapons.ammo;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -19,7 +20,7 @@ public class LaserAmmo extends Ammo {
 		this.direction = direction;
 		this.speed = speed;
 	}
-	public void update() {
+	public void update(Graphics g) {
 		if (isDead()) return;
 		setX(getX()+direction*speed);
 		if (getX()<40|| getX()>Driver.WIDTH-40) {

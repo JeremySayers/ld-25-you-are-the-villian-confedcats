@@ -43,12 +43,12 @@ public class Scythe extends Weapon {
 		return true;
 	}
 
-	public void shoot(Player player) {
-		fired = true;
-	}
-	
 	public void release() {
 		fired = false;
+	}
+	
+	public void shoot(Player player) {
+		fired = true;
 	}
 
 	public void update(Graphics g){

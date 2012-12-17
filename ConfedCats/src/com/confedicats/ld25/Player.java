@@ -213,9 +213,6 @@ public class Player {
 		    movePlayer(0, 1, 1);  
 		  }
 	}
-	public void log(String string){
-		System.out.println(string);
-	}
 	public void movePlayer(int xVel, int yVel, int jump) {
 		mapStorage = GamePanel.level.getTiles();
 		if (Math.abs(jump)==1) {
@@ -246,8 +243,6 @@ public class Player {
 		    if (downLeft== TileType.EMPTY && upLeft == TileType.EMPTY) {
 		      x += speed*xVel;
 		    } else {
-		    	
-		    	System.out.println("DL: "+downLeft);
 		      x = xTile*40;
 		    }
 		    fall();
@@ -354,9 +349,8 @@ public class Player {
 			movePlayer(1,0,0);
 		if (jumpKey){
 			if (!isJumping){
-			setJumping(true);
-			setJumpSpeed(getJumpStart());
-			System.out.println("Should be jumping!");
+				setJumping(true);
+				setJumpSpeed(getJumpStart());
 			}
 		}
 			
