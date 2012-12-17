@@ -71,7 +71,7 @@ public class Rainbow extends Map {
 		return new Tile[]{new ColorTile(), new ImageTile(PREFIX+"left.png"), new ImageTile(PREFIX+"center.png"), 
 				new ImageTile(PREFIX+"right.png"), new ImageTile(PREFIX+"tl.png"), new ImageTile(PREFIX+"tr.png"),
 				new ImageTile(PREFIX+"bl.png"), new ImageTile(PREFIX+"br.png"), new ImageTile(PREFIX+"vertical.png"),
-				new AnimationTile(PREFIX+"cc_firepit1.png", PREFIX+"cc_firepit2.png"), new ColorTile(), new ImageTile(PREFIX+"leftborder.png"), new ImageTile(PREFIX+"rightborder.png"),
+				new AnimationTile(PREFIX+"../cc_firepit1.png", PREFIX+"../cc_firepit2.png"), new ColorTile(), new ImageTile(PREFIX+"leftborder.png"), new ImageTile(PREFIX+"rightborder.png"),
 				new ColorTile(Color.BLACK)};
 	}
 	

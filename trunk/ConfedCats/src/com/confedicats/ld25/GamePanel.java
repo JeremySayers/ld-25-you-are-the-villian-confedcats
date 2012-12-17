@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -22,14 +21,14 @@ import com.confedicats.ld25.enemies.UnionSoldier;
 import com.confedicats.ld25.hologear.HoloGear;
 import com.confedicats.ld25.maps.Map;
 import com.confedicats.ld25.maps.Rainbow;
+import com.confedicats.ld25.maps.Town;
 import com.confedicats.ld25.options.Options;
 import com.confedicats.ld25.sounds.Sound;
 import com.confedicats.ld25.tiles.Tile;
-import com.confedicats.ld25.tiles.Tile.TileType;
 import com.confedicats.ld25.weapons.Weapon;
 
 public class GamePanel extends JPanel {
-	public static enum Screen {MAIN_MENU, OPTIONS, RAINBOW, LEVEL2, INDUSTRIAL, GAME_OVER};
+	public static enum Screen {MAIN_MENU, OPTIONS, RAINBOW, TOWN, INDUSTRIAL, GAME_OVER};
 	// Create Buffers
 	private static final BufferedImage buff = new BufferedImage(Driver.WIDTH, Driver.HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	private static final Graphics bg = buff.getGraphics();
@@ -66,7 +65,7 @@ public class GamePanel extends JPanel {
 		}, 1, 1000/60);
 		new java.util.Timer().scheduleAtFixedRate(new java.util.TimerTask(){
 			public void run() {
-				if (screen==Screen.RAINBOW||screen==Screen.LEVEL2||screen==Screen.INDUSTRIAL) {
+				if (screen==Screen.RAINBOW||screen==Screen.TOWN||screen==Screen.INDUSTRIAL) {
 					if ((int)(Math.random()*3+1) == 1) {
 						ArrayList<Point> spouts = level.getSpouts();
 						Point spout = spouts.get((int)(Math.random()*spouts.size()));
@@ -125,7 +124,7 @@ public class GamePanel extends JPanel {
 		});
 		addKeyListener(new KeyAdapter(){
 			public void keyPressed(KeyEvent event) {
-				if (screen==Screen.RAINBOW||screen==Screen.LEVEL2||screen==Screen.INDUSTRIAL) {
+				if (screen==Screen.RAINBOW||screen==Screen.TOWN||screen==Screen.INDUSTRIAL) {
 					if (event.getKeyCode()==KeyEvent.VK_LEFT)
 						player.setMovingLeft(true);
 					if (event.getKeyCode()==KeyEvent.VK_RIGHT) 
@@ -137,11 +136,16 @@ public class GamePanel extends JPanel {
 						player.shoot();
 					}
 				} else if (screen==Screen.GAME_OVER) {
-					setScreen(Screen.RAINBOW);
+					setScreen(level instanceof Town ? Screen.TOWN : Screen.RAINBOW);
 				}
 			}
 			public void keyReleased(KeyEvent event) {
-				if (screen==Screen.RAINBOW||screen==Screen.LEVEL2||screen==Screen.INDUSTRIAL) {
+				if (screen==Screen.MAIN_MENU) {
+					if (event.getKeyCode()==KeyEvent.VK_2) {
+						setScreen(Screen.TOWN);
+					}
+				}
+				if (screen==Screen.RAINBOW||screen==Screen.TOWN||screen==Screen.INDUSTRIAL) {
 					if (event.getKeyCode()==KeyEvent.VK_LEFT){ 
 						player.setMovingLeft(false);
 						player.setLastXVel(-1);
@@ -177,7 +181,6 @@ public class GamePanel extends JPanel {
         }
 	}
 	public void checkEnemiesAlive(){
-		Tile[] tiles = level.getTiles()[14];
 		for (int i = 0; i < enemies.size(); i++){
 			if (enemies.get(i).getBounds().intersects(player.getBounds())){
 				player.setAlive(false);
@@ -229,7 +232,7 @@ public class GamePanel extends JPanel {
 				options.paint(bg);
 				break;
 			case RAINBOW:
-			case LEVEL2:
+			case TOWN:
 			case INDUSTRIAL:
 				level.paint(bg);
 				
@@ -311,6 +314,8 @@ public class GamePanel extends JPanel {
 			Sound.clearAll();
 		} catch (Exception e){
 		}
+		ArrayList<Point> spouts;
+		Point spout;
 		switch (newScreen) {
 			case MAIN_MENU:
 				menu.getMusic().play();
@@ -323,14 +328,19 @@ public class GamePanel extends JPanel {
 				HoloGear.COUNT = 0;
 				enemies.clear();
 				level = new Rainbow();
-				ArrayList<Point> spouts = level.getSpouts();
-				Point spout = spouts.get((int)(Math.random()*spouts.size()));
+				spouts = level.getSpouts();
+				spout = spouts.get((int)(Math.random()*spouts.size()));
 				player = new Player(spout.x, 20);
 				level.getMusic().play();
 				break;
-			case LEVEL2:
+			case TOWN:
 				HoloGear.COUNT = 0;
 				enemies.clear();
+				level = new Town();
+				spouts = level.getSpouts();
+				spout = spouts.get((int)(Math.random()*spouts.size()));
+				player = new Player(spout.x, 20);
+				level.getMusic().play();
 				break;
 			case INDUSTRIAL:
 				HoloGear.COUNT = 0;
@@ -345,7 +355,7 @@ public class GamePanel extends JPanel {
 	public void tick() {
 		repaint();
 		calcFPS();
-		if (screen==Screen.RAINBOW||screen==Screen.LEVEL2||screen==Screen.INDUSTRIAL) {
+		if (screen==Screen.RAINBOW||screen==Screen.TOWN||screen==Screen.INDUSTRIAL) {
 			for (int i = 0; i < enemies.size(); i++){
 				enemies.get(i).fall();
 				enemies.get(i).jump();

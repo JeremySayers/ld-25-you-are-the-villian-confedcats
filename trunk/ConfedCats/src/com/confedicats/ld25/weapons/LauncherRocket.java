@@ -35,7 +35,15 @@ public class LauncherRocket extends Weapon {
 
 	public void shoot(Player player) {
 		try {
-			Ammo ammo = getAmmoClass().getConstructor(int.class, int.class, int.class, int.class).newInstance(player.getX(), player.getY(), player.getxVel()<0?-1:player.getxVel()>0?1:player.getLastXVel()<0?-1:1, 6);
+			int xv;
+			if (player.isMovingLeft()){
+				xv = -1;
+			} else if (player.isMovingRight()){
+			    xv = 1;
+			} else {
+				xv = player.getLastXVel();
+			}
+			Ammo ammo = getAmmoClass().getConstructor(int.class, int.class, int.class, int.class).newInstance(player.getX(), player.getY(), xv, 6);
 			addAmmo(ammo);
 			Sound.create("laser.wav", false).play();
 		} catch (Exception e) {
