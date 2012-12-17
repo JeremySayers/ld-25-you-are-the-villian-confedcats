@@ -179,6 +179,9 @@ public class GamePanel extends JPanel {
 	public void checkEnemiesAlive(){
 		Tile[] tiles = level.getTiles()[14];
 		for (int i = 0; i < enemies.size(); i++){
+			if (enemies.get(i).getBounds().intersects(player.getBounds())){
+				player.setAlive(false);
+			}
 			if (enemies.get(i).getHealth() == -Integer.MAX_VALUE){
 				enemies.remove(i);
 				Sound.create("fallinpit.wav", false).play();
