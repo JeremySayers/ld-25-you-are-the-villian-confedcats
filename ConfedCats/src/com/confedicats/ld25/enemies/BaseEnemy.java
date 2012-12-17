@@ -54,10 +54,14 @@ public abstract class BaseEnemy {
 		  if (!isJumping) {
 			mapStorage = GamePanel.level.getTiles();
 		    getMyCorners (x, y+1,mapStorage);
-		    if (downLeft == TileType.EMPTY && downRight == TileType.EMPTY || downLeft == TileType.SPOUT && downRight == TileType.SPOUT || downLeft == TileType.EMPTY && downRight == TileType.SPOUT || downLeft == TileType.SPOUT && downRight == TileType.EMPTY) {
+		    if (downLeft == TileType.EMPTY && downRight == TileType.EMPTY || downLeft == TileType.PIT && downRight == TileType.PIT) {
 		      jumpSpeed = 0;
 		      isJumping = true;
 		      firstFall = true;
+		    }
+		    if(downLeft == TileType.BEYOND_PIT && downRight == TileType.BEYOND_PIT){
+		    	health = -Integer.MAX_VALUE;
+		    	System.out.println("Enemy Fell into the pit!");
 		    }
 		  }
 	}
@@ -147,7 +151,7 @@ public abstract class BaseEnemy {
 		    }
 		  }
 		  if (yVel == 1) {
-		    if (downLeft == TileType.EMPTY && downRight == TileType.EMPTY || downLeft == TileType.SPOUT && downRight == TileType.SPOUT || downLeft == TileType.EMPTY && downRight == TileType.SPOUT || downLeft == TileType.SPOUT && downRight == TileType.EMPTY) {
+		    if (downLeft == TileType.EMPTY && downRight == TileType.EMPTY || downLeft == TileType.PIT && downRight == TileType.PIT) {
 		      y += multi*yVel;
 		    } else {
 		      y = (yTile+1)*40-height;

@@ -56,6 +56,7 @@ public class Player {
 		setWidth(30);
 		setHeight(30);
 		setSpeed(5);
+		isAlive = true;
 	}
 	
 	protected static BufferedImage loadImage(String fname) {
@@ -89,11 +90,15 @@ public class Player {
 		  if (!isJumping) {
 			mapStorage = GamePanel.level.getTiles();
 		    getMyCorners (x, y+1,mapStorage);
-		    if (downLeft == TileType.EMPTY && downRight == TileType.EMPTY) {
+		    if (downLeft == TileType.EMPTY && downRight == TileType.EMPTY || downLeft == TileType.PIT && downRight == TileType.PIT) {
 		      jumpSpeed = 0;
 		      isJumping = true;
 		    }
 		  }
+		  if(downLeft == TileType.BEYOND_PIT && downRight == TileType.BEYOND_PIT){
+		    	isAlive = false;
+		    	System.out.println("Enemy Fell into the pit!");
+		    }
 	}
 
 	public Rectangle getBounds() {
@@ -230,7 +235,7 @@ public class Player {
 		    }
 		  }
 		  if (yVel == 1) {
-		    if (downLeft == TileType.EMPTY && downRight == TileType.EMPTY) {
+		    if (downLeft == TileType.EMPTY && downRight == TileType.EMPTY || downLeft == TileType.PIT && downRight == TileType.PIT) {
 		      y += speed*yVel;
 		    } else {
 		      y = (yTile+1)*40-height;
