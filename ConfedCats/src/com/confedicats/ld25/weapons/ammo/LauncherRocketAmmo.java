@@ -74,6 +74,7 @@ public class LauncherRocketAmmo extends Ammo {
 			if (be.getBounds().intersects(getBounds())) {
 				removeEnemies.add(be);
 				Sound.create("enemydeath.wav", false).play();
+				BaseEnemy.KILL_COUNT++;
 				setDead(true);
 				break;
 			}
