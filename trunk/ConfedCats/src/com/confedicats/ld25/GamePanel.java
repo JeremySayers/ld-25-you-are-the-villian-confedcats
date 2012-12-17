@@ -179,14 +179,7 @@ public class GamePanel extends JPanel {
 	public void checkEnemiesAlive(){
 		Tile[] tiles = level.getTiles()[14];
 		for (int i = 0; i < enemies.size(); i++){
-			for (Tile tile:tiles) {
-				Rectangle bounds = new Rectangle(tile.getBounds());
-				bounds.setLocation(bounds.x, bounds.y-20);
-				if (tile.getTileType()==TileType.PIT && enemies.get(i).getBounds().intersects(bounds)) {
-					enemies.get(i).setHealth(0);
-				}
-			}
-			if (enemies.get(i).getHealth() == 0){
+			if (enemies.get(i).getHealth() == -Integer.MAX_VALUE){
 				enemies.remove(i);
 				Sound.create("fallinpit.wav", false).play();
 				ArrayList<Point> spouts = level.getSpouts();
@@ -361,13 +354,9 @@ public class GamePanel extends JPanel {
 			player.updateKeys();
 			player.checkHG();
 			Tile[] tiles = level.getTiles()[14];
-			for (Tile tile:tiles) {
-				Rectangle bounds = new Rectangle(tile.getBounds());
-				bounds.setLocation(bounds.x, bounds.y-20);
-				if (tile.getTileType()==TileType.PIT && player.getBounds().intersects(bounds)) {
+			if (!player.isAlive())
 					setScreen(Screen.GAME_OVER);
-				}
-			}
+			
 		}
 		
 		//checkJoystick();
