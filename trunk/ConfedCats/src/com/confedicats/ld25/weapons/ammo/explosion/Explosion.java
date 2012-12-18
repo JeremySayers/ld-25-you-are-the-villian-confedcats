@@ -41,11 +41,14 @@ public class Explosion {
 			el.setFrame(x+48, y+48, 3, 3);
 		for (int i = 0; i < GamePanel.enemies.size(); i++){
 			BaseEnemy en = GamePanel.enemies.get(i);
-			if (el.intersects(en.getBounds())) {
-				Sound.create("enemydeath.wav", false).play();
-				GamePanel.enemies.remove(en);
-				BaseEnemy.KILL_COUNT++;
-				i--;
+			if (!en.isBoss() && el.intersects(en.getBounds())) {
+				en.setHealth(en.getHealth()-100);
+				if (en.getHealth()<=0) {
+					GamePanel.enemies.remove(en);
+					Sound.create("enemydeath.wav", false).play();
+					BaseEnemy.KILL_COUNT++;
+					i--;
+				}
 			}
 		}
 	}

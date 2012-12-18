@@ -20,6 +20,10 @@ public class MainMenu {
 	private static BufferedImage OPT_HOVER = loadImage("cc_main_options2.png");
 	public static final Rectangle OPT_LOC = new Rectangle(250,330,300,80);
 	public static boolean opt_hovered = false;
+	private static BufferedImage INS_NORMAL = loadImage("cc_main_inst1.png");
+	private static BufferedImage INS_HOVER = loadImage("cc_main_inst2.png");
+	public static final Rectangle INS_LOC = new Rectangle(150,480,520,80);
+	public static boolean ins_hovered = false;
 	public MainMenu(){
 		start_hovered = false;
 		opt_hovered = false;
@@ -42,5 +46,6 @@ public class MainMenu {
 		g.drawImage(BG, 0, 0, null);
 		g.drawImage(start_hovered?START_HOVER:START_NORMAL, START_LOC.x, START_LOC.y, null);
 		g.drawImage(opt_hovered?OPT_HOVER:OPT_NORMAL, OPT_LOC.x, OPT_LOC.y, null);
+		g.drawImage(ins_hovered?INS_HOVER:INS_NORMAL, INS_LOC.x, INS_LOC.y, null);
 	}
 }

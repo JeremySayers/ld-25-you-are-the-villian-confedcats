@@ -47,6 +47,7 @@ public class Player {
 	private int lastXVel;
 	
 	private Tile[][] mapStorage;
+	private int health;
 	
 	public Player(){
 		ArrayList<Point> spouts = GamePanel.level.getSpouts();
@@ -60,6 +61,7 @@ public class Player {
 		setGravity(1);
 		setWidth(30);
 		setHeight(30);
+		setHealth(100);
 		setSpeed(5);
 		isAlive = true;
 		setWeapon(Weapon.getNewWeapon());
@@ -390,5 +392,13 @@ public class Player {
 		if (weapon!=null) {
 			weapon.update(g);
 		}
+	}
+
+	public int getHealth() {
+		return health;
+	}
+
+	public void setHealth(int health) {
+		this.health = health;
 	}
 }
