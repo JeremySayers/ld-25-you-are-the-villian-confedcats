@@ -5,6 +5,7 @@ import java.awt.geom.Ellipse2D;
 
 import com.confedicats.ld25.GamePanel;
 import com.confedicats.ld25.enemies.BaseEnemy;
+import com.confedicats.ld25.enemies.CyborgLincoln;
 import com.confedicats.ld25.sounds.Sound;
 import com.confedicats.ld25.tiles.AnimationTile;
 import com.confedicats.ld25.tiles.Tile.TileType;
@@ -48,6 +49,9 @@ public class Explosion {
 					Sound.create("enemydeath.wav", false).play();
 					BaseEnemy.KILL_COUNT++;
 					i--;
+					if (en instanceof CyborgLincoln) {
+						((CyborgLincoln)en).SOUND.stop();
+					}
 				}
 			}
 		}

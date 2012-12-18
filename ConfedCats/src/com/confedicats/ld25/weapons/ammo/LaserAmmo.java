@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import com.confedicats.ld25.Driver;
 import com.confedicats.ld25.GamePanel;
 import com.confedicats.ld25.enemies.BaseEnemy;
+import com.confedicats.ld25.enemies.CyborgLincoln;
 import com.confedicats.ld25.sounds.Sound;
 import com.confedicats.ld25.tiles.Tile;
 import com.confedicats.ld25.tiles.Tile.TileType;
@@ -40,6 +41,9 @@ public class LaserAmmo extends Ammo {
 					removeEnemies.add(be);
 					Sound.create("enemydeath.wav", false).play();
 					BaseEnemy.KILL_COUNT++;
+					if (be instanceof CyborgLincoln) {
+						((CyborgLincoln)be).SOUND.stop();
+					}
 				}
 				setDead(true);
 				break;

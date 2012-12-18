@@ -15,6 +15,7 @@ public class CyborgLincoln extends Boss {
 	private BufferedImage RIGHT;
 	private ArrayList<Ammo> ammoFired = new ArrayList<Ammo>();
 	private int tick = 0;
+	public Sound SOUND;
 	public CyborgLincoln(int health, int x, int y, int multi, boolean angry) {
 		super(health, x, y, multi, angry);
 		try {
@@ -22,6 +23,7 @@ public class CyborgLincoln extends Boss {
 			RIGHT = ImageIO.read(UnionSoldier.class.getResource("/com/confedicats/ld25/enemies/cc_clincoln_r.png"));
 		} catch (Exception e){
 		}
+		SOUND = Sound.create("bossbattle.au", true);
 	}
 	public void addAmmo(Ammo ammo) {
 		ammoFired.add(ammo);
