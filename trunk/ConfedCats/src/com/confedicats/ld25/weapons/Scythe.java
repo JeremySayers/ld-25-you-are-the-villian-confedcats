@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import com.confedicats.ld25.GamePanel;
 import com.confedicats.ld25.Player;
 import com.confedicats.ld25.enemies.BaseEnemy;
+import com.confedicats.ld25.enemies.CyborgLincoln;
 import com.confedicats.ld25.sounds.Sound;
 import com.confedicats.ld25.weapons.ammo.Ammo;
 
@@ -66,6 +67,9 @@ public class Scythe extends Weapon {
 						removeEnemies.add(be);
 						Sound.create("enemydeath.wav", false).play();
 						BaseEnemy.KILL_COUNT++;
+						if (be instanceof CyborgLincoln) {
+							((CyborgLincoln)be).SOUND.stop();
+						}
 					}
 				}
 			}
