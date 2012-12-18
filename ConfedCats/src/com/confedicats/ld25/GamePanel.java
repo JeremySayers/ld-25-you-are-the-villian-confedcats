@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 import com.confedicats.ld25.enemies.BaseEnemy;
+import com.confedicats.ld25.enemies.Boss;
+import com.confedicats.ld25.enemies.CyborgLincoln;
 import com.confedicats.ld25.enemies.UnionSoldier;
 import com.confedicats.ld25.hologear.HoloGear;
 import com.confedicats.ld25.maps.LevelSelect;
@@ -26,12 +28,13 @@ import com.confedicats.ld25.maps.Rainbow;
 import com.confedicats.ld25.maps.Town;
 import com.confedicats.ld25.options.Options;
 import com.confedicats.ld25.sounds.Sound;
+import com.confedicats.ld25.tiles.AnimationTile;
 import com.confedicats.ld25.tiles.Tile;
 import com.confedicats.ld25.tiles.Tile.TileType;
 import com.confedicats.ld25.weapons.Weapon;
 
 public class GamePanel extends JPanel {
-	public static enum Screen {MAIN_MENU, OPTIONS, RAINBOW, TOWN, INDUSTRIAL, GAME_OVER, LEVEL_SELECT};
+	public static enum Screen {MAIN_MENU, OPTIONS, RAINBOW, TOWN, INDUSTRIAL, GAME_OVER, LEVEL_SELECT, INSTRUCTIONS};
 	// Create Buffers
 	private static final BufferedImage buff = new BufferedImage(Driver.WIDTH, Driver.HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	private static final Graphics bg = buff.getGraphics();
@@ -56,7 +59,12 @@ public class GamePanel extends JPanel {
 	private boolean moveHG = true;
 	
 	Tile[][] mapStorage;
+	public static ArrayList<Integer> bossSends = new ArrayList<Integer>();
     public static HoloGear hg = new HoloGear(Weapon.getNewWeapon(), 460, 200);
+    private static BufferedImage BACK_NORMAL = Driver.loadRawImage("/com/confedicats/ld25/options/cc_options_back1.png");
+	private static BufferedImage BACK_HOVER = Driver.loadRawImage("/com/confedicats/ld25/options/cc_options_back2.png");
+	public static final Rectangle BACK_LOC = new Rectangle(120,500,200,80);
+	public static boolean back_hovered = false;
 	public GamePanel() {
 		super();
 		
@@ -76,7 +84,14 @@ public class GamePanel extends JPanel {
 		new java.util.Timer().scheduleAtFixedRate(new java.util.TimerTask(){
 			public void run() {
 				if (getScreen()==Screen.RAINBOW||getScreen()==Screen.TOWN||getScreen()==Screen.INDUSTRIAL) {
-					if ((int)(Math.random()*3+1) == 1) {
+					if (HoloGear.COUNT%100==2 && !bossSends.contains(HoloGear.COUNT)) {
+						System.out.println("lincoln");
+						bossSends.add(HoloGear.COUNT);
+						ArrayList<Point> spouts = level.getSpouts();
+						Point spout = spouts.get((int)(Math.random()*spouts.size()));
+						enemies.add(new CyborgLincoln(200,spout.x,20,10,false));
+					}
+					else if ((int)(Math.random()*3+1) == 1) {
 						ArrayList<Point> spouts = level.getSpouts();
 						Point spout = spouts.get((int)(Math.random()*spouts.size()));
 						enemies.add(new UnionSoldier(20,spout.x,20,1,false));
@@ -94,6 +109,8 @@ public class GamePanel extends JPanel {
 						setScreen(Screen.LEVEL_SELECT);
 					} else if (MainMenu.OPT_LOC.contains(scaled)) {
 						setScreen(Screen.OPTIONS);
+					} else if (MainMenu.INS_LOC.contains(scaled)) {
+						setScreen(Screen.INSTRUCTIONS);
 					}
 				} else if (getScreen()==Screen.OPTIONS) {
 					if (Options.BGM_LOC.contains(scaled)) {
@@ -119,6 +136,10 @@ public class GamePanel extends JPanel {
 					}
 				} else if (getScreen()==Screen.GAME_OVER) {
 					setScreen(lastScreen);
+				} else if (getScreen()==Screen.INSTRUCTIONS) {
+					if (BACK_LOC.contains(scaled)) {
+						setScreen(lastScreen); 
+					}
 				}
 			}
 		});
@@ -130,15 +151,20 @@ public class GamePanel extends JPanel {
 				if (getScreen()==Screen.MAIN_MENU) {
 					MainMenu.start_hovered = false;
 					MainMenu.opt_hovered = false;
+					MainMenu.ins_hovered = false;
 					if (MainMenu.START_LOC.contains(scaled)) {
 						MainMenu.start_hovered = true;
 					} else if (MainMenu.OPT_LOC.contains(scaled)) {
 						MainMenu.opt_hovered = true;
+					} else if (MainMenu.INS_LOC.contains(scaled)) {
+						MainMenu.ins_hovered = true;
 					}
 				} else if (getScreen()==Screen.OPTIONS) {
 					Options.back_hovered = Options.BACK_LOC.contains(scaled);
 				} else if (getScreen()==Screen.LEVEL_SELECT) {
 					LevelSelect.back_hovered = LevelSelect.BACK_LOC.contains(scaled);
+				} else if (getScreen()==Screen.INSTRUCTIONS) {
+					back_hovered = BACK_LOC.contains(scaled);
 				}
 			}
 		});
@@ -210,11 +236,17 @@ public class GamePanel extends JPanel {
 				player.setAlive(false);
 			}
 			if (enemies.get(i).getHealth() == -Integer.MAX_VALUE){
+				Class<? extends BaseEnemy> encl = enemies.get(i).getClass();
+				int health = enemies.get(i).getFullHealth();
+				int multi = enemies.get(i).getMulti()*4;
 				enemies.remove(i);
 				Sound.create("fallinpit.wav", false).play();
 				ArrayList<Point> spouts = level.getSpouts();
 				Point spout = spouts.get((int)(Math.random()*spouts.size()));
-				enemies.add(new UnionSoldier(20,spout.x,20,4,true));
+				try {
+					enemies.add(encl.getConstructor(int.class, int.class, int.class, int.class, boolean.class).newInstance(health, spout.x, 20, multi, true));
+				} catch (Exception e){
+				}
 				i--;
 			}
 		}
@@ -281,11 +313,15 @@ public class GamePanel extends JPanel {
 				
 				//Paints the enemies
 				bg.setColor(Color.RED);
-				for (BaseEnemy be:enemies){
-					if (be.isMovingRight())
-						bg.drawImage(be.getRight(), be.getX(), be.getY(), null);
-					else if (be.isMovingLeft())
-						bg.drawImage(be.getLeft(), be.getX(), be.getY(), null);
+				synchronized (enemies) {
+					for (BaseEnemy be:enemies){
+						if (be.isMovingRight())
+							bg.drawImage(be.getRight(), be.getX(), be.getY(), null);
+						else if (be.isMovingLeft())
+							bg.drawImage(be.getLeft(), be.getX(), be.getY(), null);
+						if (be.isBoss())
+							((Boss)be).update(bg);
+					}
 				}
 				break;
 			case GAME_OVER:
@@ -337,6 +373,25 @@ public class GamePanel extends JPanel {
 			case LEVEL_SELECT:
 				LEVEL_SELECT.paint(bg);
 				break;
+			case INSTRUCTIONS:
+				bg.setFont(bg.getFont().deriveFont(12f));
+				fm = bg.getFontMetrics();
+				bg.setColor(new Color(0xFF5b5b5b));
+				bg.fillRect(0, 0, 800, 600);
+				bg.setColor(Color.BLACK);
+				String msg = "Confedicats is the latest in fast paced platform games!\nBut with a lot of unique features that you need to know about.\n\nThese right here       are hologears, they give you weapons to\nkill enemies.\n\nYou will need to kill the unions soldiers for the\nConferate States of America to remain alive!\n\nThe object is simple, get as many hologears as you\ncan without touching an enemy!\n\nUse the arrow keys to move, up to jump,\nspace to shoot, and F for fullscreen.\n\nYou can always get back to the main menu with the escape key!\n\nGood luck confedicat!";
+				int y = 40;
+				for (String str:msg.split("\n")) {
+					bg.drawString(str, 400-fm.stringWidth(str)/2, y);
+					y+=fm.getHeight();
+				}
+				AnimationTile hgt = HoloGear.tile;
+				hgt.register(TileType.EMPTY, 240, 60);
+				hgt.paintMe(bg);
+				bg.drawImage(back_hovered?BACK_HOVER:BACK_NORMAL, BACK_LOC.x, BACK_LOC.y, null);
+				break;
+			default:
+				break;
 		}
 		//Paints the FPS counter
 		//bg.setColor(Color.RED);
@@ -365,19 +420,23 @@ public class GamePanel extends JPanel {
 			case RAINBOW:
 				HoloGear.COUNT = 0;
 				BaseEnemy.KILL_COUNT = 0;
+				bossSends.clear();
 				enemies.clear();
 				level = new Rainbow();
 				player = new Player();
 				player.moveHG();
+				HoloGear.COUNT--;
 				level.getMusic().play();
 				break;
 			case TOWN:
 				HoloGear.COUNT = 0;
 				BaseEnemy.KILL_COUNT = 0;
+				bossSends.clear();
 				enemies.clear();
 				level = new Town();
 				player = new Player();
 				player.moveHG();
+				HoloGear.COUNT--;
 				level.getMusic().play();
 				break;
 			case INDUSTRIAL:
@@ -388,6 +447,11 @@ public class GamePanel extends JPanel {
 			case GAME_OVER:
 				Sound.create("gameover.au", true).play();
 				break;
+		case INSTRUCTIONS:
+			menu.getMusic().play();
+			break;
+		default:
+			break;
 		}
 		lastScreen = screen;
 		screen = newScreen;

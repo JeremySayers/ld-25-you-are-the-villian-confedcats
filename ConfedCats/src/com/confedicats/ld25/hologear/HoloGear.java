@@ -13,7 +13,7 @@ public class HoloGear {
 	private int y;
 	private Class<? extends Weapon> weapon;
 	public static int COUNT;
-	private static final AnimationTile tile = new AnimationTile("cc_hologear1.png", "cc_hologear2.png", "cc_hologear3.png", "cc_hologear4.png");
+	public static final AnimationTile tile = new AnimationTile("cc_hologear1.png", "cc_hologear2.png", "cc_hologear3.png", "cc_hologear4.png");
 	public HoloGear(Class<? extends Weapon> weap, int x, int y) {
 		weapon = weap;
 		this.x = x;

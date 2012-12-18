@@ -35,11 +35,15 @@ public abstract class BaseEnemy {
 	
 	TileType upLeft;
 	private Tile[][] mapStorage;
+	private boolean angry;
+	private int fullHealth;
 	public static int KILL_COUNT = 0;
-	public BaseEnemy(int health, int x, int y, int multi){
+	public BaseEnemy(int health, int x, int y, int multi, boolean angry){
 		setHealth(health);
+		setFullHealth(health);
 		setX(x);
 		setY(y);
+		this.setAngry(angry);
 		xTile = (int)(Math.floor(x/40));
 		yTile = (int)(Math.floor(y/40));
 		setMulti(multi);
@@ -256,5 +260,17 @@ public abstract class BaseEnemy {
 			}
 		}
 			
+	}
+	public boolean isAngry() {
+		return angry;
+	}
+	public void setAngry(boolean angry) {
+		this.angry = angry;
+	}
+	public int getFullHealth() {
+		return fullHealth;
+	}
+	public void setFullHealth(int fullHeath) {
+		this.fullHealth = fullHeath;
 	}
 }

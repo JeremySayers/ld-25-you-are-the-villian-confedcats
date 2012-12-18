@@ -61,9 +61,12 @@ public class Scythe extends Weapon {
 			ArrayList<BaseEnemy> removeEnemies = new ArrayList<BaseEnemy>();
 			for (BaseEnemy be:GamePanel.enemies) {
 				if (be.getBounds().intersects(getBounds())) {
-					removeEnemies.add(be);
-					Sound.create("enemydeath.wav", false).play();
-					BaseEnemy.KILL_COUNT++;
+					be.setHealth(be.getHealth()-50);
+					if (be.getHealth()<=0) {
+						removeEnemies.add(be);
+						Sound.create("enemydeath.wav", false).play();
+						BaseEnemy.KILL_COUNT++;
+					}
 				}
 			}
 			GamePanel.enemies.removeAll(removeEnemies);
