@@ -84,7 +84,7 @@ public class GamePanel extends JPanel {
 		new java.util.Timer().scheduleAtFixedRate(new java.util.TimerTask(){
 			public void run() {
 				if (getScreen()==Screen.RAINBOW||getScreen()==Screen.TOWN||getScreen()==Screen.INDUSTRIAL) {
-					if (HoloGear.COUNT%100==2 && !bossSends.contains(HoloGear.COUNT)) {
+					if (HoloGear.COUNT%100==0 && HoloGear.COUNT!=0 && !bossSends.contains(HoloGear.COUNT)) {
 						System.out.println("lincoln");
 						bossSends.add(HoloGear.COUNT);
 						ArrayList<Point> spouts = level.getSpouts();
@@ -379,7 +379,7 @@ public class GamePanel extends JPanel {
 				bg.setColor(new Color(0xFF5b5b5b));
 				bg.fillRect(0, 0, 800, 600);
 				bg.setColor(Color.BLACK);
-				String msg = "Confedicats is the latest in fast paced platform games!\nBut with a lot of unique features that you need to know about.\n\nThese right here       are hologears, they give you weapons to\nkill enemies.\n\nYou will need to kill the unions soldiers for the\nConferate States of America to remain alive!\n\nThe object is simple, get as many hologears as you\ncan without touching an enemy!\n\nUse the arrow keys to move, up to jump,\nspace to shoot, and F for fullscreen.\n\nYou can always get back to the main menu with the escape key!\n\nGood luck confedicat!";
+				String msg = "Confedicats is the latest in fast paced platform games!\nBut with a lot of unique features that you need to know about.\n\nThese right here       are hologears, they give you weapons to\nkill enemies.\n\nYou will need to kill the unions soldiers for the\nConfederate States of America to remain alive!\n\nThe object is simple, get as many hologears as you\ncan without touching an enemy!\n\nUse the arrow keys to move, up to jump,\nspace to shoot, and F for fullscreen.\n\nYou can always get back to the main menu with the escape key!\n\nGood luck confedicat!";
 				int y = 40;
 				for (String str:msg.split("\n")) {
 					bg.drawString(str, 400-fm.stringWidth(str)/2, y);
